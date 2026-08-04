@@ -3,7 +3,6 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:deshmukh_travelling/pages/home_dashboard/components/search_form.dart';
 import 'package:deshmukh_travelling/pages/home_dashboard/home_dashboard_model.dart';
 import 'package:deshmukh_travelling/components/button/button_widget.dart';
-import 'package:deshmukh_travelling/flutter_flow/flutter_flow_util.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:deshmukh_travelling/l10n/app_localizations.dart';
 import 'package:provider/provider.dart';
@@ -33,6 +32,7 @@ void main() {
             onSwap: () {},
             onPickLocation: (_) {},
             onPickDate: () {},
+            onPickPassengers: () {},
             onSearch: () {},
           ),
         ),

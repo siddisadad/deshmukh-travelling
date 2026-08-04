@@ -7,6 +7,7 @@ import 'home_dashboard_widget.dart' show HomeDashboardWidget;
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'dart:convert';
+import 'dart:async';
 
 class HomeDashboardModel extends FlutterFlowModel<HomeDashboardWidget> {
   ///  State fields for stateful widgets in this page.
@@ -23,6 +24,7 @@ class HomeDashboardModel extends FlutterFlowModel<HomeDashboardWidget> {
   int guestCount = 2;
   String citySearchText = '';
   List<String> aiSuggestions = [];
+  Timer? _debounceTimer;
 
   double walletBalance = 1250.50;
   int rewardPoints = 450;
@@ -181,22 +183,28 @@ class HomeDashboardModel extends FlutterFlowModel<HomeDashboardWidget> {
   }
 
   Future<void> updateAiSuggestions(String query) async {
-    if (query.length < 2) {
-      aiSuggestions = [];
-      return;
-    }
-    // Simulate AI suggestion logic (could be Gemini API call)
-    await Future.delayed(const Duration(milliseconds: 300));
-    final allSuggestions = [
-      'Best beaches in Goa for family',
-      'Cheap hotels in Mumbai near airport',
-      'Weekend trips from Pune for couples',
-      'Luxury bus from Ahmedabad to Surat',
-      'Trekking packages in Manali',
-    ];
-    aiSuggestions = allSuggestions
-        .where((s) => s.toLowerCase().contains(query.toLowerCase()))
-        .toList();
+    _debounceTimer?.cancel();
+    _debounceTimer = Timer(const Duration(milliseconds: 500), () async {
+      if (query.length < 2) {
+        aiSuggestions = [];
+        onUpdate();
+        return;
+      }
+      // Simulate AI suggestion logic (could be Gemini API call)
+      final allSuggestions = [
+        'Best beaches in Goa for family',
+        'Cheap hotels in Mumbai near airport',
+        'Weekend trips from Pune for couples',
+        'Luxury bus from Ahmedabad to Surat',
+        'Trekking packages in Manali',
+        'Hotels with sea view in Mumbai',
+        'Direct bus to Nashik',
+      ];
+      aiSuggestions = allSuggestions
+          .where((s) => s.toLowerCase().contains(query.toLowerCase()))
+          .toList();
+      onUpdate();
+    });
   }
 
   // Model for SearchInputRow.

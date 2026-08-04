@@ -120,7 +120,7 @@ class _TaxiBookingWidgetState extends State<TaxiBookingWidget> {
         margin: EdgeInsets.only(bottom: 12),
         padding: EdgeInsets.all(12),
         decoration: BoxDecoration(
-          color: isSelected ? FlutterFlowTheme.of(context).primary.withOpacity(0.05) : FlutterFlowTheme.of(context).secondaryBackground,
+          color: isSelected ? FlutterFlowTheme.of(context).primary.withValues(alpha: 0.05) : FlutterFlowTheme.of(context).secondaryBackground,
           borderRadius: BorderRadius.circular(12),
           border: Border.all(color: isSelected ? FlutterFlowTheme.of(context).primary : FlutterFlowTheme.of(context).alternate),
         ),

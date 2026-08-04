@@ -1,5 +1,6 @@
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import 'package:flutter_localizations/flutter_localizations.dart';
@@ -32,10 +33,11 @@ void main() async {
     statusBarIconBrightness: Brightness.dark,
   ));
 
-  runApp(const ProviderScope(child: MyApp()));
+  runApp(ProviderScope(child: MyApp()));
 }
 
 class MyApp extends StatefulWidget {
+  const MyApp({super.key});
   // This widget is the root of your application.
   @override
   State<MyApp> createState() => MyAppState();

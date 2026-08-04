@@ -1,4 +1,3 @@
-import '/backend/schema/booking_record.dart';
 import '/auth/firebase_auth/auth_util.dart';
 import '/components/button/button_widget.dart';
 import '/components/payment_method_tile/payment_method_tile_widget.dart';
@@ -7,8 +6,8 @@ import '/flutter_flow/flutter_flow_icon_button.dart';
 import '/flutter_flow/flutter_flow_theme.dart';
 import '/flutter_flow/flutter_flow_util.dart';
 import '../../l10n/app_localizations.dart';
-import '/index.dart';
 import 'package:flutter/material.dart';
+import '/index.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'payment_checkout_model.dart';
 export 'payment_checkout_model.dart';
@@ -760,7 +759,7 @@ class _PaymentCheckoutWidgetState extends State<PaymentCheckoutWidget> {
                                                 _model.useWallet = val;
                                               });
                                             },
-                                            activeColor:
+                                            activeTrackColor:
                                                 FlutterFlowTheme.of(context)
                                                     .primary,
                                           ),

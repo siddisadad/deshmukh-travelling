@@ -5,7 +5,6 @@ import '/components/search_input_row/search_input_row_widget.dart';
 import '/components/button/button_widget.dart';
 import '../../../l10n/app_localizations.dart';
 import '../home_dashboard_model.dart';
-import '/index.dart';
 
 class SearchForm extends StatelessWidget {
   final HomeDashboardModel model;

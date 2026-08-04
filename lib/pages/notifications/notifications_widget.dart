@@ -100,10 +100,10 @@ class _NotificationsWidgetState extends State<NotificationsWidget> {
                   },
                   child: Container(
                     decoration: BoxDecoration(
-                      color: n.isRead ? FlutterFlowTheme.of(context).secondaryBackground : FlutterFlowTheme.of(context).primaryContainer.withOpacity(0.1),
+                      color: n.isRead ? FlutterFlowTheme.of(context).secondaryBackground : FlutterFlowTheme.of(context).primaryContainer.withValues(alpha: 0.1),
                       borderRadius: BorderRadius.circular(16),
                       border: Border.all(
-                        color: n.isRead ? FlutterFlowTheme.of(context).alternate : FlutterFlowTheme.of(context).primary.withOpacity(0.3),
+                        color: n.isRead ? FlutterFlowTheme.of(context).alternate : FlutterFlowTheme.of(context).primary.withValues(alpha: 0.3),
                       ),
                     ),
                     padding: const EdgeInsets.all(16),
@@ -165,10 +165,10 @@ class _NotificationsWidgetState extends State<NotificationsWidget> {
 
   Color _getIconBgColor(String type, BuildContext context) {
     switch (type) {
-      case 'booking': return FlutterFlowTheme.of(context).success.withOpacity(0.1);
-      case 'offer': return FlutterFlowTheme.of(context).secondary.withOpacity(0.1);
-      case 'alert': return FlutterFlowTheme.of(context).error.withOpacity(0.1);
-      default: return FlutterFlowTheme.of(context).primary.withOpacity(0.1);
+      case 'booking': return FlutterFlowTheme.of(context).success.withValues(alpha: 0.1);
+      case 'offer': return FlutterFlowTheme.of(context).secondary.withValues(alpha: 0.1);
+      case 'alert': return FlutterFlowTheme.of(context).error.withValues(alpha: 0.1);
+      default: return FlutterFlowTheme.of(context).primary.withValues(alpha: 0.1);
     }
   }
 

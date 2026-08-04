@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import '/flutter_flow/flutter_flow_theme.dart';
-import 'package:google_fonts/google_fonts.dart';
 
 class AiSearchSuggestions extends StatelessWidget {
   final List<String> suggestions;

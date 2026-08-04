@@ -52,7 +52,7 @@ String? serializeParam(
     }
     String? data;
     switch (paramType) {
-      case ParamType.int:
+      case ParamType.Int:
         data = param.toString();
       case ParamType.double:
         data = param.toString();
@@ -168,7 +168,7 @@ FFUploadedFile uploadedFileFromString(String uploadedFileStr) =>
     FFUploadedFile.deserialize(uploadedFileStr);
 
 enum ParamType {
-  int,
+  Int,
   double,
   String,
   bool,
@@ -204,7 +204,7 @@ dynamic deserializeParam<T>(
           .toList();
     }
     switch (paramType) {
-      case ParamType.int:
+      case ParamType.Int:
         return int.tryParse(param);
       case ParamType.double:
         return double.tryParse(param);

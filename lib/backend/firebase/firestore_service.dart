@@ -1,9 +1,15 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import '../schema/bus_record.dart';
-import '../schema/booking_record.dart';
-import '../schema/passenger_record.dart';
-import '../schema/users_record.dart';
-import '../schema/wallet_record.dart';
+import 'package:deshmukh_travelling/backend/schema/bus_record.dart';
+import 'package:deshmukh_travelling/backend/schema/booking_record.dart';
+import 'package:deshmukh_travelling/backend/schema/passenger_record.dart';
+import 'package:deshmukh_travelling/backend/schema/users_record.dart';
+import 'package:deshmukh_travelling/backend/schema/wallet_record.dart';
+import 'package:deshmukh_travelling/backend/schema/hotel_record.dart';
+import 'package:deshmukh_travelling/backend/schema/room_record.dart';
+import 'package:deshmukh_travelling/backend/schema/taxi_record.dart';
+import 'package:deshmukh_travelling/backend/schema/package_record.dart';
+import 'package:deshmukh_travelling/backend/schema/reward_record.dart';
+import 'package:deshmukh_travelling/backend/schema/hotel_booking_record.dart';
 
 class FirestoreService {
   FirebaseFirestore get _db => FirebaseFirestore.instance;

@@ -1,8 +1,11 @@
 import '../bus_search_results/bus_search_results_widget.dart';
 import '../hotel_search_results/hotel_search_results_widget.dart';
 import '../package_listing/package_listing_widget.dart';
-import '../taxi_search_results/taxi_search_results_widget.dart';
 import '../ai_assistant/ai_assistant_widget.dart';
+import '../notifications/notifications_widget.dart';
+import '../taxi_booking/taxi_booking_widget.dart';
+import '../car_rental/car_rental_widget.dart';
+import '../all_routes/all_routes_widget.dart';
 import 'components/search_form.dart';
 import 'components/wallet_summary.dart';
 import 'components/ai_assistant_fab.dart';
@@ -10,12 +13,11 @@ import 'components/ai_search_suggestions.dart';
 import '../../components/premium_card/premium_card_widget.dart';
 import '/components/button/button_widget.dart';
 import '/components/popular_route_item/popular_route_item_widget.dart';
-import '/components/search_input_row/search_input_row_widget.dart';
+import 'package:flutter/material.dart';
 import '/flutter_flow/flutter_flow_icon_button.dart';
 import '/flutter_flow/flutter_flow_theme.dart';
 import '/flutter_flow/flutter_flow_util.dart';
 import 'package:cached_network_image/cached_network_image.dart';
-import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import '../../l10n/app_localizations.dart';
 import 'home_dashboard_model.dart';
@@ -115,6 +117,7 @@ class _HomeDashboardWidgetState extends State<HomeDashboardWidget> {
                         setModalState(() {
                           _model.citySearchText = value;
                         });
+                        _model.updateAiSuggestions(value);
                       },
                     ),
                   ),

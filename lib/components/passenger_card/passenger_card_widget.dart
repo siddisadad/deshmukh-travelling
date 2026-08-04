@@ -65,104 +65,71 @@ class _PassengerCardWidgetState extends State<PassengerCardWidget> {
         ),
         child: Padding(
           padding: EdgeInsets.all(FlutterFlowTheme.of(context).designToken.spacing.md),
-            child: Container(
-              child: Column(
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            mainAxisAlignment: MainAxisAlignment.start,
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Container(
+                width: 40.0,
+                height: 40.0,
+                decoration: BoxDecoration(
+                  color: FlutterFlowTheme.of(context).secondary,
+                  shape: BoxShape.circle,
+                ),
+                alignment: AlignmentDirectional(0.0, 0.0),
+                child: Text(
+                  valueOrDefault<String>(
+                    widget.initials,
+                    'AD',
+                  ),
+                  textAlign: TextAlign.center,
+                  maxLines: 1,
+                  style: FlutterFlowTheme.of(context).labelMedium.override(
+                        font: GoogleFonts.inter(
+                          fontWeight: FontWeight.w600,
+                        ),
+                        color: FlutterFlowTheme.of(context).onSurface,
+                        fontSize: 15.2,
+                        letterSpacing: 0.0,
+                      ),
+                  overflow: TextOverflow.clip,
+                ),
+              ),
+              Column(
                 mainAxisSize: MainAxisSize.min,
                 mainAxisAlignment: MainAxisAlignment.start,
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Container(
-                    width: 40.0,
-                    height: 40.0,
-                    decoration: BoxDecoration(
-                      color: FlutterFlowTheme.of(context).secondary,
-                      shape: BoxShape.circle,
+                  Text(
+                    valueOrDefault<String>(
+                      widget.name,
+                      'Aditya Deshmukh',
                     ),
-                    alignment: AlignmentDirectional(0.0, 0.0),
-                    child: Text(
-                      valueOrDefault<String>(
-                        widget.initials,
-                        'AD',
-                      ),
-                      textAlign: TextAlign.center,
-                      maxLines: 1,
-                      style: FlutterFlowTheme.of(context).labelMedium.override(
-                            font: GoogleFonts.inter(
-                              fontWeight: FontWeight.w600,
-                              fontStyle: FlutterFlowTheme.of(context)
-                                  .labelMedium
-                                  .fontStyle,
-                            ),
-                            color: FlutterFlowTheme.of(context).onSurface,
-                            fontSize: 15.2,
-                            letterSpacing: 0.0,
+                    maxLines: 1,
+                    style: FlutterFlowTheme.of(context).labelLarge.override(
+                          font: GoogleFonts.inter(
                             fontWeight: FontWeight.w600,
-                            fontStyle: FlutterFlowTheme.of(context)
-                                .labelMedium
-                                .fontStyle,
-                            lineHeight: 1.4,
                           ),
-                      overflow: TextOverflow.clip,
+                          color: FlutterFlowTheme.of(context).primaryText,
+                          letterSpacing: 0.0,
+                        ),
+                    overflow: TextOverflow.ellipsis,
+                  ),
+                  Text(
+                    valueOrDefault<String>(
+                      widget.relation,
+                      'Self',
                     ),
-                  ),
-                  Column(
-                    mainAxisSize: MainAxisSize.min,
-                    mainAxisAlignment: MainAxisAlignment.start,
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text(
-                        valueOrDefault<String>(
-                          widget.name,
-                          'Aditya Deshmukh',
+                    style: FlutterFlowTheme.of(context).labelSmall.override(
+                          font: GoogleFonts.inter(),
+                          color: FlutterFlowTheme.of(context).secondaryText,
+                          letterSpacing: 0.0,
                         ),
-                        maxLines: 1,
-                        style: FlutterFlowTheme.of(context).labelLarge.override(
-                              font: GoogleFonts.inter(
-                                fontWeight: FontWeight.w600,
-                                fontStyle: FlutterFlowTheme.of(context)
-                                    .labelLarge
-                                    .fontStyle,
-                              ),
-                              color: FlutterFlowTheme.of(context).primaryText,
-                              letterSpacing: 0.0,
-                              fontWeight: FontWeight.w600,
-                              fontStyle: FlutterFlowTheme.of(context)
-                                  .labelLarge
-                                  .fontStyle,
-                              lineHeight: 1.4,
-                            ),
-                        overflow: TextOverflow.ellipsis,
-                      ),
-                      Text(
-                        valueOrDefault<String>(
-                          widget.relation,
-                          'Self',
-                        ),
-                        style: FlutterFlowTheme.of(context).labelSmall.override(
-                              font: GoogleFonts.inter(
-                                fontWeight: FlutterFlowTheme.of(context)
-                                    .labelSmall
-                                    .fontWeight,
-                                fontStyle: FlutterFlowTheme.of(context)
-                                    .labelSmall
-                                    .fontStyle,
-                              ),
-                              color: FlutterFlowTheme.of(context).secondaryText,
-                              letterSpacing: 0.0,
-                              fontWeight: FlutterFlowTheme.of(context)
-                                  .labelSmall
-                                  .fontWeight,
-                              fontStyle: FlutterFlowTheme.of(context)
-                                  .labelSmall
-                                  .fontStyle,
-                              lineHeight: 1.4,
-                            ),
-                      ),
-                    ].divide(SizedBox(height: 2.0)),
                   ),
-                ].divide(SizedBox(height: 8.0)),
+                ].divide(SizedBox(height: 2.0)),
               ),
-            ),
+            ].divide(SizedBox(height: 8.0)),
           ),
         ),
       ),

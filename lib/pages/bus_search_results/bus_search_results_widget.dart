@@ -1,10 +1,10 @@
-import '/backend/schema/bus_record.dart';
 import 'package:shimmer/shimmer.dart';
 import '/components/bus_card/bus_card_widget.dart';
 import '/components/filter_chip/filter_chip_widget.dart';
 import '/flutter_flow/flutter_flow_icon_button.dart';
 import '/flutter_flow/flutter_flow_theme.dart';
 import '/flutter_flow/flutter_flow_util.dart';
+import '/l10n/app_localizations.dart';
 import '/index.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';

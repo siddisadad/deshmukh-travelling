@@ -105,7 +105,7 @@ class _HotelCardWidgetState extends State<HotelCardWidget> {
                       Container(
                         padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
                         decoration: BoxDecoration(
-                          color: FlutterFlowTheme.of(context).success.withOpacity(0.1),
+                          color: FlutterFlowTheme.of(context).success.withValues(alpha: 0.1),
                           borderRadius: BorderRadius.circular(8),
                         ),
                         child: Row(

@@ -1,8 +1,6 @@
-import '/backend/schema/bus_record.dart';
 import 'components/bus_seat_map.dart';
 import '/components/button/button_widget.dart';
 import '/components/seat_legend_item/seat_legend_item_widget.dart';
-import '/components/seat_widget/seat_widget_widget.dart';
 import '/flutter_flow/flutter_flow_icon_button.dart';
 import '/flutter_flow/flutter_flow_theme.dart';
 import '/flutter_flow/flutter_flow_util.dart';
@@ -119,7 +117,6 @@ class _SeatSelectionWidgetState extends State<SeatSelectionWidget> {
                                     lineHeight: 1.45,
                                   ),
                             ),
-...
                             Text(
                               '${widget.bus?.departureCity.split(',').first ?? 'Mumbai'} → ${widget.bus?.arrivalCity.split(',').first ?? 'Pune'} • ${AppLocalizations.of(context)!.availableBuses}',
                               style: FlutterFlowTheme.of(context)

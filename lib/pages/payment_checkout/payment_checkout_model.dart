@@ -1,12 +1,11 @@
 import '/backend/repositories/loyalty_repository.dart';
-import '/backend/schema/coupon_record.dart';
+import '/flutter_flow/flutter_flow_util.dart';
 import '/backend/firebase/firestore_service.dart';
 import '/components/button/button_widget.dart';
 import '/components/payment_method_tile/payment_method_tile_widget.dart';
 import '/components/price_summary_row/price_summary_row_widget.dart';
 import '/flutter_flow/flutter_flow_util.dart';
 import '/index.dart';
-import 'payment_checkout_widget.dart' show PaymentCheckoutWidget;
 import 'package:flutter/material.dart';
 
 class PaymentCheckoutModel extends FlutterFlowModel<PaymentCheckoutWidget> {

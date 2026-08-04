@@ -1,5 +1,4 @@
 import '/flutter_flow/flutter_flow_util.dart';
-import '../../backend/schema/hotel_record.dart';
 import '../../backend/schema/room_record.dart';
 import '../../backend/firebase/firestore_service.dart';
 import 'hotel_details_widget.dart' show HotelDetailsWidget;

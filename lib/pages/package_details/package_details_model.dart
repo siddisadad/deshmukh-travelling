@@ -1,5 +1,4 @@
 import '/flutter_flow/flutter_flow_util.dart';
-import '../../backend/schema/package_record.dart';
 import 'package:flutter/material.dart';
 
 class PackageDetailsModel extends FlutterFlowModel {

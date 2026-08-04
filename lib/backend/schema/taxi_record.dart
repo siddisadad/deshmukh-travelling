@@ -35,6 +35,19 @@ class TaxiRecord {
     );
   }
 
+  factory TaxiRecord.fromMap(Map<String, dynamic> data, String id) {
+    return TaxiRecord(
+      id: id,
+      type: data['type'] ?? '',
+      vehicleName: data['vehicleName'] ?? '',
+      pricePerKm: (data['pricePerKm'] ?? 0.0).toDouble(),
+      baseFare: (data['baseFare'] ?? 0.0).toDouble(),
+      image: data['image'] ?? '',
+      rating: (data['rating'] ?? 0.0).toDouble(),
+      capacity: data['capacity'] ?? 4,
+    );
+  }
+
   Map<String, dynamic> toMap() => {
     'type': type,
     'vehicleName': vehicleName,

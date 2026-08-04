@@ -1,7 +1,6 @@
 import 'components/passenger_form_list.dart';
 import '/auth/firebase_auth/auth_util.dart';
 import '/backend/schema/booking_record.dart';
-import '/backend/schema/bus_record.dart';
 import '/components/button/button_widget.dart';
 import '/components/passenger_form/passenger_form_widget.dart';
 import '/components/section_header_a8889900/section_header_a8889900_widget.dart';

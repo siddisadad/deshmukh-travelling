@@ -138,7 +138,7 @@ class _AiAssistantWidgetState extends State<AiAssistantWidget> {
                                       fontSize: 10,
                                       color: message.isAi
                                           ? FlutterFlowTheme.of(context).secondaryText
-                                          : Colors.white.withOpacity(0.7),
+                                          : Colors.white.withValues(alpha: 0.7),
                                     ),
                               ),
                             ],

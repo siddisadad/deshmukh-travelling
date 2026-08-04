@@ -158,7 +158,7 @@ class _CarRentalWidgetState extends State<CarRentalWidget> {
     return Container(
       padding: EdgeInsets.symmetric(horizontal: 8, vertical: 4),
       decoration: BoxDecoration(
-        color: FlutterFlowTheme.of(context).accent1.withOpacity(0.1),
+        color: FlutterFlowTheme.of(context).accent1.withValues(alpha: 0.1),
         borderRadius: BorderRadius.circular(4),
       ),
       child: Text(label, style: FlutterFlowTheme.of(context).labelSmall.override(font: GoogleFonts.inter(), color: FlutterFlowTheme.of(context).primary)),

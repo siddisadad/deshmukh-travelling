@@ -153,9 +153,9 @@ class _HotelDetailsWidgetState extends State<HotelDetailsWidget> {
                           .map((amenity) => Container(
                                 padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
                                 decoration: BoxDecoration(
-                                  color: FlutterFlowTheme.of(context).accent1.withOpacity(0.1),
+                                  color: FlutterFlowTheme.of(context).accent1.withValues(alpha: 0.1),
                                   borderRadius: BorderRadius.circular(20),
-                                  border: Border.all(color: FlutterFlowTheme.of(context).accent1.withOpacity(0.2)),
+                                  border: Border.all(color: FlutterFlowTheme.of(context).accent1.withValues(alpha: 0.2)),
                                 ),
                                 child: Text(
                                   amenity,

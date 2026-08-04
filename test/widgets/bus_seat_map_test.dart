@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:deshmukh_travelling/pages/seat_selection/components/bus_seat_map.dart';
 import 'package:deshmukh_travelling/pages/seat_selection/seat_selection_model.dart';
-import 'package:deshmukh_travelling/flutter_flow/flutter_flow_util.dart';
+import 'package:flutter_test/flutter_test.dart';
 
 void main() {
   testWidgets('BusSeatMap renders all seats', (WidgetTester tester) async {

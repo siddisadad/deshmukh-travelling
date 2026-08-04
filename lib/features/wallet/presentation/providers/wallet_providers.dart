@@ -1,5 +1,5 @@
 import 'package:riverpod_annotation/riverpod_annotation.dart';
-import '../../../core/providers/firebase_providers.dart';
+import 'package:deshmukh_travelling/core/providers/firebase_providers.dart';
 import '../../data/repositories/firebase_wallet_repository.dart';
 import '../../domain/entities/wallet.dart';
 import '../../domain/repositories/wallet_repository.dart';

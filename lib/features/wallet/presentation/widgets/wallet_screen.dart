@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:intl/intl.dart';
 import '../../../../auth/firebase_auth/auth_util.dart';
 import '../../../../components/button/button_widget.dart';
 import '../../../../flutter_flow/flutter_flow_icon_button.dart';
@@ -71,14 +70,14 @@ class _WalletContent extends ConsumerWidget {
                 bottomRight: Radius.circular(32.0),
               ),
             ),
-            padding: const EdgeInsets.fromSTEB(24.0, 0.0, 24.0, 40.0),
+            padding: const EdgeInsetsDirectional.fromSTEB(24.0, 0.0, 24.0, 40.0),
             child: Column(
               children: [
                 Text(
                   'Available Balance',
                   style: FlutterFlowTheme.of(context).bodyMedium.override(
                         fontFamily: 'Inter',
-                        color: Colors.white.withOpacity(0.8),
+                        color: Colors.white.withValues(alpha: 0.8),
                       ),
                 ),
                 const SizedBox(height: 8.0),
@@ -145,7 +144,7 @@ class _WalletContent extends ConsumerWidget {
                             width: 44.0,
                             height: 44.0,
                             decoration: BoxDecoration(
-                              color: (isCredit ? Colors.green : Colors.red).withOpacity(0.1),
+                              color: (isCredit ? Colors.green : Colors.red).withValues(alpha: 0.1),
                               shape: BoxShape.circle,
                             ),
                             child: Icon(

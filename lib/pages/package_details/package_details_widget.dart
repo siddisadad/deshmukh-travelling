@@ -23,12 +23,10 @@ class PackageDetailsWidget extends StatefulWidget {
 }
 
 class _PackageDetailsWidgetState extends State<PackageDetailsWidget> {
-  late PackageDetailsModel _model;
-
   @override
   void initState() {
     super.initState();
-    _model = createModel(context, () => PackageDetailsModel());
+    createModel(context, () => PackageDetailsModel());
   }
 
   @override
@@ -169,9 +167,9 @@ class _PackageDetailsWidgetState extends State<PackageDetailsWidget> {
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
       decoration: BoxDecoration(
-        color: color.withOpacity(0.1),
+        color: color.withValues(alpha: 0.1),
         borderRadius: BorderRadius.circular(20),
-        border: Border.all(color: color.withOpacity(0.2)),
+        border: Border.all(color: color.withValues(alpha: 0.2)),
       ),
       child: Row(
         mainAxisSize: MainAxisSize.min,

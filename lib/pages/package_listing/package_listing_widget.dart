@@ -6,7 +6,6 @@ import '../package_details/package_details_widget.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:provider/provider.dart';
 import 'package:deshmukh_travelling/pages/package_listing/package_listing_model.dart';
 
 class PackageListingWidget extends StatefulWidget {
@@ -149,7 +148,7 @@ class _PackageListingWidgetState extends State<PackageListingWidget> {
                           ),
                         ],
                       ),
-                      Icon(Icons.arrow_forward_circle_rounded, color: FlutterFlowTheme.of(context).primary, size: 32),
+                      Icon(Icons.arrow_forward, color: FlutterFlowTheme.of(context).primary, size: 32),
                     ],
                   ),
                 ],

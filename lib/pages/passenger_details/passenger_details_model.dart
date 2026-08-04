@@ -3,11 +3,14 @@ import '/components/passenger_form/passenger_form_widget.dart';
 import '/components/section_header_a8889900/section_header_a8889900_widget.dart';
 import '/components/text_field/text_field_widget.dart';
 import '/flutter_flow/flutter_flow_util.dart';
+import '/backend/firebase/firestore_service.dart';
 import '/index.dart';
 import 'passenger_details_widget.dart' show PassengerDetailsWidget;
 import 'package:flutter/material.dart';
 
 class PassengerDetailsModel extends FlutterFlowModel<PassengerDetailsWidget> {
+  final firestoreService = FirestoreService();
+
   ///  State fields for stateful widgets in this page.
 
   List<PassengerFormModel> passengerFormModels = [];

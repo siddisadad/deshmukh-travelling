@@ -6,7 +6,6 @@ import '/auth/firebase_auth/auth_util.dart';
 import '../../backend/schema/hotel_record.dart';
 import '../../backend/schema/room_record.dart';
 import '../../backend/schema/hotel_booking_record.dart';
-import '../booking_confirmation_ticket/booking_confirmation_ticket_widget.dart';
 import '../home_dashboard/home_dashboard_widget.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';

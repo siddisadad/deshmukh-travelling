@@ -1,5 +1,4 @@
 import '/main.dart';
-import '/backend/schema/passenger_record.dart';
 import '/auth/firebase_auth/auth_util.dart';
 import '/components/button/button_widget.dart';
 import '/components/passenger_card/passenger_card_widget.dart';

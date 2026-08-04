@@ -56,3 +56,8 @@ export '/backend/schema/hotel_booking_record.dart' show HotelBookingRecord;
 export '/backend/schema/package_record.dart' show PackageRecord, ItineraryDay;
 export '/backend/schema/taxi_record.dart' show TaxiRecord;
 export '/backend/schema/review_record.dart' show ReviewRecord;
+export '/backend/schema/users_record.dart' show UsersRecord;
+export '/backend/schema/rental_record.dart' show RentalRecord;
+export '/backend/schema/coupon_record.dart' show CouponRecord;
+export '/backend/schema/reward_record.dart' show RewardRecord;
+export '/backend/schema/wallet_record.dart' show WalletRecord, WalletTransaction;
