@@ -9,8 +9,19 @@ import 'package:flutter/material.dart';
 class SplashOnboardingModel extends FlutterFlowModel<SplashOnboardingWidget> {
   ///  State fields for stateful widgets in this page.
 
+  // State field(s) for PageView widget.
+  PageController? pageViewController;
+
+  int get pageViewCurrentIndex => pageViewController != null &&
+          pageViewController!.hasClients &&
+          pageViewController!.page != null
+      ? pageViewController!.page!.round()
+      : 0;
+
   // Model for OnboardingStep.
-  late OnboardingStepModel onboardingStepModel;
+  late OnboardingStepModel onboardingStepModel1;
+  late OnboardingStepModel onboardingStepModel2;
+  late OnboardingStepModel onboardingStepModel3;
   // Model for StepIndicator.
   late StepIndicatorModel stepIndicatorModel1;
   // Model for StepIndicator.
@@ -24,7 +35,9 @@ class SplashOnboardingModel extends FlutterFlowModel<SplashOnboardingWidget> {
 
   @override
   void initState(BuildContext context) {
-    onboardingStepModel = createModel(context, () => OnboardingStepModel());
+    onboardingStepModel1 = createModel(context, () => OnboardingStepModel());
+    onboardingStepModel2 = createModel(context, () => OnboardingStepModel());
+    onboardingStepModel3 = createModel(context, () => OnboardingStepModel());
     stepIndicatorModel1 = createModel(context, () => StepIndicatorModel());
     stepIndicatorModel2 = createModel(context, () => StepIndicatorModel());
     stepIndicatorModel3 = createModel(context, () => StepIndicatorModel());
@@ -34,7 +47,9 @@ class SplashOnboardingModel extends FlutterFlowModel<SplashOnboardingWidget> {
 
   @override
   void dispose() {
-    onboardingStepModel.dispose();
+    onboardingStepModel1.dispose();
+    onboardingStepModel2.dispose();
+    onboardingStepModel3.dispose();
     stepIndicatorModel1.dispose();
     stepIndicatorModel2.dispose();
     stepIndicatorModel3.dispose();

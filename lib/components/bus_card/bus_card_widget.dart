@@ -1,6 +1,8 @@
+import '/backend/schema/bus_record.dart';
 import '/components/button/button_widget.dart';
 import '/flutter_flow/flutter_flow_theme.dart';
 import '/flutter_flow/flutter_flow_util.dart';
+import '../../l10n/app_localizations.dart';
 import '/index.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
@@ -11,6 +13,7 @@ export 'bus_card_model.dart';
 class BusCardWidget extends StatefulWidget {
   const BusCardWidget({
     super.key,
+    this.bus,
     String? arrTime,
     String? depTime,
     String? duration,
@@ -28,6 +31,7 @@ class BusCardWidget extends StatefulWidget {
         this.seats = seats ?? '12',
         this.type = type ?? 'Volvo Multi-Axle AC';
 
+  final BusRecord? bus;
   final String arrTime;
   final String depTime;
   final String duration;
@@ -68,14 +72,19 @@ class _BusCardWidgetState extends State<BusCardWidget> {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: EdgeInsetsDirectional.fromSTEB(0.0, 0.0, 0.0, 16.0),
+      padding: EdgeInsets.only(bottom: FlutterFlowTheme.of(context).designToken.spacing.md),
       child: Container(
+        decoration: BoxDecoration(
+          color: FlutterFlowTheme.of(context).secondaryBackground,
+          borderRadius: BorderRadius.circular(FlutterFlowTheme.of(context).designToken.radius.lg),
+          boxShadow: [FlutterFlowTheme.of(context).designToken.shadow.sm],
+        ),
         child: ClipRRect(
-          borderRadius: BorderRadius.circular(16.0),
+          borderRadius: BorderRadius.circular(FlutterFlowTheme.of(context).designToken.radius.lg),
           child: Container(
             decoration: BoxDecoration(
               color: FlutterFlowTheme.of(context).secondaryBackground,
-              borderRadius: BorderRadius.circular(16.0),
+              borderRadius: BorderRadius.circular(FlutterFlowTheme.of(context).designToken.radius.lg),
               shape: BoxShape.rectangle,
               border: Border.all(
                 color: FlutterFlowTheme.of(context).alternate,
@@ -302,7 +311,7 @@ class _BusCardWidgetState extends State<BusCardWidget> {
                                     ),
                               ),
                               Text(
-                                'Departure',
+                                AppLocalizations.of(context)!.departure,
                                 style: FlutterFlowTheme.of(context)
                                     .labelSmall
                                     .override(
@@ -413,7 +422,7 @@ class _BusCardWidgetState extends State<BusCardWidget> {
                                     ),
                               ),
                               Text(
-                                'Arrival',
+                                AppLocalizations.of(context)!.arrival,
                                 style: FlutterFlowTheme.of(context)
                                     .labelSmall
                                     .override(
@@ -477,10 +486,7 @@ class _BusCardWidgetState extends State<BusCardWidget> {
                                     size: 16.0,
                                   ),
                                   Text(
-                                    valueOrDefault<String>(
-                                      '${widget.seats} Seats left',
-                                      '12 Seats left',
-                                    ),
+                                    AppLocalizations.of(context)!.seatsLeft(widget.seats),
                                     style: FlutterFlowTheme.of(context)
                                         .bodySmall
                                         .override(
@@ -583,7 +589,7 @@ class _BusCardWidgetState extends State<BusCardWidget> {
                                     ),
                               ),
                               Text(
-                                'per seat',
+                                AppLocalizations.of(context)!.perSeat,
                                 style: FlutterFlowTheme.of(context)
                                     .labelSmall
                                     .override(
@@ -638,7 +644,15 @@ class _BusCardWidgetState extends State<BusCardWidget> {
                             hoverColor: Colors.transparent,
                             highlightColor: Colors.transparent,
                             onTap: () async {
-                              context.goNamed(SeatSelectionWidget.routeName);
+                              context.goNamed(
+                                SeatSelectionWidget.routeName,
+                                queryParameters: {
+                                  'bus': serializeParam(
+                                    widget.bus,
+                                    ParamType.JSON,
+                                  ),
+                                }.withoutNulls,
+                              );
                             },
                             child: wrapWithModel(
                               model: _model.buttonModel,
@@ -652,7 +666,7 @@ class _BusCardWidgetState extends State<BusCardWidget> {
                                 ),
                                 iconPresent: true,
                                 iconEndPresent: false,
-                                content: 'Select Seats',
+                                content: AppLocalizations.of(context)!.selectSeats,
                                 variant: 'primary',
                                 size: 'medium',
                                 fullWidth: true,

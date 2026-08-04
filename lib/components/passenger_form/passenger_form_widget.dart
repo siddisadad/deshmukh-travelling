@@ -3,6 +3,7 @@ import '/flutter_flow/flutter_flow_drop_down.dart';
 import '/flutter_flow/flutter_flow_theme.dart';
 import '/flutter_flow/flutter_flow_util.dart';
 import '/flutter_flow/form_field_controller.dart';
+import '../../l10n/app_localizations.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'passenger_form_model.dart';
@@ -147,7 +148,7 @@ class _PassengerFormWidgetState extends State<PassengerFormWidget> {
                     crossAxisAlignment: CrossAxisAlignment.stretch,
                     children: [
                       Text(
-                        'Full Name',
+                        AppLocalizations.of(context)!.fullName,
                         style: FlutterFlowTheme.of(context)
                             .labelMedium
                             .override(
@@ -190,7 +191,9 @@ class _PassengerFormWidgetState extends State<PassengerFormWidget> {
                           onChange: '',
                           onSubmit: '',
                           variant: 'outlined',
-                          error: false,
+                          error: _model.name.isEmpty && _model.textFieldModel1.inputTextController!.text.isNotEmpty,
+                          controller: _model.textFieldModel1.inputTextController,
+                          focusNode: _model.textFieldModel1.inputFocusNode,
                         ),
                       ),
                     ].divide(SizedBox(height: 8.0)),
@@ -208,7 +211,7 @@ class _PassengerFormWidgetState extends State<PassengerFormWidget> {
                           crossAxisAlignment: CrossAxisAlignment.stretch,
                           children: [
                             Text(
-                              'Age',
+                              AppLocalizations.of(context)!.age,
                               style: FlutterFlowTheme.of(context)
                                   .labelMedium
                                   .override(
@@ -254,6 +257,9 @@ class _PassengerFormWidgetState extends State<PassengerFormWidget> {
                                 onSubmit: '',
                                 variant: 'outlined',
                                 error: false,
+                                controller: _model.textFieldModel2.inputTextController,
+                                focusNode: _model.textFieldModel2.inputFocusNode,
+                                keyboardType: TextInputType.number,
                               ),
                             ),
                           ].divide(SizedBox(height: 8.0)),
@@ -267,27 +273,23 @@ class _PassengerFormWidgetState extends State<PassengerFormWidget> {
                           crossAxisAlignment: CrossAxisAlignment.stretch,
                           children: [
                             Text(
-                              'Gender',
+                              AppLocalizations.of(context)!.gender,
                               style: FlutterFlowTheme.of(context)
                                   .labelMedium
                                   .override(
                                     font: GoogleFonts.inter(
                                       fontWeight: FlutterFlowTheme.of(context)
-                                          .labelMedium
-                                          .fontWeight,
+                                          .labelMedium.fontWeight,
                                       fontStyle: FlutterFlowTheme.of(context)
-                                          .labelMedium
-                                          .fontStyle,
+                                          .labelMedium.fontStyle,
                                     ),
                                     color: FlutterFlowTheme.of(context)
                                         .secondaryText,
                                     letterSpacing: 0.0,
                                     fontWeight: FlutterFlowTheme.of(context)
-                                        .labelMedium
-                                        .fontWeight,
+                                        .labelMedium.fontWeight,
                                     fontStyle: FlutterFlowTheme.of(context)
-                                        .labelMedium
-                                        .fontStyle,
+                                        .labelMedium.fontStyle,
                                     lineHeight: 1.4,
                                   ),
                             ),
@@ -296,7 +298,11 @@ class _PassengerFormWidgetState extends State<PassengerFormWidget> {
                                   FormFieldController<String>(
                                 _model.dropdownValue ??= 'Male',
                               ),
-                              options: ['Male', 'Female', 'Other'],
+                              options: [
+                                AppLocalizations.of(context)!.male,
+                                AppLocalizations.of(context)!.female,
+                                AppLocalizations.of(context)!.other
+                              ],
                               onChanged: (val) => safeSetState(
                                   () => _model.dropdownValue = val),
                               width: 200.0,

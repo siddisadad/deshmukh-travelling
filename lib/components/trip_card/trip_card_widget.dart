@@ -1,3 +1,5 @@
+import '/pages/live_tracking/live_tracking_widget.dart';
+import '/index.dart';
 import '/components/button/button_widget.dart';
 import '/flutter_flow/flutter_flow_theme.dart';
 import '/flutter_flow/flutter_flow_util.dart';
@@ -10,6 +12,7 @@ export 'trip_card_model.dart';
 class TripCardWidget extends StatefulWidget {
   const TripCardWidget({
     super.key,
+    this.busId,
     String? arrCity,
     String? arrTime,
     String? busType,
@@ -33,6 +36,8 @@ class TripCardWidget extends StatefulWidget {
         this.seats = seats ?? 'S-12, S-13',
         this.status = status ?? 'upcoming';
 
+  final String? busId;
+  final String? bookingId;
   final String arrCity;
   final String arrTime;
   final String busType;
@@ -44,6 +49,7 @@ class TripCardWidget extends StatefulWidget {
   final String price;
   final String seats;
   final String status;
+  final VoidCallback? onCancel;
 
   @override
   State<TripCardWidget> createState() => _TripCardWidgetState();
@@ -801,6 +807,39 @@ class _TripCardWidgetState extends State<TripCardWidget> {
                           children: [
                             Expanded(
                               flex: 1,
+                              child: InkWell(
+                                onTap: () async {
+                                  context.pushNamed(
+                                    LiveTrackingWidget.routeName,
+                                    queryParameters: {
+                                      'busId': serializeParam(
+                                          widget.busId, ParamType.String),
+                                    }.withoutNulls,
+                                  );
+                                },
+                                child: wrapWithModel(
+                                  model: _model.buttonModel1,
+                                  updateCallback: () => safeSetState(() {}),
+                                  child: ButtonWidget(
+                                    icon: const Icon(
+                                      Icons.location_on_rounded,
+                                      color: Colors.white,
+                                      size: 18.0,
+                                    ),
+                                    iconPresent: true,
+                                    iconEndPresent: false,
+                                    content: 'Track',
+                                    variant: 'primary',
+                                    size: 'small',
+                                    fullWidth: true,
+                                    loading: false,
+                                    disabled: false,
+                                  ),
+                                ),
+                              ),
+                            ),
+                            Expanded(
+                              flex: 1,
                               child: wrapWithModel(
                                 model: _model.buttonModel1,
                                 updateCallback: () => safeSetState(() {}),
@@ -813,8 +852,8 @@ class _TripCardWidgetState extends State<TripCardWidget> {
                                   ),
                                   iconPresent: true,
                                   iconEndPresent: false,
-                                  content: 'View QR Ticket',
-                                  variant: 'primary',
+                                  content: 'QR Ticket',
+                                  variant: 'outline',
                                   size: 'small',
                                   fullWidth: true,
                                   loading: false,
@@ -824,28 +863,35 @@ class _TripCardWidgetState extends State<TripCardWidget> {
                             ),
                             Expanded(
                               flex: 1,
-                              child: wrapWithModel(
-                                model: _model.buttonModel2,
-                                updateCallback: () => safeSetState(() {}),
-                                child: ButtonWidget(
-                                  icon: Icon(
-                                    Icons.close_rounded,
-                                    color: FlutterFlowTheme.of(context)
-                                        .primaryText,
-                                    size: 24.0,
+                              child: InkWell(
+                                onTap: () async {
+                                  if (widget.onCancel != null) {
+                                    widget.onCancel!();
+                                  }
+                                },
+                                child: wrapWithModel(
+                                  model: _model.buttonModel2,
+                                  updateCallback: () => safeSetState(() {}),
+                                  child: ButtonWidget(
+                                    icon: Icon(
+                                      Icons.close_rounded,
+                                      color: FlutterFlowTheme.of(context)
+                                          .primaryText,
+                                      size: 24.0,
+                                    ),
+                                    iconPresent: true,
+                                    iconEndPresent: false,
+                                    content: 'Cancel',
+                                    variant: 'ghost',
+                                    size: 'small',
+                                    fullWidth: true,
+                                    loading: false,
+                                    disabled: false,
                                   ),
-                                  iconPresent: true,
-                                  iconEndPresent: false,
-                                  content: 'Cancel',
-                                  variant: 'outline',
-                                  size: 'small',
-                                  fullWidth: true,
-                                  loading: false,
-                                  disabled: false,
                                 ),
                               ),
                             ),
-                          ].divide(SizedBox(width: 16.0)),
+                          ].divide(SizedBox(width: 12.0)),
                         ),
                       ),
                     ),

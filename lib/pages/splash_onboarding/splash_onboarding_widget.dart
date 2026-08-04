@@ -128,15 +128,49 @@ class _SplashOnboardingWidgetState extends State<SplashOnboardingWidget> {
                       ),
                     ),
                   ),
-                  wrapWithModel(
-                    model: _model.onboardingStepModel,
-                    updateCallback: () => safeSetState(() {}),
-                    child: OnboardingStepWidget(
-                      description:
-                          'Experience premium journeys with our fleet of high-end, air-conditioned buses designed for maximum relaxation.',
-                      imgDesc:
-                          'https://dimg.dreamflow.cloud/v1/image/modern%20luxury%20coach%20bus%20interior%20with%20comfortable%20seats',
-                      title: 'Travel in Comfort',
+                  Container(
+                    width: double.infinity,
+                    height: 500.0,
+                    child: PageView(
+                      controller: _model.pageViewController ??=
+                          PageController(initialPage: 0),
+                      onPageChanged: (value) => safeSetState(() {}),
+                      scrollDirection: Axis.horizontal,
+                      children: [
+                        wrapWithModel(
+                          model: _model.onboardingStepModel1,
+                          updateCallback: () => safeSetState(() {}),
+                          child: OnboardingStepWidget(
+                            description:
+                                'Experience premium journeys with our fleet of high-end, air-conditioned buses designed for maximum relaxation.',
+                            imgDesc:
+                                'https://images.unsplash.com/photo-1544620347-c4fd4a3d5957?ixlib=rb-4.0.3&auto=format&fit=crop&w=1000&q=80',
+                            title: 'Travel in Comfort',
+                          ),
+                        ),
+                        wrapWithModel(
+                          model: _model.onboardingStepModel2,
+                          updateCallback: () => safeSetState(() {}),
+                          child: OnboardingStepWidget(
+                            description:
+                                'Book your tickets in seconds with our intuitive interface. Secure payments and instant confirmation.',
+                            imgDesc:
+                                'https://images.unsplash.com/photo-1570126128858-623dd0b3c1c7?ixlib=rb-4.0.3&auto=format&fit=crop&w=1000&q=80',
+                            title: 'Easy Booking',
+                          ),
+                        ),
+                        wrapWithModel(
+                          model: _model.onboardingStepModel3,
+                          updateCallback: () => safeSetState(() {}),
+                          child: OnboardingStepWidget(
+                            description:
+                                'Stay informed with real-time bus tracking. Know exactly where your bus is and when it will arrive.',
+                            imgDesc:
+                                'https://images.unsplash.com/photo-1520038410233-7141be7e6f97?ixlib=rb-4.0.3&auto=format&fit=crop&w=1000&q=80',
+                            title: 'Track Your Ride',
+                          ),
+                        ),
+                      ],
                     ),
                   ),
                   Container(
@@ -158,21 +192,21 @@ class _SplashOnboardingWidgetState extends State<SplashOnboardingWidget> {
                               model: _model.stepIndicatorModel1,
                               updateCallback: () => safeSetState(() {}),
                               child: StepIndicatorWidget(
-                                active: true,
+                                active: _model.pageViewCurrentIndex == 0,
                               ),
                             ),
                             wrapWithModel(
                               model: _model.stepIndicatorModel2,
                               updateCallback: () => safeSetState(() {}),
                               child: StepIndicatorWidget(
-                                active: false,
+                                active: _model.pageViewCurrentIndex == 1,
                               ),
                             ),
                             wrapWithModel(
                               model: _model.stepIndicatorModel3,
                               updateCallback: () => safeSetState(() {}),
                               child: StepIndicatorWidget(
-                                active: false,
+                                active: _model.pageViewCurrentIndex == 2,
                               ),
                             ),
                           ].divide(SizedBox(width: 4.0)),
@@ -188,7 +222,14 @@ class _SplashOnboardingWidgetState extends State<SplashOnboardingWidget> {
                               hoverColor: Colors.transparent,
                               highlightColor: Colors.transparent,
                               onTap: () async {
-                                context.goNamed(HomeDashboardWidget.routeName);
+                                if (_model.pageViewCurrentIndex < 2) {
+                                  await _model.pageViewController?.nextPage(
+                                    duration: Duration(milliseconds: 300),
+                                    curve: Curves.ease,
+                                  );
+                                } else {
+                                  context.goNamed(LoginOTPWidget.routeName);
+                                }
                               },
                               child: wrapWithModel(
                                 model: _model.buttonModel1,
@@ -196,7 +237,9 @@ class _SplashOnboardingWidgetState extends State<SplashOnboardingWidget> {
                                 child: ButtonWidget(
                                   iconPresent: false,
                                   iconEndPresent: false,
-                                  content: 'Get Started',
+                                  content: _model.pageViewCurrentIndex == 2
+                                      ? 'Get Started'
+                                      : 'Next',
                                   variant: 'primary',
                                   size: 'large',
                                   fullWidth: false,
@@ -211,7 +254,7 @@ class _SplashOnboardingWidgetState extends State<SplashOnboardingWidget> {
                               hoverColor: Colors.transparent,
                               highlightColor: Colors.transparent,
                               onTap: () async {
-                                context.goNamed(HomeDashboardWidget.routeName);
+                                context.goNamed(LoginOTPWidget.routeName);
                               },
                               child: wrapWithModel(
                                 model: _model.buttonModel2,
@@ -219,7 +262,7 @@ class _SplashOnboardingWidgetState extends State<SplashOnboardingWidget> {
                                 child: ButtonWidget(
                                   iconPresent: false,
                                   iconEndPresent: false,
-                                  content: 'Sign In to Account',
+                                  content: 'Skip',
                                   variant: 'ghost',
                                   size: 'medium',
                                   fullWidth: false,

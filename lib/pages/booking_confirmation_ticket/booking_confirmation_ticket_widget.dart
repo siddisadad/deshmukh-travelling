@@ -1,8 +1,14 @@
+import '/pages/live_tracking/live_tracking_widget.dart';
+import '/pages/home_dashboard/home_dashboard_widget.dart';
+import '/backend/schema/booking_record.dart';
+import '/core/services/pdf_service.dart';
+import '/core/services/share_service.dart';
 import '/components/action_button/action_button_widget.dart';
 import '/components/button/button_widget.dart';
 import '/components/ticket_detail/ticket_detail_widget.dart';
 import '/flutter_flow/flutter_flow_theme.dart';
 import '/flutter_flow/flutter_flow_util.dart';
+import '../../l10n/app_localizations.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -10,7 +16,12 @@ import 'booking_confirmation_ticket_model.dart';
 export 'booking_confirmation_ticket_model.dart';
 
 class BookingConfirmationTicketWidget extends StatefulWidget {
-  const BookingConfirmationTicketWidget({super.key});
+  const BookingConfirmationTicketWidget({
+    super.key,
+    this.booking,
+  });
+
+  final BookingRecord? booking;
 
   static String routeName = 'BookingConfirmationTicket';
   static String routePath = '/bookingConfirmationTicket';
@@ -62,14 +73,17 @@ class _BookingConfirmationTicketWidgetState
                 decoration: BoxDecoration(
                   color: FlutterFlowTheme.of(context).primary,
                   borderRadius: BorderRadius.only(
-                    bottomLeft: Radius.circular(32.0),
-                    bottomRight: Radius.circular(32.0),
+                    bottomLeft: Radius.circular(FlutterFlowTheme.of(context).designToken.radius.xxl),
+                    bottomRight: Radius.circular(FlutterFlowTheme.of(context).designToken.radius.xxl),
                   ),
                   shape: BoxShape.rectangle,
                 ),
                 child: Padding(
-                  padding:
-                      EdgeInsetsDirectional.fromSTEB(24.0, 40.0, 24.0, 32.0),
+                  padding: EdgeInsetsDirectional.fromSTEB(
+                      FlutterFlowTheme.of(context).designToken.spacing.lg,
+                      FlutterFlowTheme.of(context).designToken.spacing.xxl,
+                      FlutterFlowTheme.of(context).designToken.spacing.lg,
+                      FlutterFlowTheme.of(context).designToken.spacing.xl),
                   child: Container(
                     child: Column(
                       mainAxisSize: MainAxisSize.min,
@@ -97,7 +111,7 @@ class _BookingConfirmationTicketWidgetState
                           crossAxisAlignment: CrossAxisAlignment.center,
                           children: [
                             Text(
-                              'Booking Confirmed!',
+                              AppLocalizations.of(context)!.bookingConfirmed,
                               textAlign: TextAlign.center,
                               style: FlutterFlowTheme.of(context)
                                   .headlineMedium
@@ -157,12 +171,13 @@ class _BookingConfirmationTicketWidgetState
                   child: Container(
                     decoration: BoxDecoration(
                       color: FlutterFlowTheme.of(context).secondaryBackground,
-                      borderRadius: BorderRadius.circular(24.0),
+                      borderRadius: BorderRadius.circular(FlutterFlowTheme.of(context).designToken.radius.lg),
                       shape: BoxShape.rectangle,
                     ),
                     child: Padding(
-                      padding: EdgeInsetsDirectional.fromSTEB(
-                          24.0, 16.0, 24.0, 16.0),
+                      padding: EdgeInsets.symmetric(
+                          horizontal: FlutterFlowTheme.of(context).designToken.spacing.lg,
+                          vertical: FlutterFlowTheme.of(context).designToken.spacing.md),
                       child: Container(
                         child: Row(
                           mainAxisSize: MainAxisSize.max,
@@ -202,7 +217,7 @@ class _BookingConfirmationTicketWidgetState
                                       ),
                                 ),
                                 Text(
-                                  'DT-9928471',
+                                  widget.booking?.id?.toUpperCase() ?? 'DT-9928471',
                                   style: FlutterFlowTheme.of(context)
                                       .titleLarge
                                       .override(
@@ -269,14 +284,14 @@ class _BookingConfirmationTicketWidgetState
                 ),
               ),
               Padding(
-                padding: EdgeInsets.all(24.0),
+                padding: EdgeInsets.all(FlutterFlowTheme.of(context).designToken.spacing.lg),
                 child: Container(
                   child: ClipRRect(
                     borderRadius: BorderRadius.circular(24.0),
                     child: Container(
                       decoration: BoxDecoration(
                         color: FlutterFlowTheme.of(context).secondaryBackground,
-                        borderRadius: BorderRadius.circular(24.0),
+                        borderRadius: BorderRadius.circular(FlutterFlowTheme.of(context).designToken.radius.lg),
                         shape: BoxShape.rectangle,
                         border: Border.all(
                           color: FlutterFlowTheme.of(context).alternate,
@@ -311,10 +326,9 @@ class _BookingConfirmationTicketWidgetState
                                           CrossAxisAlignment.start,
                                       children: [
                                         Text(
-                                          'Deshmukh Royal',
+                                          widget.booking?.busName ?? 'Deshmukh Royal',
                                           style: FlutterFlowTheme.of(context)
-                                              .titleMedium
-                                              .override(
+                                              .titleMedium.override(
                                                 font:
                                                     GoogleFonts.plusJakartaSans(
                                                   fontWeight: FontWeight.bold,
@@ -337,10 +351,9 @@ class _BookingConfirmationTicketWidgetState
                                               ),
                                         ),
                                         Text(
-                                          'AC • Sleeper (3A)',
+                                          widget.booking?.busType ?? 'AC • Sleeper',
                                           style: FlutterFlowTheme.of(context)
-                                              .labelSmall
-                                              .override(
+                                              .labelSmall.override(
                                                 font: GoogleFonts.inter(
                                                   fontWeight:
                                                       FlutterFlowTheme.of(
@@ -382,7 +395,7 @@ class _BookingConfirmationTicketWidgetState
                             ),
                           ),
                           Padding(
-                            padding: EdgeInsets.all(24.0),
+                            padding: EdgeInsets.all(FlutterFlowTheme.of(context).designToken.spacing.lg),
                             child: Column(
                               mainAxisSize: MainAxisSize.min,
                               mainAxisAlignment: MainAxisAlignment.start,
@@ -398,8 +411,8 @@ class _BookingConfirmationTicketWidgetState
                                       model: _model.ticketDetailModel1,
                                       updateCallback: () => safeSetState(() {}),
                                       child: TicketDetailWidget(
-                                        label: 'DEPARTURE',
-                                        value: '24 Oct, 08:30 PM',
+                                        label: AppLocalizations.of(context)!.departure,
+                                        value: '${widget.booking?.departureCity.split(',').first ?? 'Mumbai'}, ${widget.booking?.depTime ?? '08:30 PM'}',
                                       ),
                                     ),
                                     Icon(
@@ -412,8 +425,8 @@ class _BookingConfirmationTicketWidgetState
                                       model: _model.ticketDetailModel2,
                                       updateCallback: () => safeSetState(() {}),
                                       child: TicketDetailWidget(
-                                        label: 'ARRIVAL',
-                                        value: '25 Oct, 06:30 AM',
+                                        label: AppLocalizations.of(context)!.arrival,
+                                        value: '${widget.booking?.arrivalCity.split(',').first ?? 'Pune'}, ${widget.booking?.arrTime ?? '06:30 AM'}',
                                       ),
                                     ),
                                   ],
@@ -536,7 +549,7 @@ class _BookingConfirmationTicketWidgetState
                                               ),
                                         ),
                                         Text(
-                                          'B2, B3',
+                                          widget.booking?.seatNumbers.join(', ') ?? 'B2, B3',
                                           style: FlutterFlowTheme.of(context)
                                               .bodyMedium
                                               .override(
@@ -577,7 +590,7 @@ class _BookingConfirmationTicketWidgetState
                                     ),
                                   ),
                                   child: Padding(
-                                    padding: EdgeInsets.all(24.0),
+                                    padding: EdgeInsets.all(FlutterFlowTheme.of(context).designToken.spacing.lg),
                                     child: Container(
                                       child: Container(
                                         alignment:
@@ -805,46 +818,72 @@ class _BookingConfirmationTicketWidgetState
                       children: [
                         Expanded(
                           flex: 1,
-                          child: wrapWithModel(
-                            model: _model.actionButtonModel1,
-                            updateCallback: () => safeSetState(() {}),
-                            child: ActionButtonWidget(
-                              icon: Icon(
-                                Icons.download_rounded,
-                                color: FlutterFlowTheme.of(context).primary,
-                                size: 28.0,
+                          child: InkWell(
+                            onTap: () async {
+                              if (widget.booking != null) {
+                                await PdfService.printTicket(widget.booking!);
+                              }
+                            },
+                            child: wrapWithModel(
+                              model: _model.actionButtonModel1,
+                              updateCallback: () => safeSetState(() {}),
+                              child: ActionButtonWidget(
+                                icon: Icon(
+                                  Icons.download_rounded,
+                                  color: FlutterFlowTheme.of(context).primary,
+                                  size: 28.0,
+                                ),
+                                label: 'Download PDF',
                               ),
-                              label: 'Download PDF',
                             ),
                           ),
                         ),
                         Expanded(
                           flex: 1,
-                          child: wrapWithModel(
-                            model: _model.actionButtonModel2,
-                            updateCallback: () => safeSetState(() {}),
-                            child: ActionButtonWidget(
-                              icon: Icon(
-                                Icons.share_rounded,
-                                color: FlutterFlowTheme.of(context).primary,
-                                size: 28.0,
+                          child: InkWell(
+                            onTap: () async {
+                              if (widget.booking != null) {
+                                await ShareService.shareBookingDetails(
+                                    widget.booking!);
+                              }
+                            },
+                            child: wrapWithModel(
+                              model: _model.actionButtonModel2,
+                              updateCallback: () => safeSetState(() {}),
+                              child: ActionButtonWidget(
+                                icon: Icon(
+                                  Icons.share_rounded,
+                                  color: FlutterFlowTheme.of(context).primary,
+                                  size: 28.0,
+                                ),
+                                label: 'Share Ticket',
                               ),
-                              label: 'Share Ticket',
                             ),
                           ),
                         ),
                         Expanded(
                           flex: 1,
-                          child: wrapWithModel(
-                            model: _model.actionButtonModel3,
-                            updateCallback: () => safeSetState(() {}),
-                            child: ActionButtonWidget(
-                              icon: Icon(
-                                Icons.map_rounded,
-                                color: FlutterFlowTheme.of(context).primary,
-                                size: 28.0,
+                          child: InkWell(
+                            onTap: () async {
+                              context.pushNamed(
+                                LiveTrackingWidget.routeName,
+                                queryParameters: {
+                                  'busId': serializeParam(
+                                      widget.booking?.busId, ParamType.String),
+                                }.withoutNulls,
+                              );
+                            },
+                            child: wrapWithModel(
+                              model: _model.actionButtonModel3,
+                              updateCallback: () => safeSetState(() {}),
+                              child: ActionButtonWidget(
+                                icon: Icon(
+                                  Icons.map_rounded,
+                                  color: FlutterFlowTheme.of(context).primary,
+                                  size: 28.0,
+                                ),
+                                label: 'Track Bus',
                               ),
-                              label: 'Track Bus',
                             ),
                           ),
                         ),
@@ -873,20 +912,25 @@ class _BookingConfirmationTicketWidgetState
                       ),
                     ),
                     Padding(
-                      padding: EdgeInsets.all(24.0),
+                      padding: EdgeInsets.all(FlutterFlowTheme.of(context).designToken.spacing.lg),
                       child: Container(
-                        child: wrapWithModel(
-                          model: _model.buttonModel,
-                          updateCallback: () => safeSetState(() {}),
-                          child: ButtonWidget(
-                            iconPresent: false,
-                            iconEndPresent: false,
-                            content: 'Back to Home',
-                            variant: 'primary',
-                            size: 'large',
-                            fullWidth: true,
-                            loading: false,
-                            disabled: false,
+                        child: InkWell(
+                          onTap: () async {
+                            context.goNamed(HomeDashboardWidget.routeName);
+                          },
+                          child: wrapWithModel(
+                            model: _model.buttonModel,
+                            updateCallback: () => safeSetState(() {}),
+                            child: ButtonWidget(
+                              iconPresent: false,
+                              iconEndPresent: false,
+                              content: AppLocalizations.of(context)!.backToHome,
+                              variant: 'primary',
+                              size: 'large',
+                              fullWidth: true,
+                              loading: false,
+                              disabled: false,
+                            ),
                           ),
                         ),
                       ),

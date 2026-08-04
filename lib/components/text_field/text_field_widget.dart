@@ -22,6 +22,10 @@ class TextFieldWidget extends StatefulWidget {
     String? onSubmit,
     String? variant,
     bool? error,
+    this.obscureText = false,
+    this.keyboardType = TextInputType.text,
+    this.controller,
+    this.focusNode,
   })  : this.label = label ?? '',
         this.labelPresent = labelPresent ?? false,
         this.helper = helper ?? '',
@@ -49,6 +53,10 @@ class TextFieldWidget extends StatefulWidget {
   final String onSubmit;
   final String variant;
   final bool error;
+  final bool obscureText;
+  final TextInputType keyboardType;
+  final TextEditingController? controller;
+  final FocusNode? focusNode;
 
   @override
   State<TextFieldWidget> createState() => _TextFieldWidgetState();
@@ -68,8 +76,8 @@ class _TextFieldWidgetState extends State<TextFieldWidget> {
     super.initState();
     _model = createModel(context, () => TextFieldModel());
 
-    _model.inputTextController ??= TextEditingController(text: widget.value);
-    _model.inputFocusNode ??= FocusNode();
+    _model.inputTextController ??= widget.controller ?? TextEditingController(text: widget.value);
+    _model.inputFocusNode ??= widget.focusNode ?? FocusNode();
 
     WidgetsBinding.instance.addPostFrameCallback((_) => safeSetState(() {}));
   }
@@ -120,7 +128,6 @@ class _TextFieldWidgetState extends State<TextFieldWidget> {
                   ),
             ),
           Container(
-            height: 40.0,
             decoration: BoxDecoration(
               color: valueOrDefault<Color>(
                 () {
@@ -375,7 +382,8 @@ class _TextFieldWidgetState extends State<TextFieldWidget> {
                     child: TextFormField(
                       controller: _model.inputTextController,
                       focusNode: _model.inputFocusNode,
-                      obscureText: false,
+                      obscureText: widget.obscureText,
+                      keyboardType: widget.keyboardType,
                       decoration: InputDecoration(
                         isDense: true,
                         hintText: valueOrDefault<String>(
@@ -426,6 +434,11 @@ class _TextFieldWidgetState extends State<TextFieldWidget> {
                         focusedBorder: InputBorder.none,
                         errorBorder: InputBorder.none,
                         focusedErrorBorder: InputBorder.none,
+                        errorStyle: FlutterFlowTheme.of(context).bodySmall.override(
+                          font: GoogleFonts.inter(),
+                          color: FlutterFlowTheme.of(context).error,
+                          fontSize: 10.0,
+                        ),
                       ),
                       style: FlutterFlowTheme.of(context).bodyMedium.override(
                             font: GoogleFonts.inter(

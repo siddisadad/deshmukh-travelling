@@ -1,3 +1,6 @@
+import '/backend/firebase/firestore_service.dart';
+import '/backend/schema/passenger_record.dart';
+import '/backend/schema/users_record.dart';
 import '/components/button/button_widget.dart';
 import '/components/passenger_card/passenger_card_widget.dart';
 import '/components/profile_menu_item/profile_menu_item_widget.dart';
@@ -9,6 +12,10 @@ import 'package:flutter/material.dart';
 
 class ProfileSettingsModel extends FlutterFlowModel<ProfileSettingsWidget> {
   ///  State fields for stateful widgets in this page.
+
+  final firestoreService = FirestoreService();
+  Future<List<PassengerRecord>>? savedPassengersFuture;
+  Future<UsersRecord?>? userRecordFuture;
 
   // Model for Button.
   late ButtonModel buttonModel1;

@@ -7,6 +7,10 @@ import 'package:flutter/material.dart';
 class PassengerFormModel extends FlutterFlowModel<PassengerFormWidget> {
   ///  State fields for stateful widgets in this component.
 
+  String get name => textFieldModel1.inputTextController?.text ?? '';
+  int get age => int.tryParse(textFieldModel2.inputTextController?.text ?? '') ?? 0;
+  String get gender => dropdownValue ?? 'Male';
+
   // Model for TextField.
   late TextFieldModel textFieldModel1;
   // Model for TextField.
@@ -18,7 +22,12 @@ class PassengerFormModel extends FlutterFlowModel<PassengerFormWidget> {
   @override
   void initState(BuildContext context) {
     textFieldModel1 = createModel(context, () => TextFieldModel());
+    textFieldModel1.inputTextController = TextEditingController();
+    textFieldModel1.inputFocusNode = FocusNode();
+
     textFieldModel2 = createModel(context, () => TextFieldModel());
+    textFieldModel2.inputTextController = TextEditingController();
+    textFieldModel2.inputFocusNode = FocusNode();
   }
 
   @override

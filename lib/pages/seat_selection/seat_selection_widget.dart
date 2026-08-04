@@ -1,9 +1,12 @@
+import '/backend/schema/bus_record.dart';
+import 'components/bus_seat_map.dart';
 import '/components/button/button_widget.dart';
 import '/components/seat_legend_item/seat_legend_item_widget.dart';
 import '/components/seat_widget/seat_widget_widget.dart';
 import '/flutter_flow/flutter_flow_icon_button.dart';
 import '/flutter_flow/flutter_flow_theme.dart';
 import '/flutter_flow/flutter_flow_util.dart';
+import '../../l10n/app_localizations.dart';
 import '/index.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -11,7 +14,12 @@ import 'seat_selection_model.dart';
 export 'seat_selection_model.dart';
 
 class SeatSelectionWidget extends StatefulWidget {
-  const SeatSelectionWidget({super.key});
+  const SeatSelectionWidget({
+    super.key,
+    this.bus,
+  });
+
+  final BusRecord? bus;
 
   static String routeName = 'SeatSelection';
   static String routePath = '/seatSelection';
@@ -29,6 +37,7 @@ class _SeatSelectionWidgetState extends State<SeatSelectionWidget> {
   void initState() {
     super.initState();
     _model = createModel(context, () => SeatSelectionModel());
+    _model.pricePerSeat = widget.bus?.price ?? 1250.0;
 
     WidgetsBinding.instance.addPostFrameCallback((_) => safeSetState(() {}));
   }
@@ -61,7 +70,10 @@ class _SeatSelectionWidgetState extends State<SeatSelectionWidget> {
                 shape: BoxShape.rectangle,
               ),
               child: Padding(
-                padding: EdgeInsetsDirectional.fromSTEB(24.0, 16.0, 24.0, 16.0),
+                padding: EdgeInsets.symmetric(
+                  horizontal: FlutterFlowTheme.of(context).designToken.spacing.lg,
+                  vertical: FlutterFlowTheme.of(context).designToken.spacing.md,
+                ),
                 child: Container(
                   child: Row(
                     mainAxisSize: MainAxisSize.max,
@@ -77,8 +89,8 @@ class _SeatSelectionWidgetState extends State<SeatSelectionWidget> {
                           color: FlutterFlowTheme.of(context).primaryText,
                           size: 24.0,
                         ),
-                        onPressed: () {
-                          print('IconButton pressed ...');
+                        onPressed: () async {
+                          context.safePop();
                         },
                       ),
                       Expanded(
@@ -89,7 +101,7 @@ class _SeatSelectionWidgetState extends State<SeatSelectionWidget> {
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
                             Text(
-                              'Select Seats',
+                              AppLocalizations.of(context)!.selectSeats,
                               style: FlutterFlowTheme.of(context)
                                   .titleMedium
                                   .override(
@@ -107,8 +119,9 @@ class _SeatSelectionWidgetState extends State<SeatSelectionWidget> {
                                     lineHeight: 1.45,
                                   ),
                             ),
+...
                             Text(
-                              'Mumbai → Pune • 24 Oct',
+                              '${widget.bus?.departureCity.split(',').first ?? 'Mumbai'} → ${widget.bus?.arrivalCity.split(',').first ?? 'Pune'} • ${AppLocalizations.of(context)!.availableBuses}',
                               style: FlutterFlowTheme.of(context)
                                   .labelSmall
                                   .override(
@@ -164,7 +177,7 @@ class _SeatSelectionWidgetState extends State<SeatSelectionWidget> {
                     crossAxisAlignment: CrossAxisAlignment.stretch,
                     children: [
                       Padding(
-                        padding: EdgeInsets.all(24.0),
+                        padding: EdgeInsets.all(FlutterFlowTheme.of(context).designToken.spacing.lg),
                         child: Container(
                           child: Column(
                             mainAxisSize: MainAxisSize.min,
@@ -175,7 +188,7 @@ class _SeatSelectionWidgetState extends State<SeatSelectionWidget> {
                                 decoration: BoxDecoration(
                                   color: FlutterFlowTheme.of(context)
                                       .secondaryBackground,
-                                  borderRadius: BorderRadius.circular(16.0),
+                                  borderRadius: BorderRadius.circular(FlutterFlowTheme.of(context).designToken.radius.md),
                                   shape: BoxShape.rectangle,
                                   border: Border.all(
                                     color:
@@ -184,7 +197,7 @@ class _SeatSelectionWidgetState extends State<SeatSelectionWidget> {
                                   ),
                                 ),
                                 child: Padding(
-                                  padding: EdgeInsets.all(16.0),
+                                  padding: EdgeInsets.all(FlutterFlowTheme.of(context).designToken.spacing.md),
                                   child: Container(
                                     child: Row(
                                       mainAxisSize: MainAxisSize.max,
@@ -200,7 +213,7 @@ class _SeatSelectionWidgetState extends State<SeatSelectionWidget> {
                                             color: FlutterFlowTheme.of(context)
                                                 .primaryContainer,
                                             borderRadius:
-                                                BorderRadius.circular(12.0),
+                                                BorderRadius.circular(FlutterFlowTheme.of(context).designToken.radius.sm),
                                             shape: BoxShape.rectangle,
                                           ),
                                           alignment:
@@ -222,7 +235,7 @@ class _SeatSelectionWidgetState extends State<SeatSelectionWidget> {
                                                 CrossAxisAlignment.start,
                                             children: [
                                               Text(
-                                                'Deshmukh Premium AC',
+                                                widget.bus?.name ?? 'Deshmukh Premium AC',
                                                 maxLines: 1,
                                                 style:
                                                     FlutterFlowTheme.of(context)
@@ -308,7 +321,7 @@ class _SeatSelectionWidgetState extends State<SeatSelectionWidget> {
                                                     ),
                                                   ),
                                                   Text(
-                                                    'Volvo B11R',
+                                                    widget.bus?.type ?? 'Volvo B11R',
                                                     style: FlutterFlowTheme.of(
                                                             context)
                                                         .labelSmall
@@ -439,519 +452,13 @@ class _SeatSelectionWidgetState extends State<SeatSelectionWidget> {
                                   ),
                                 ],
                               ),
-                              Container(
-                                decoration: BoxDecoration(
-                                  color: FlutterFlowTheme.of(context)
-                                      .secondaryBackground,
-                                  borderRadius: BorderRadius.circular(24.0),
-                                  shape: BoxShape.rectangle,
-                                  border: Border.all(
-                                    color:
-                                        FlutterFlowTheme.of(context).alternate,
-                                    width: 1.0,
-                                  ),
-                                ),
-                                child: Padding(
-                                  padding: EdgeInsets.all(32.0),
-                                  child: Container(
-                                    child: Column(
-                                      mainAxisSize: MainAxisSize.min,
-                                      mainAxisAlignment:
-                                          MainAxisAlignment.start,
-                                      crossAxisAlignment:
-                                          CrossAxisAlignment.center,
-                                      children: [
-                                        Row(
-                                          mainAxisSize: MainAxisSize.max,
-                                          mainAxisAlignment:
-                                              MainAxisAlignment.center,
-                                          crossAxisAlignment:
-                                              CrossAxisAlignment.center,
-                                          children: [
-                                            Container(
-                                              width: 80.0,
-                                              height: 32.0,
-                                              decoration: BoxDecoration(
-                                                color:
-                                                    FlutterFlowTheme.of(context)
-                                                        .secondaryBackground,
-                                                borderRadius: BorderRadius.only(
-                                                  topLeft: Radius.circular(4.0),
-                                                  topRight:
-                                                      Radius.circular(16.0),
-                                                  bottomLeft:
-                                                      Radius.circular(16.0),
-                                                  bottomRight:
-                                                      Radius.circular(4.0),
-                                                ),
-                                                shape: BoxShape.rectangle,
-                                                border: Border.all(
-                                                  color: FlutterFlowTheme.of(
-                                                          context)
-                                                      .alternate,
-                                                  width: 1.0,
-                                                ),
-                                              ),
-                                            ),
-                                            Expanded(
-                                              flex: 1,
-                                              child: Column(
-                                                mainAxisSize: MainAxisSize.min,
-                                                mainAxisAlignment:
-                                                    MainAxisAlignment.start,
-                                                crossAxisAlignment:
-                                                    CrossAxisAlignment.center,
-                                                children: [
-                                                  Row(
-                                                    mainAxisSize:
-                                                        MainAxisSize.max,
-                                                    mainAxisAlignment:
-                                                        MainAxisAlignment
-                                                            .center,
-                                                    crossAxisAlignment:
-                                                        CrossAxisAlignment
-                                                            .center,
-                                                    children: [
-                                                      wrapWithModel(
-                                                        model: _model
-                                                            .seatWidgetModel1,
-                                                        updateCallback: () =>
-                                                            safeSetState(() {}),
-                                                        child: SeatWidgetWidget(
-                                                          number: '1',
-                                                          status: 'booked',
-                                                        ),
-                                                      ),
-                                                      wrapWithModel(
-                                                        model: _model
-                                                            .seatWidgetModel2,
-                                                        updateCallback: () =>
-                                                            safeSetState(() {}),
-                                                        child: SeatWidgetWidget(
-                                                          number: '2',
-                                                          status: 'booked',
-                                                        ),
-                                                      ),
-                                                      Container(
-                                                        width: 12.0,
-                                                      ),
-                                                      wrapWithModel(
-                                                        model: _model
-                                                            .seatWidgetModel3,
-                                                        updateCallback: () =>
-                                                            safeSetState(() {}),
-                                                        child: SeatWidgetWidget(
-                                                          number: '3',
-                                                          status: 'booked',
-                                                        ),
-                                                      ),
-                                                      wrapWithModel(
-                                                        model: _model
-                                                            .seatWidgetModel4,
-                                                        updateCallback: () =>
-                                                            safeSetState(() {}),
-                                                        child: SeatWidgetWidget(
-                                                          number: '4',
-                                                          status: 'booked',
-                                                        ),
-                                                      ),
-                                                    ].divide(
-                                                        SizedBox(width: 16.0)),
-                                                  ),
-                                                  Row(
-                                                    mainAxisSize:
-                                                        MainAxisSize.max,
-                                                    mainAxisAlignment:
-                                                        MainAxisAlignment
-                                                            .center,
-                                                    crossAxisAlignment:
-                                                        CrossAxisAlignment
-                                                            .center,
-                                                    children: [
-                                                      wrapWithModel(
-                                                        model: _model
-                                                            .seatWidgetModel5,
-                                                        updateCallback: () =>
-                                                            safeSetState(() {}),
-                                                        child: SeatWidgetWidget(
-                                                          number: '5',
-                                                          status: 'booked',
-                                                        ),
-                                                      ),
-                                                      wrapWithModel(
-                                                        model: _model
-                                                            .seatWidgetModel6,
-                                                        updateCallback: () =>
-                                                            safeSetState(() {}),
-                                                        child: SeatWidgetWidget(
-                                                          number: '6',
-                                                          status: 'booked',
-                                                        ),
-                                                      ),
-                                                      Container(
-                                                        width: 12.0,
-                                                      ),
-                                                      wrapWithModel(
-                                                        model: _model
-                                                            .seatWidgetModel7,
-                                                        updateCallback: () =>
-                                                            safeSetState(() {}),
-                                                        child: SeatWidgetWidget(
-                                                          number: '7',
-                                                          status: 'booked',
-                                                        ),
-                                                      ),
-                                                      wrapWithModel(
-                                                        model: _model
-                                                            .seatWidgetModel8,
-                                                        updateCallback: () =>
-                                                            safeSetState(() {}),
-                                                        child: SeatWidgetWidget(
-                                                          number: '8',
-                                                          status: 'booked',
-                                                        ),
-                                                      ),
-                                                    ].divide(
-                                                        SizedBox(width: 16.0)),
-                                                  ),
-                                                ].divide(
-                                                    SizedBox(height: 16.0)),
-                                              ),
-                                            ),
-                                          ].divide(SizedBox(width: 16.0)),
-                                        ),
-                                        Row(
-                                          mainAxisSize: MainAxisSize.max,
-                                          mainAxisAlignment:
-                                              MainAxisAlignment.center,
-                                          crossAxisAlignment:
-                                              CrossAxisAlignment.center,
-                                          children: [
-                                            Container(
-                                              width: 80.0,
-                                              height: 32.0,
-                                              decoration: BoxDecoration(
-                                                color:
-                                                    FlutterFlowTheme.of(context)
-                                                        .secondaryBackground,
-                                                borderRadius: BorderRadius.only(
-                                                  topLeft:
-                                                      Radius.circular(16.0),
-                                                  topRight:
-                                                      Radius.circular(4.0),
-                                                  bottomLeft:
-                                                      Radius.circular(4.0),
-                                                  bottomRight:
-                                                      Radius.circular(16.0),
-                                                ),
-                                                shape: BoxShape.rectangle,
-                                                border: Border.all(
-                                                  color: FlutterFlowTheme.of(
-                                                          context)
-                                                      .alternate,
-                                                  width: 1.0,
-                                                ),
-                                              ),
-                                              alignment: AlignmentDirectional(
-                                                  0.0, 0.0),
-                                              child: Icon(
-                                                Icons.wc_rounded,
-                                                color:
-                                                    FlutterFlowTheme.of(context)
-                                                        .onSurface,
-                                                size: 16.0,
-                                              ),
-                                            ),
-                                            Expanded(
-                                              flex: 1,
-                                              child: Column(
-                                                mainAxisSize: MainAxisSize.min,
-                                                mainAxisAlignment:
-                                                    MainAxisAlignment.start,
-                                                crossAxisAlignment:
-                                                    CrossAxisAlignment.center,
-                                                children: [
-                                                  Row(
-                                                    mainAxisSize:
-                                                        MainAxisSize.max,
-                                                    mainAxisAlignment:
-                                                        MainAxisAlignment
-                                                            .center,
-                                                    crossAxisAlignment:
-                                                        CrossAxisAlignment
-                                                            .center,
-                                                    children: [
-                                                      wrapWithModel(
-                                                        model: _model
-                                                            .seatWidgetModel9,
-                                                        updateCallback: () =>
-                                                            safeSetState(() {}),
-                                                        child: SeatWidgetWidget(
-                                                          number: '9',
-                                                          status: 'booked',
-                                                        ),
-                                                      ),
-                                                      wrapWithModel(
-                                                        model: _model
-                                                            .seatWidgetModel10,
-                                                        updateCallback: () =>
-                                                            safeSetState(() {}),
-                                                        child: SeatWidgetWidget(
-                                                          number: '10',
-                                                          status: 'booked',
-                                                        ),
-                                                      ),
-                                                      Container(
-                                                        width: 12.0,
-                                                      ),
-                                                      wrapWithModel(
-                                                        model: _model
-                                                            .seatWidgetModel11,
-                                                        updateCallback: () =>
-                                                            safeSetState(() {}),
-                                                        child: SeatWidgetWidget(
-                                                          number: '11',
-                                                          status: 'booked',
-                                                        ),
-                                                      ),
-                                                      wrapWithModel(
-                                                        model: _model
-                                                            .seatWidgetModel12,
-                                                        updateCallback: () =>
-                                                            safeSetState(() {}),
-                                                        child: SeatWidgetWidget(
-                                                          number: '12',
-                                                          status: 'booked',
-                                                        ),
-                                                      ),
-                                                    ].divide(
-                                                        SizedBox(width: 16.0)),
-                                                  ),
-                                                  Row(
-                                                    mainAxisSize:
-                                                        MainAxisSize.max,
-                                                    mainAxisAlignment:
-                                                        MainAxisAlignment
-                                                            .center,
-                                                    crossAxisAlignment:
-                                                        CrossAxisAlignment
-                                                            .center,
-                                                    children: [
-                                                      wrapWithModel(
-                                                        model: _model
-                                                            .seatWidgetModel13,
-                                                        updateCallback: () =>
-                                                            safeSetState(() {}),
-                                                        child: SeatWidgetWidget(
-                                                          number: '13',
-                                                          status: 'booked',
-                                                        ),
-                                                      ),
-                                                      wrapWithModel(
-                                                        model: _model
-                                                            .seatWidgetModel14,
-                                                        updateCallback: () =>
-                                                            safeSetState(() {}),
-                                                        child: SeatWidgetWidget(
-                                                          number: '14',
-                                                          status: 'booked',
-                                                        ),
-                                                      ),
-                                                      Container(
-                                                        width: 12.0,
-                                                      ),
-                                                      wrapWithModel(
-                                                        model: _model
-                                                            .seatWidgetModel15,
-                                                        updateCallback: () =>
-                                                            safeSetState(() {}),
-                                                        child: SeatWidgetWidget(
-                                                          number: '15',
-                                                          status: 'booked',
-                                                        ),
-                                                      ),
-                                                      wrapWithModel(
-                                                        model: _model
-                                                            .seatWidgetModel16,
-                                                        updateCallback: () =>
-                                                            safeSetState(() {}),
-                                                        child: SeatWidgetWidget(
-                                                          number: '16',
-                                                          status: 'booked',
-                                                        ),
-                                                      ),
-                                                    ].divide(
-                                                        SizedBox(width: 16.0)),
-                                                  ),
-                                                ].divide(
-                                                    SizedBox(height: 16.0)),
-                                              ),
-                                            ),
-                                          ].divide(SizedBox(width: 16.0)),
-                                        ),
-                                        Row(
-                                          mainAxisSize: MainAxisSize.max,
-                                          mainAxisAlignment:
-                                              MainAxisAlignment.center,
-                                          crossAxisAlignment:
-                                              CrossAxisAlignment.center,
-                                          children: [
-                                            Container(
-                                              width: 80.0,
-                                              height: 32.0,
-                                              decoration: BoxDecoration(
-                                                color:
-                                                    FlutterFlowTheme.of(context)
-                                                        .secondaryBackground,
-                                                borderRadius: BorderRadius.only(
-                                                  topLeft: Radius.circular(4.0),
-                                                  topRight:
-                                                      Radius.circular(16.0),
-                                                  bottomLeft:
-                                                      Radius.circular(16.0),
-                                                  bottomRight:
-                                                      Radius.circular(4.0),
-                                                ),
-                                                shape: BoxShape.rectangle,
-                                                border: Border.all(
-                                                  color: FlutterFlowTheme.of(
-                                                          context)
-                                                      .alternate,
-                                                  width: 1.0,
-                                                ),
-                                              ),
-                                            ),
-                                            Expanded(
-                                              flex: 1,
-                                              child: Column(
-                                                mainAxisSize: MainAxisSize.min,
-                                                mainAxisAlignment:
-                                                    MainAxisAlignment.start,
-                                                crossAxisAlignment:
-                                                    CrossAxisAlignment.center,
-                                                children: [
-                                                  Row(
-                                                    mainAxisSize:
-                                                        MainAxisSize.max,
-                                                    mainAxisAlignment:
-                                                        MainAxisAlignment
-                                                            .center,
-                                                    crossAxisAlignment:
-                                                        CrossAxisAlignment
-                                                            .center,
-                                                    children: [
-                                                      wrapWithModel(
-                                                        model: _model
-                                                            .seatWidgetModel17,
-                                                        updateCallback: () =>
-                                                            safeSetState(() {}),
-                                                        child: SeatWidgetWidget(
-                                                          number: '17',
-                                                          status: 'booked',
-                                                        ),
-                                                      ),
-                                                      wrapWithModel(
-                                                        model: _model
-                                                            .seatWidgetModel18,
-                                                        updateCallback: () =>
-                                                            safeSetState(() {}),
-                                                        child: SeatWidgetWidget(
-                                                          number: '18',
-                                                          status: 'selected',
-                                                        ),
-                                                      ),
-                                                      Container(
-                                                        width: 12.0,
-                                                      ),
-                                                      wrapWithModel(
-                                                        model: _model
-                                                            .seatWidgetModel19,
-                                                        updateCallback: () =>
-                                                            safeSetState(() {}),
-                                                        child: SeatWidgetWidget(
-                                                          number: '19',
-                                                          status: 'booked',
-                                                        ),
-                                                      ),
-                                                      wrapWithModel(
-                                                        model: _model
-                                                            .seatWidgetModel20,
-                                                        updateCallback: () =>
-                                                            safeSetState(() {}),
-                                                        child: SeatWidgetWidget(
-                                                          number: '20',
-                                                          status: 'booked',
-                                                        ),
-                                                      ),
-                                                    ].divide(
-                                                        SizedBox(width: 16.0)),
-                                                  ),
-                                                  Row(
-                                                    mainAxisSize:
-                                                        MainAxisSize.max,
-                                                    mainAxisAlignment:
-                                                        MainAxisAlignment
-                                                            .center,
-                                                    crossAxisAlignment:
-                                                        CrossAxisAlignment
-                                                            .center,
-                                                    children: [
-                                                      wrapWithModel(
-                                                        model: _model
-                                                            .seatWidgetModel21,
-                                                        updateCallback: () =>
-                                                            safeSetState(() {}),
-                                                        child: SeatWidgetWidget(
-                                                          number: '21',
-                                                          status: 'booked',
-                                                        ),
-                                                      ),
-                                                      wrapWithModel(
-                                                        model: _model
-                                                            .seatWidgetModel22,
-                                                        updateCallback: () =>
-                                                            safeSetState(() {}),
-                                                        child: SeatWidgetWidget(
-                                                          number: '22',
-                                                          status: 'booked',
-                                                        ),
-                                                      ),
-                                                      Container(
-                                                        width: 12.0,
-                                                      ),
-                                                      wrapWithModel(
-                                                        model: _model
-                                                            .seatWidgetModel23,
-                                                        updateCallback: () =>
-                                                            safeSetState(() {}),
-                                                        child: SeatWidgetWidget(
-                                                          number: '23',
-                                                          status: 'booked',
-                                                        ),
-                                                      ),
-                                                      wrapWithModel(
-                                                        model: _model
-                                                            .seatWidgetModel24,
-                                                        updateCallback: () =>
-                                                            safeSetState(() {}),
-                                                        child: SeatWidgetWidget(
-                                                          number: '24',
-                                                          status: 'booked',
-                                                        ),
-                                                      ),
-                                                    ].divide(
-                                                        SizedBox(width: 16.0)),
-                                                  ),
-                                                ].divide(
-                                                    SizedBox(height: 16.0)),
-                                              ),
-                                            ),
-                                          ].divide(SizedBox(width: 16.0)),
-                                        ),
-                                      ].divide(SizedBox(height: 24.0)),
-                                    ),
-                                  ),
-                                ),
+                              BusSeatMap(
+                                model: _model,
+                                onToggleSeat: (number) {
+                                  setState(() {
+                                    _model.toggleSeat(number);
+                                  });
+                                },
                               ),
                             ].divide(SizedBox(height: 32.0)),
                           ),
@@ -992,7 +499,7 @@ class _SeatSelectionWidgetState extends State<SeatSelectionWidget> {
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
                               Text(
-                                '₹1,250',
+                                '₹${_model.totalPrice.toInt().toString().replaceAllMapped(RegExp(r'(\d{1,3})(?=(\d{3})+(?!\d))'), (Match m) => '${m[1]},')}',
                                 style: FlutterFlowTheme.of(context)
                                     .titleLarge
                                     .override(
@@ -1018,7 +525,7 @@ class _SeatSelectionWidgetState extends State<SeatSelectionWidget> {
                                 crossAxisAlignment: CrossAxisAlignment.center,
                                 children: [
                                   Text(
-                                    '2 Seats',
+                                    '${_model.selectedSeatNumbers.length} Seats',
                                     style: FlutterFlowTheme.of(context)
                                         .labelSmall
                                         .override(
@@ -1087,8 +594,20 @@ class _SeatSelectionWidgetState extends State<SeatSelectionWidget> {
                               hoverColor: Colors.transparent,
                               highlightColor: Colors.transparent,
                               onTap: () async {
-                                context
-                                    .goNamed(PassengerDetailsWidget.routeName);
+                                context.goNamed(
+                                  PassengerDetailsWidget.routeName,
+                                  queryParameters: {
+                                    'selectedSeats': serializeParam(
+                                      _model.selectedSeatNumbers,
+                                      ParamType.String,
+                                      isList: true,
+                                    ),
+                                    'bus': serializeParam(
+                                      widget.bus,
+                                      ParamType.JSON,
+                                    ),
+                                  }.withoutNulls,
+                                );
                               },
                               child: wrapWithModel(
                                 model: _model.buttonModel,
@@ -1102,12 +621,12 @@ class _SeatSelectionWidgetState extends State<SeatSelectionWidget> {
                                   ),
                                   iconPresent: true,
                                   iconEndPresent: false,
-                                  content: 'Continue',
+                                  content: AppLocalizations.of(context)!.continueBtn,
                                   variant: 'primary',
                                   size: 'large',
                                   fullWidth: false,
                                   loading: false,
-                                  disabled: false,
+                                  disabled: _model.selectedSeatNumbers.isEmpty,
                                 ),
                               ),
                             ),

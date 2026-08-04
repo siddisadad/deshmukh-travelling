@@ -6,8 +6,51 @@ import '/index.dart';
 import 'seat_selection_widget.dart' show SeatSelectionWidget;
 import 'package:flutter/material.dart';
 
+class Seat {
+  final String number;
+  final String status; // 'available', 'booked', 'selected'
+  final double price;
+
+  Seat({
+    required this.number,
+    required this.status,
+    required this.price,
+  });
+
+  Seat copyWith({String? status}) {
+    return Seat(
+      number: this.number,
+      status: status ?? this.status,
+      price: this.price,
+    );
+  }
+}
+
 class SeatSelectionModel extends FlutterFlowModel<SeatSelectionWidget> {
   ///  State fields for stateful widgets in this page.
+
+  List<Seat> seats = [];
+  List<String> selectedSeatNumbers = [];
+  double pricePerSeat = 1250.0;
+
+  double get totalPrice => selectedSeatNumbers.length * pricePerSeat;
+
+  void toggleSeat(String number) {
+    if (selectedSeatNumbers.contains(number)) {
+      selectedSeatNumbers.remove(number);
+      // Update seat status in list
+      final index = seats.indexWhere((s) => s.number == number);
+      if (index != -1) {
+        seats[index] = seats[index].copyWith(status: 'available');
+      }
+    } else {
+      selectedSeatNumbers.add(number);
+      final index = seats.indexWhere((s) => s.number == number);
+      if (index != -1) {
+        seats[index] = seats[index].copyWith(status: 'selected');
+      }
+    }
+  }
 
   // Model for SeatLegendItem.
   late SeatLegendItemModel seatLegendItemModel1;
@@ -71,30 +114,15 @@ class SeatSelectionModel extends FlutterFlowModel<SeatSelectionWidget> {
     seatLegendItemModel1 = createModel(context, () => SeatLegendItemModel());
     seatLegendItemModel2 = createModel(context, () => SeatLegendItemModel());
     seatLegendItemModel3 = createModel(context, () => SeatLegendItemModel());
-    seatWidgetModel1 = createModel(context, () => SeatWidgetModel());
-    seatWidgetModel2 = createModel(context, () => SeatWidgetModel());
-    seatWidgetModel3 = createModel(context, () => SeatWidgetModel());
-    seatWidgetModel4 = createModel(context, () => SeatWidgetModel());
-    seatWidgetModel5 = createModel(context, () => SeatWidgetModel());
-    seatWidgetModel6 = createModel(context, () => SeatWidgetModel());
-    seatWidgetModel7 = createModel(context, () => SeatWidgetModel());
-    seatWidgetModel8 = createModel(context, () => SeatWidgetModel());
-    seatWidgetModel9 = createModel(context, () => SeatWidgetModel());
-    seatWidgetModel10 = createModel(context, () => SeatWidgetModel());
-    seatWidgetModel11 = createModel(context, () => SeatWidgetModel());
-    seatWidgetModel12 = createModel(context, () => SeatWidgetModel());
-    seatWidgetModel13 = createModel(context, () => SeatWidgetModel());
-    seatWidgetModel14 = createModel(context, () => SeatWidgetModel());
-    seatWidgetModel15 = createModel(context, () => SeatWidgetModel());
-    seatWidgetModel16 = createModel(context, () => SeatWidgetModel());
-    seatWidgetModel17 = createModel(context, () => SeatWidgetModel());
-    seatWidgetModel18 = createModel(context, () => SeatWidgetModel());
-    seatWidgetModel19 = createModel(context, () => SeatWidgetModel());
-    seatWidgetModel20 = createModel(context, () => SeatWidgetModel());
-    seatWidgetModel21 = createModel(context, () => SeatWidgetModel());
-    seatWidgetModel22 = createModel(context, () => SeatWidgetModel());
-    seatWidgetModel23 = createModel(context, () => SeatWidgetModel());
-    seatWidgetModel24 = createModel(context, () => SeatWidgetModel());
+
+    // Initialize mock seats
+    seats = List.generate(24, (index) {
+      final number = (index + 1).toString();
+      // Make some seats booked for demo
+      final status = (index % 5 == 0) ? 'booked' : 'available';
+      return Seat(number: number, status: status, price: 1250.0);
+    });
+
     buttonModel = createModel(context, () => ButtonModel());
   }
 
@@ -103,30 +131,6 @@ class SeatSelectionModel extends FlutterFlowModel<SeatSelectionWidget> {
     seatLegendItemModel1.dispose();
     seatLegendItemModel2.dispose();
     seatLegendItemModel3.dispose();
-    seatWidgetModel1.dispose();
-    seatWidgetModel2.dispose();
-    seatWidgetModel3.dispose();
-    seatWidgetModel4.dispose();
-    seatWidgetModel5.dispose();
-    seatWidgetModel6.dispose();
-    seatWidgetModel7.dispose();
-    seatWidgetModel8.dispose();
-    seatWidgetModel9.dispose();
-    seatWidgetModel10.dispose();
-    seatWidgetModel11.dispose();
-    seatWidgetModel12.dispose();
-    seatWidgetModel13.dispose();
-    seatWidgetModel14.dispose();
-    seatWidgetModel15.dispose();
-    seatWidgetModel16.dispose();
-    seatWidgetModel17.dispose();
-    seatWidgetModel18.dispose();
-    seatWidgetModel19.dispose();
-    seatWidgetModel20.dispose();
-    seatWidgetModel21.dispose();
-    seatWidgetModel22.dispose();
-    seatWidgetModel23.dispose();
-    seatWidgetModel24.dispose();
     buttonModel.dispose();
   }
 }

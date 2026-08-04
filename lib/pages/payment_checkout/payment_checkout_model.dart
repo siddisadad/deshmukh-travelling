@@ -1,3 +1,6 @@
+import '/backend/repositories/loyalty_repository.dart';
+import '/backend/schema/coupon_record.dart';
+import '/backend/firebase/firestore_service.dart';
 import '/components/button/button_widget.dart';
 import '/components/payment_method_tile/payment_method_tile_widget.dart';
 import '/components/price_summary_row/price_summary_row_widget.dart';
@@ -8,6 +11,15 @@ import 'package:flutter/material.dart';
 
 class PaymentCheckoutModel extends FlutterFlowModel<PaymentCheckoutWidget> {
   ///  State fields for stateful widgets in this page.
+
+  final firestoreService = FirestoreService();
+  final loyaltyRepository = MockLoyaltyRepository();
+
+  CouponRecord? appliedCoupon;
+  bool useWallet = false;
+  double walletBalance = 500.0;
+
+  TextEditingController? couponController;
 
   // Model for PaymentMethodTile.
   late PaymentMethodTileModel paymentMethodTileModel1;

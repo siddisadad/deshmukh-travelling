@@ -50,16 +50,15 @@ class _SeatWidgetWidgetState extends State<SeatWidgetWidget> {
       width: 48.0,
       height: 40.0,
       decoration: BoxDecoration(
-        color: valueOrDefault<Color>(
-          valueOrDefault<String>(
-                    widget.status,
-                    'booked',
-                  ) ==
-                  'selected'
-              ? FlutterFlowTheme.of(context).primary
-              : FlutterFlowTheme.of(context).surfaceVariant,
-          FlutterFlowTheme.of(context).surfaceVariant,
-        ),
+        color: () {
+          if (widget.status == 'selected') {
+            return FlutterFlowTheme.of(context).primary;
+          }
+          if (widget.status == 'booked') {
+            return FlutterFlowTheme.of(context).surfaceVariant;
+          }
+          return FlutterFlowTheme.of(context).primaryBackground;
+        }(),
         borderRadius: BorderRadius.circular(12.0),
         shape: BoxShape.rectangle,
         border: Border.all(
@@ -85,16 +84,15 @@ class _SeatWidgetWidgetState extends State<SeatWidgetWidget> {
                     fontStyle:
                         FlutterFlowTheme.of(context).labelSmall.fontStyle,
                   ),
-                  color: valueOrDefault<Color>(
-                    valueOrDefault<String>(
-                              widget.status,
-                              'booked',
-                            ) ==
-                            'selected'
-                        ? FlutterFlowTheme.of(context).onPrimary
-                        : FlutterFlowTheme.of(context).accent3,
-                    FlutterFlowTheme.of(context).accent3,
-                  ),
+                  color: () {
+                    if (widget.status == 'selected') {
+                      return FlutterFlowTheme.of(context).onPrimary;
+                    }
+                    if (widget.status == 'booked') {
+                      return FlutterFlowTheme.of(context).secondaryText;
+                    }
+                    return FlutterFlowTheme.of(context).primaryText;
+                  }(),
                   letterSpacing: 0.0,
                   fontWeight:
                       FlutterFlowTheme.of(context).labelSmall.fontWeight,
@@ -104,16 +102,15 @@ class _SeatWidgetWidgetState extends State<SeatWidgetWidget> {
           ),
           Icon(
             Icons.event_seat_rounded,
-            color: valueOrDefault<Color>(
-              valueOrDefault<String>(
-                        widget.status,
-                        'booked',
-                      ) ==
-                      'selected'
-                  ? FlutterFlowTheme.of(context).onPrimary
-                  : FlutterFlowTheme.of(context).accent3,
-              FlutterFlowTheme.of(context).accent3,
-            ),
+            color: () {
+              if (widget.status == 'selected') {
+                return FlutterFlowTheme.of(context).onPrimary;
+              }
+              if (widget.status == 'booked') {
+                return FlutterFlowTheme.of(context).secondaryText;
+              }
+              return FlutterFlowTheme.of(context).primary;
+            }(),
             size: 14.0,
           ),
         ].divide(SizedBox(height: 2.0)),

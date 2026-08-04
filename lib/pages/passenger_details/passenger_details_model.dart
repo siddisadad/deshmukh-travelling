@@ -10,6 +10,8 @@ import 'package:flutter/material.dart';
 class PassengerDetailsModel extends FlutterFlowModel<PassengerDetailsWidget> {
   ///  State fields for stateful widgets in this page.
 
+  List<PassengerFormModel> passengerFormModels = [];
+
   // Model for SectionHeaderA8889900.
   late SectionHeaderA8889900Model sectionHeaderA8889900Model1;
   // Model for PassengerForm.
@@ -33,8 +35,15 @@ class PassengerDetailsModel extends FlutterFlowModel<PassengerDetailsWidget> {
     passengerFormModel2 = createModel(context, () => PassengerFormModel());
     sectionHeaderA8889900Model2 =
         createModel(context, () => SectionHeaderA8889900Model());
+
     textFieldModel1 = createModel(context, () => TextFieldModel());
+    textFieldModel1.inputTextController = TextEditingController();
+    textFieldModel1.inputFocusNode = FocusNode();
+
     textFieldModel2 = createModel(context, () => TextFieldModel());
+    textFieldModel2.inputTextController = TextEditingController();
+    textFieldModel2.inputFocusNode = FocusNode();
+
     buttonModel = createModel(context, () => ButtonModel());
   }
 

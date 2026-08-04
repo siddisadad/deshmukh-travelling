@@ -1,3 +1,6 @@
+import '/main.dart';
+import '/backend/schema/passenger_record.dart';
+import '/auth/firebase_auth/auth_util.dart';
 import '/components/button/button_widget.dart';
 import '/components/passenger_card/passenger_card_widget.dart';
 import '/components/profile_menu_item/profile_menu_item_widget.dart';
@@ -6,6 +9,8 @@ import '/components/switch_component/switch_component_widget.dart';
 import '/flutter_flow/flutter_flow_icon_button.dart';
 import '/flutter_flow/flutter_flow_theme.dart';
 import '/flutter_flow/flutter_flow_util.dart';
+import '../../l10n/app_localizations.dart';
+import '/index.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -32,7 +37,59 @@ class _ProfileSettingsWidgetState extends State<ProfileSettingsWidget> {
     super.initState();
     _model = createModel(context, () => ProfileSettingsModel());
 
+    _model.savedPassengersFuture = _model.firestoreService.fetchSavedPassengers(currentUserUid);
+    _model.userRecordFuture = _model.firestoreService.getUser(currentUserUid);
+
     WidgetsBinding.instance.addPostFrameCallback((_) => safeSetState(() {}));
+  }
+
+  Future<void> _addNewPassengerDialog() async {
+    final nameController = TextEditingController();
+    final ageController = TextEditingController();
+    String relation = 'Other';
+
+    await showDialog(
+      context: context,
+      builder: (context) => AlertDialog(
+        title: const Text('Add New Passenger'),
+        content: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            TextField(controller: nameController, decoration: const InputDecoration(hintText: 'Full Name')),
+            TextField(controller: ageController, decoration: const InputDecoration(hintText: 'Age'), keyboardType: TextInputType.number),
+            DropdownButton<String>(
+              value: relation,
+              items: ['Self', 'Spouse', 'Father', 'Mother', 'Son', 'Daughter', 'Other']
+                  .map((e) => DropdownMenuItem(value: e, child: Text(e)))
+                  .toList(),
+              onChanged: (val) => setState(() => relation = val!),
+            ),
+          ],
+        ),
+        actions: [
+          TextButton(onPressed: () => Navigator.pop(context), child: const Text('Cancel')),
+          TextButton(
+            onPressed: () async {
+              if (nameController.text.isNotEmpty) {
+                final p = PassengerRecord(
+                  userId: currentUserUid,
+                  name: nameController.text,
+                  age: int.tryParse(ageController.text) ?? 0,
+                  gender: 'Male', // Default for now
+                  relation: relation,
+                );
+                await _model.firestoreService.savePassenger(p);
+                Navigator.pop(context);
+                setState(() {
+                  _model.savedPassengersFuture = _model.firestoreService.fetchSavedPassengers(currentUserUid);
+                });
+              }
+            },
+            child: const Text('Save'),
+          ),
+        ],
+      ),
+    );
   }
 
   @override
@@ -79,7 +136,7 @@ class _ProfileSettingsWidgetState extends State<ProfileSettingsWidget> {
                   ),
                   Padding(
                     padding:
-                        EdgeInsetsDirectional.fromSTEB(24.0, 60.0, 24.0, 20.0),
+                        EdgeInsetsDirectional.fromSTEB(FlutterFlowTheme.of(context).designToken.spacing.lg, 60.0, FlutterFlowTheme.of(context).designToken.spacing.lg, FlutterFlowTheme.of(context).designToken.spacing.md),
                     child: Column(
                       mainAxisSize: MainAxisSize.min,
                       mainAxisAlignment: MainAxisAlignment.start,
@@ -99,12 +156,12 @@ class _ProfileSettingsWidgetState extends State<ProfileSettingsWidget> {
                                 color: FlutterFlowTheme.of(context).onPrimary,
                                 size: 24.0,
                               ),
-                              onPressed: () {
-                                print('IconButton pressed ...');
+                              onPressed: () async {
+                                context.safePop();
                               },
                             ),
                             Text(
-                              'Profile',
+                              AppLocalizations.of(context)!.profile,
                               style: FlutterFlowTheme.of(context)
                                   .titleLarge
                                   .override(
@@ -133,8 +190,11 @@ class _ProfileSettingsWidgetState extends State<ProfileSettingsWidget> {
                                 color: FlutterFlowTheme.of(context).onPrimary,
                                 size: 20.0,
                               ),
-                              onPressed: () {
-                                print('IconButton pressed ...');
+                              onPressed: () async {
+                                await context.pushNamed(PersonalInfoWidget.routeName);
+                                setState(() {
+                                  _model.userRecordFuture = _model.firestoreService.getUser(currentUserUid);
+                                });
                               },
                             ),
                           ],
@@ -147,11 +207,11 @@ class _ProfileSettingsWidgetState extends State<ProfileSettingsWidget> {
                               decoration: BoxDecoration(
                                 color: FlutterFlowTheme.of(context)
                                     .secondaryBackground,
-                                borderRadius: BorderRadius.circular(24.0),
+                                borderRadius: BorderRadius.circular(FlutterFlowTheme.of(context).designToken.radius.lg),
                                 shape: BoxShape.rectangle,
                               ),
                               child: Padding(
-                                padding: EdgeInsets.all(24.0),
+                                padding: EdgeInsets.all(FlutterFlowTheme.of(context).designToken.spacing.lg),
                                 child: Container(
                                   child: Row(
                                     mainAxisSize: MainAxisSize.max,
@@ -190,156 +250,173 @@ class _ProfileSettingsWidgetState extends State<ProfileSettingsWidget> {
                                       ),
                                       Expanded(
                                         flex: 1,
-                                        child: Column(
-                                          mainAxisSize: MainAxisSize.min,
-                                          mainAxisAlignment:
-                                              MainAxisAlignment.start,
-                                          crossAxisAlignment:
-                                              CrossAxisAlignment.start,
-                                          children: [
-                                            Text(
-                                              'Aditya Deshmukh',
-                                              style: FlutterFlowTheme.of(
-                                                      context)
-                                                  .headlineSmall
-                                                  .override(
-                                                    font: GoogleFonts
-                                                        .plusJakartaSans(
-                                                      fontWeight:
-                                                          FontWeight.bold,
-                                                      fontStyle:
-                                                          FlutterFlowTheme.of(
-                                                                  context)
-                                                              .headlineSmall
-                                                              .fontStyle,
-                                                    ),
-                                                    color: FlutterFlowTheme.of(
-                                                            context)
-                                                        .primaryText,
-                                                    letterSpacing: 0.0,
-                                                    fontWeight: FontWeight.bold,
-                                                    fontStyle:
-                                                        FlutterFlowTheme.of(
-                                                                context)
-                                                            .headlineSmall
-                                                            .fontStyle,
-                                                    lineHeight: 1.35,
+                                        child: FutureBuilder<UsersRecord?>(
+                                          future: _model.userRecordFuture,
+                                          builder: (context, snapshot) {
+                                            final user = snapshot.data;
+                                            return Column(
+                                              mainAxisSize: MainAxisSize.min,
+                                              mainAxisAlignment:
+                                                  MainAxisAlignment.start,
+                                              crossAxisAlignment:
+                                                  CrossAxisAlignment.start,
+                                              children: [
+                                                Text(
+                                                  user?.displayName ?? valueOrDefault<String>(
+                                                    currentUserDisplayName,
+                                                    'Aditya Deshmukh',
                                                   ),
-                                            ),
-                                            Text(
-                                              '+91 98765 43210',
-                                              style:
-                                                  FlutterFlowTheme.of(context)
-                                                      .bodyMedium
+                                                  style: FlutterFlowTheme.of(
+                                                          context)
+                                                      .headlineSmall
                                                       .override(
-                                                        font: GoogleFonts.inter(
+                                                        font: GoogleFonts
+                                                            .plusJakartaSans(
                                                           fontWeight:
-                                                              FlutterFlowTheme.of(
-                                                                      context)
-                                                                  .bodyMedium
-                                                                  .fontWeight,
+                                                              FontWeight.bold,
                                                           fontStyle:
                                                               FlutterFlowTheme.of(
                                                                       context)
-                                                                  .bodyMedium
+                                                                  .headlineSmall
                                                                   .fontStyle,
                                                         ),
-                                                        color:
-                                                            FlutterFlowTheme.of(
-                                                                    context)
-                                                                .onSurface,
+                                                        color: FlutterFlowTheme.of(
+                                                                context)
+                                                            .primaryText,
                                                         letterSpacing: 0.0,
-                                                        fontWeight:
-                                                            FlutterFlowTheme.of(
-                                                                    context)
-                                                                .bodyMedium
-                                                                .fontWeight,
+                                                        fontWeight: FontWeight.bold,
                                                         fontStyle:
                                                             FlutterFlowTheme.of(
                                                                     context)
-                                                                .bodyMedium
+                                                                .headlineSmall
                                                                 .fontStyle,
-                                                        lineHeight: 1.5,
+                                                        lineHeight: 1.35,
                                                       ),
-                                            ),
-                                            Padding(
-                                              padding: EdgeInsetsDirectional
-                                                  .fromSTEB(0.0, 4.0, 0.0, 0.0),
-                                              child: Container(
-                                                child: Container(
-                                                  decoration: BoxDecoration(
-                                                    color: Color(0xFFE3F2FD),
-                                                    borderRadius:
-                                                        BorderRadius.circular(
-                                                            9999.0),
-                                                    shape: BoxShape.rectangle,
+                                                ),
+                                                Text(
+                                                  user?.phoneNumber ?? valueOrDefault<String>(
+                                                    currentPhoneNumber,
+                                                    '+91 98765 43210',
                                                   ),
-                                                  child: Padding(
-                                                    padding:
-                                                        EdgeInsetsDirectional
-                                                            .fromSTEB(12.0, 4.0,
-                                                                12.0, 4.0),
-                                                    child: Container(
-                                                      child: Row(
-                                                        mainAxisSize:
-                                                            MainAxisSize.min,
-                                                        mainAxisAlignment:
-                                                            MainAxisAlignment
-                                                                .start,
-                                                        crossAxisAlignment:
-                                                            CrossAxisAlignment
-                                                                .center,
-                                                        children: [
-                                                          Icon(
-                                                            Icons
-                                                                .verified_rounded,
-                                                            color: FlutterFlowTheme
-                                                                    .of(context)
-                                                                .onSurface,
-                                                            size: 14.0,
-                                                          ),
-                                                          Text(
-                                                            'Verified Traveler',
-                                                            style: FlutterFlowTheme
-                                                                    .of(context)
-                                                                .labelSmall
-                                                                .override(
-                                                                  font:
-                                                                      GoogleFonts
-                                                                          .inter(
-                                                                    fontWeight:
-                                                                        FontWeight
-                                                                            .w600,
-                                                                    fontStyle: FlutterFlowTheme.of(
-                                                                            context)
-                                                                        .labelSmall
-                                                                        .fontStyle,
-                                                                  ),
-                                                                  color: FlutterFlowTheme.of(
+                                                  style:
+                                                      FlutterFlowTheme.of(context)
+                                                          .bodyMedium
+                                                          .override(
+                                                            font: GoogleFonts.inter(
+                                                              fontWeight:
+                                                                  FlutterFlowTheme.of(
                                                                           context)
-                                                                      .onSurface,
-                                                                  letterSpacing:
-                                                                      0.0,
-                                                                  fontWeight:
-                                                                      FontWeight
-                                                                          .w600,
-                                                                  fontStyle: FlutterFlowTheme.of(
+                                                                      .bodyMedium
+                                                                      .fontWeight,
+                                                              fontStyle:
+                                                                  FlutterFlowTheme.of(
                                                                           context)
-                                                                      .labelSmall
+                                                                      .bodyMedium
                                                                       .fontStyle,
-                                                                  lineHeight:
-                                                                      1.4,
-                                                                ),
+                                                            ),
+                                                            color:
+                                                                FlutterFlowTheme.of(
+                                                                        context)
+                                                                    .onSurface,
+                                                            letterSpacing: 0.0,
+                                                            fontWeight:
+                                                                FlutterFlowTheme.of(
+                                                                        context)
+                                                                    .bodyMedium
+                                                                    .fontWeight,
+                                                            fontStyle:
+                                                                FlutterFlowTheme.of(
+                                                                        context)
+                                                                    .bodyMedium
+                                                                    .fontStyle,
+                                                            lineHeight: 1.5,
                                                           ),
-                                                        ].divide(SizedBox(
-                                                            width: 4.0)),
+                                                ),
+                                                if (user?.dob != null)
+                                                  Text(
+                                                    'DOB: ${DateFormat('dd MMM yyyy').format(user!.dob!)}',
+                                                    style: FlutterFlowTheme.of(context).labelSmall,
+                                                  ),
+                                                Padding(
+                                                  padding: EdgeInsetsDirectional
+                                                      .fromSTEB(0.0, 4.0, 0.0, 0.0),
+                                                  child: Container(
+                                                    child: Container(
+                                                      decoration: BoxDecoration(
+                                                        color: Color(0xFFE3F2FD),
+                                                        borderRadius:
+                                                            BorderRadius.circular(
+                                                                9999.0),
+                                                        shape: BoxShape.rectangle,
+                                                      ),
+                                                      child: Padding(
+                                                        padding:
+                                                            EdgeInsetsDirectional
+                                                                .fromSTEB(12.0, 4.0,
+                                                                    12.0, 4.0),
+                                                        child: Container(
+                                                          child: Row(
+                                                            mainAxisSize:
+                                                                MainAxisSize.min,
+                                                            mainAxisAlignment:
+                                                                MainAxisAlignment
+                                                                    .start,
+                                                            crossAxisAlignment:
+                                                                CrossAxisAlignment
+                                                                    .center,
+                                                            children: [
+                                                              Icon(
+                                                                Icons
+                                                                    .verified_rounded,
+                                                                color: FlutterFlowTheme
+                                                                        .of(context)
+                                                                    .onSurface,
+                                                                size: 14.0,
+                                                              ),
+                                                              Text(
+                                                                'Verified Traveler',
+                                                                style: FlutterFlowTheme
+                                                                        .of(context)
+                                                                    .labelSmall
+                                                                    .override(
+                                                                      font:
+                                                                          GoogleFonts
+                                                                              .inter(
+                                                                        fontWeight:
+                                                                            FontWeight
+                                                                                .w600,
+                                                                        fontStyle: FlutterFlowTheme.of(
+                                                                                context)
+                                                                            .labelSmall
+                                                                            .fontStyle,
+                                                                      ),
+                                                                      color: FlutterFlowTheme.of(
+                                                                              context)
+                                                                          .onSurface,
+                                                                      letterSpacing:
+                                                                          0.0,
+                                                                      fontWeight:
+                                                                          FontWeight
+                                                                              .w600,
+                                                                      fontStyle: FlutterFlowTheme.of(
+                                                                              context)
+                                                                          .labelSmall
+                                                                          .fontStyle,
+                                                                      lineHeight:
+                                                                          1.4,
+                                                                    ),
+                                                              ),
+                                                            ].divide(SizedBox(
+                                                                width: 4.0)),
+                                                          ),
+                                                        ),
                                                       ),
                                                     ),
                                                   ),
                                                 ),
-                                              ),
-                                            ),
-                                          ].divide(SizedBox(height: 4.0)),
+                                              ].divide(SizedBox(height: 4.0)),
+                                            );
+                                          },
                                         ),
                                       ),
                                     ].divide(SizedBox(width: 24.0)),
@@ -386,82 +463,65 @@ class _ProfileSettingsWidgetState extends State<ProfileSettingsWidget> {
                                 lineHeight: 1.45,
                               ),
                         ),
-                        wrapWithModel(
-                          model: _model.buttonModel1,
-                          updateCallback: () => safeSetState(() {}),
-                          child: ButtonWidget(
-                            icon: Icon(
-                              Icons.add_rounded,
-                              color: FlutterFlowTheme.of(context).primaryText,
-                              size: 24.0,
+                        InkWell(
+                          onTap: _addNewPassengerDialog,
+                          child: wrapWithModel(
+                            model: _model.buttonModel1,
+                            updateCallback: () => safeSetState(() {}),
+                            child: ButtonWidget(
+                              icon: Icon(
+                                Icons.add_rounded,
+                                color: FlutterFlowTheme.of(context).primaryText,
+                                size: 24.0,
+                              ),
+                              iconPresent: true,
+                              iconEndPresent: false,
+                              content: 'Add New',
+                              variant: 'ghost',
+                              size: 'small',
+                              fullWidth: false,
+                              loading: false,
+                              disabled: false,
                             ),
-                            iconPresent: true,
-                            iconEndPresent: false,
-                            content: 'Add New',
-                            variant: 'ghost',
-                            size: 'small',
-                            fullWidth: false,
-                            loading: false,
-                            disabled: false,
                           ),
                         ),
                       ],
                     ),
-                    SingleChildScrollView(
-                      scrollDirection: Axis.horizontal,
-                      child: Row(
-                        mainAxisSize: MainAxisSize.min,
-                        mainAxisAlignment: MainAxisAlignment.start,
-                        crossAxisAlignment: CrossAxisAlignment.center,
-                        children: [
-                          Padding(
-                            padding: EdgeInsetsDirectional.fromSTEB(
-                                0.0, 4.0, 0.0, 12.0),
-                            child: Container(
-                              child: Row(
-                                mainAxisSize: MainAxisSize.min,
-                                mainAxisAlignment: MainAxisAlignment.start,
-                                crossAxisAlignment: CrossAxisAlignment.center,
-                                children: [
-                                  wrapWithModel(
-                                    model: _model.passengerCardModel1,
-                                    updateCallback: () => safeSetState(() {}),
-                                    child: PassengerCardWidget(
-                                      initials: 'AD',
-                                      name: 'Aditya Deshmukh',
-                                      relation: 'Self',
-                                    ),
+                    FutureBuilder<List<PassengerRecord>>(
+                      future: _model.savedPassengersFuture,
+                      builder: (context, snapshot) {
+                        if (snapshot.connectionState == ConnectionState.waiting) {
+                          return const Center(child: CircularProgressIndicator());
+                        }
+                        final passengers = snapshot.data ?? [];
+                        return SingleChildScrollView(
+                          scrollDirection: Axis.horizontal,
+                          child: Row(
+                            mainAxisSize: MainAxisSize.min,
+                            mainAxisAlignment: MainAxisAlignment.start,
+                            crossAxisAlignment: CrossAxisAlignment.center,
+                            children: [
+                              for (var p in passengers)
+                                Padding(
+                                  padding: const EdgeInsets.only(right: 12.0),
+                                  child: PassengerCardWidget(
+                                    initials: p.name.substring(0, min(2, p.name.length)).toUpperCase(),
+                                    name: p.name,
+                                    relation: p.relation,
                                   ),
-                                  wrapWithModel(
-                                    model: _model.passengerCardModel2,
-                                    updateCallback: () => safeSetState(() {}),
-                                    child: PassengerCardWidget(
-                                      initials: 'SD',
-                                      name: 'Sunita Deshmukh',
-                                      relation: 'Spouse',
-                                    ),
-                                  ),
-                                  wrapWithModel(
-                                    model: _model.passengerCardModel3,
-                                    updateCallback: () => safeSetState(() {}),
-                                    child: PassengerCardWidget(
-                                      initials: 'MD',
-                                      name: 'Manoj Deshmukh',
-                                      relation: 'Father',
-                                    ),
-                                  ),
-                                ],
-                              ),
-                            ),
+                                ),
+                              if (passengers.isEmpty)
+                                Text('No saved passengers', style: FlutterFlowTheme.of(context).bodySmall),
+                            ],
                           ),
-                        ],
-                      ),
+                        );
+                      },
                     ),
                   ].divide(SizedBox(height: 16.0)),
                 ),
               ),
               Padding(
-                padding: EdgeInsets.all(24.0),
+                padding: EdgeInsets.all(FlutterFlowTheme.of(context).designToken.spacing.lg),
                 child: Column(
                   mainAxisSize: MainAxisSize.min,
                   mainAxisAlignment: MainAxisAlignment.start,
@@ -485,56 +545,94 @@ class _ProfileSettingsWidgetState extends State<ProfileSettingsWidget> {
                             lineHeight: 1.45,
                           ),
                     ),
-                    wrapWithModel(
-                      model: _model.profileMenuItemModel1,
-                      updateCallback: () => safeSetState(() {}),
-                      child: ProfileMenuItemWidget(
-                        icon: Icon(
-                          Icons.person_outline_rounded,
-                          color: FlutterFlowTheme.of(context).primary,
-                          size: 22.0,
+                    InkWell(
+                      onTap: () async {
+                        context.pushNamed(PersonalInfoWidget.routeName);
+                      },
+                      child: wrapWithModel(
+                        model: _model.profileMenuItemModel1,
+                        updateCallback: () => safeSetState(() {}),
+                        child: ProfileMenuItemWidget(
+                          icon: Icon(
+                            Icons.person_outline_rounded,
+                            color: FlutterFlowTheme.of(context).primary,
+                            size: 22.0,
+                          ),
+                          subtitle: 'Manage your data and identity',
+                          title: 'Personal Information',
                         ),
-                        subtitle: 'Manage your data and identity',
-                        title: 'Personal Information',
                       ),
                     ),
-                    wrapWithModel(
-                      model: _model.profileMenuItemModel2,
-                      updateCallback: () => safeSetState(() {}),
-                      child: ProfileMenuItemWidget(
-                        icon: Icon(
-                          Icons.history_rounded,
-                          color: FlutterFlowTheme.of(context).primary,
-                          size: 22.0,
+                    InkWell(
+                      onTap: () async {
+                        context.pushNamed(MyTripsWidget.routeName);
+                      },
+                      child: wrapWithModel(
+                        model: _model.profileMenuItemModel2,
+                        updateCallback: () => safeSetState(() {}),
+                        child: ProfileMenuItemWidget(
+                          icon: Icon(
+                            Icons.history_rounded,
+                            color: FlutterFlowTheme.of(context).primary,
+                            size: 22.0,
+                          ),
+                          subtitle: 'View all your past trips',
+                          title: AppLocalizations.of(context)!.history,
                         ),
-                        subtitle: 'View all your past trips',
-                        title: 'Booking History',
                       ),
                     ),
-                    wrapWithModel(
-                      model: _model.profileMenuItemModel3,
-                      updateCallback: () => safeSetState(() {}),
-                      child: ProfileMenuItemWidget(
-                        icon: Icon(
-                          Icons.notifications_none_rounded,
-                          color: FlutterFlowTheme.of(context).primary,
-                          size: 22.0,
+                    InkWell(
+                      onTap: () async {
+                        context.pushNamed(NotificationsWidget.routeName);
+                      },
+                      child: wrapWithModel(
+                        model: _model.profileMenuItemModel3,
+                        updateCallback: () => safeSetState(() {}),
+                        child: ProfileMenuItemWidget(
+                          icon: Icon(
+                            Icons.notifications_none_rounded,
+                            color: FlutterFlowTheme.of(context).primary,
+                            size: 22.0,
+                          ),
+                          subtitle: 'Manage alerts and offers',
+                          title: 'Notifications',
                         ),
-                        subtitle: 'Manage alerts and offers',
-                        title: 'Notifications',
                       ),
                     ),
-                    wrapWithModel(
-                      model: _model.profileMenuItemModel4,
-                      updateCallback: () => safeSetState(() {}),
-                      child: ProfileMenuItemWidget(
-                        icon: Icon(
-                          Icons.account_balance_wallet_outlined,
-                          color: FlutterFlowTheme.of(context).primary,
-                          size: 22.0,
+                    InkWell(
+                      onTap: () async {
+                        context.pushNamed(WalletWidget.routeName);
+                      },
+                      child: wrapWithModel(
+                        model: _model.profileMenuItemModel4,
+                        updateCallback: () => safeSetState(() {}),
+                        child: ProfileMenuItemWidget(
+                          icon: Icon(
+                            Icons.account_balance_wallet_outlined,
+                            color: FlutterFlowTheme.of(context).primary,
+                            size: 22.0,
+                          ),
+                          subtitle: 'Manage methods and refunds',
+                          title: 'Payments & Wallet',
                         ),
-                        subtitle: 'Manage methods and refunds',
-                        title: 'Payments & Wallet',
+                      ),
+                    ),
+                    InkWell(
+                      onTap: () async {
+                        context.pushNamed(WalletWidget.routeName);
+                      },
+                      child: wrapWithModel(
+                        model: _model.profileMenuItemModel4,
+                        updateCallback: () => safeSetState(() {}),
+                        child: ProfileMenuItemWidget(
+                          icon: Icon(
+                            Icons.stars_rounded,
+                            color: FlutterFlowTheme.of(context).secondary,
+                            size: 22.0,
+                          ),
+                          subtitle: '250 points available',
+                          title: 'Rewards & Loyalty',
+                        ),
                       ),
                     ),
                   ].divide(SizedBox(height: 16.0)),
@@ -676,7 +774,14 @@ class _ProfileSettingsWidgetState extends State<ProfileSettingsWidget> {
                                   label: '',
                                   labelPresent: false,
                                   variant: 'iOS',
-                                  active: true,
+                                  active: Theme.of(context).brightness ==
+                                      Brightness.dark,
+                                  onChanged: (newValue) async {
+                                    MyApp.of(context).setThemeMode(
+                                        newValue
+                                            ? ThemeMode.dark
+                                            : ThemeMode.light);
+                                  },
                                 ),
                               ),
                             ],
@@ -800,23 +905,33 @@ class _ProfileSettingsWidgetState extends State<ProfileSettingsWidget> {
                   padding:
                       EdgeInsetsDirectional.fromSTEB(24.0, 0.0, 24.0, 32.0),
                   child: Container(
-                    child: wrapWithModel(
-                      model: _model.buttonModel2,
-                      updateCallback: () => safeSetState(() {}),
-                      child: ButtonWidget(
-                        icon: Icon(
-                          Icons.logout_rounded,
-                          color: FlutterFlowTheme.of(context).primaryText,
-                          size: 24.0,
+                    child: InkWell(
+                      splashColor: Colors.transparent,
+                      focusColor: Colors.transparent,
+                      hoverColor: Colors.transparent,
+                      highlightColor: Colors.transparent,
+                      onTap: () async {
+                        await authManager.signOut();
+                        context.goNamed(SplashOnboardingWidget.routeName);
+                      },
+                      child: wrapWithModel(
+                        model: _model.buttonModel2,
+                        updateCallback: () => safeSetState(() {}),
+                        child: ButtonWidget(
+                          icon: Icon(
+                            Icons.logout_rounded,
+                            color: FlutterFlowTheme.of(context).primaryText,
+                            size: 24.0,
+                          ),
+                          iconPresent: true,
+                          iconEndPresent: false,
+                          content: AppLocalizations.of(context)!.logout,
+                          variant: 'destructive',
+                          size: 'large',
+                          fullWidth: true,
+                          loading: false,
+                          disabled: false,
                         ),
-                        iconPresent: true,
-                        iconEndPresent: false,
-                        content: 'Logout',
-                        variant: 'destructive',
-                        size: 'large',
-                        fullWidth: true,
-                        loading: false,
-                        disabled: false,
                       ),
                     ),
                   ),

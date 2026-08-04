@@ -50,21 +50,21 @@ class _PassengerCardWidgetState extends State<PassengerCardWidget> {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: EdgeInsetsDirectional.fromSTEB(0.0, 0.0, 16.0, 0.0),
+      padding: EdgeInsets.only(right: FlutterFlowTheme.of(context).designToken.spacing.md),
       child: Container(
-        child: Container(
-          width: 160.0,
-          decoration: BoxDecoration(
-            color: FlutterFlowTheme.of(context).secondaryBackground,
-            borderRadius: BorderRadius.circular(16.0),
-            shape: BoxShape.rectangle,
-            border: Border.all(
-              color: FlutterFlowTheme.of(context).alternate,
-              width: 1.0,
-            ),
+        width: 160.0,
+        decoration: BoxDecoration(
+          color: FlutterFlowTheme.of(context).secondaryBackground,
+          borderRadius: BorderRadius.circular(FlutterFlowTheme.of(context).designToken.radius.md),
+          shape: BoxShape.rectangle,
+          border: Border.all(
+            color: FlutterFlowTheme.of(context).alternate,
+            width: 1.0,
           ),
-          child: Padding(
-            padding: EdgeInsets.all(16.0),
+          boxShadow: [FlutterFlowTheme.of(context).designToken.shadow.xs],
+        ),
+        child: Padding(
+          padding: EdgeInsets.all(FlutterFlowTheme.of(context).designToken.spacing.md),
             child: Container(
               child: Column(
                 mainAxisSize: MainAxisSize.min,

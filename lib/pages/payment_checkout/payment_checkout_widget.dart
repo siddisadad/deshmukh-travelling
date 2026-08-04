@@ -1,9 +1,12 @@
+import '/backend/schema/booking_record.dart';
+import '/auth/firebase_auth/auth_util.dart';
 import '/components/button/button_widget.dart';
 import '/components/payment_method_tile/payment_method_tile_widget.dart';
 import '/components/price_summary_row/price_summary_row_widget.dart';
 import '/flutter_flow/flutter_flow_icon_button.dart';
 import '/flutter_flow/flutter_flow_theme.dart';
 import '/flutter_flow/flutter_flow_util.dart';
+import '../../l10n/app_localizations.dart';
 import '/index.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -11,7 +14,12 @@ import 'payment_checkout_model.dart';
 export 'payment_checkout_model.dart';
 
 class PaymentCheckoutWidget extends StatefulWidget {
-  const PaymentCheckoutWidget({super.key});
+  const PaymentCheckoutWidget({
+    super.key,
+    this.booking,
+  });
+
+  final BookingRecord? booking;
 
   static String routeName = 'PaymentCheckout';
   static String routePath = '/paymentCheckout';
@@ -30,7 +38,18 @@ class _PaymentCheckoutWidgetState extends State<PaymentCheckoutWidget> {
     super.initState();
     _model = createModel(context, () => PaymentCheckoutModel());
 
+    _loadWallet();
+
     WidgetsBinding.instance.addPostFrameCallback((_) => safeSetState(() {}));
+  }
+
+  Future<void> _loadWallet() async {
+    final wallet = await _model.firestoreService.getWallet(currentUserUid);
+    if (wallet != null) {
+      safeSetState(() {
+        _model.walletBalance = wallet.balance;
+      });
+    }
   }
 
   @override
@@ -65,8 +84,9 @@ class _PaymentCheckoutWidgetState extends State<PaymentCheckoutWidget> {
                 crossAxisAlignment: CrossAxisAlignment.stretch,
                 children: [
                   Padding(
-                    padding:
-                        EdgeInsetsDirectional.fromSTEB(24.0, 16.0, 24.0, 16.0),
+                    padding: EdgeInsets.symmetric(
+                        horizontal: FlutterFlowTheme.of(context).designToken.spacing.lg,
+                        vertical: FlutterFlowTheme.of(context).designToken.spacing.md),
                     child: Container(
                       child: Row(
                         mainAxisSize: MainAxisSize.max,
@@ -87,7 +107,7 @@ class _PaymentCheckoutWidgetState extends State<PaymentCheckoutWidget> {
                             },
                           ),
                           Text(
-                            'Payment & Checkout',
+                            AppLocalizations.of(context)!.payment,
                             style: FlutterFlowTheme.of(context)
                                 .titleLarge
                                 .override(
@@ -132,7 +152,7 @@ class _PaymentCheckoutWidgetState extends State<PaymentCheckoutWidget> {
                     crossAxisAlignment: CrossAxisAlignment.stretch,
                     children: [
                       Padding(
-                        padding: EdgeInsets.all(24.0),
+                        padding: EdgeInsets.all(FlutterFlowTheme.of(context).designToken.spacing.lg),
                         child: Container(
                           child: Column(
                             mainAxisSize: MainAxisSize.min,
@@ -143,7 +163,7 @@ class _PaymentCheckoutWidgetState extends State<PaymentCheckoutWidget> {
                                 decoration: BoxDecoration(
                                   color: FlutterFlowTheme.of(context)
                                       .secondaryBackground,
-                                  borderRadius: BorderRadius.circular(24.0),
+                                  borderRadius: BorderRadius.circular(FlutterFlowTheme.of(context).designToken.radius.lg),
                                   shape: BoxShape.rectangle,
                                   border: Border.all(
                                     color:
@@ -152,7 +172,7 @@ class _PaymentCheckoutWidgetState extends State<PaymentCheckoutWidget> {
                                   ),
                                 ),
                                 child: Padding(
-                                  padding: EdgeInsets.all(24.0),
+                                  padding: EdgeInsets.all(FlutterFlowTheme.of(context).designToken.spacing.lg),
                                   child: Container(
                                     child: Column(
                                       mainAxisSize: MainAxisSize.min,
@@ -176,7 +196,7 @@ class _PaymentCheckoutWidgetState extends State<PaymentCheckoutWidget> {
                                                   CrossAxisAlignment.start,
                                               children: [
                                                 Text(
-                                                  'Shivneri Express',
+                                                  widget.booking?.busName ?? 'Shivneri Express',
                                                   style: FlutterFlowTheme.of(
                                                           context)
                                                       .titleMedium
@@ -207,7 +227,7 @@ class _PaymentCheckoutWidgetState extends State<PaymentCheckoutWidget> {
                                                       ),
                                                 ),
                                                 Text(
-                                                  'AC Sleeper • 2B, 2C',
+                                                  '${widget.booking?.busType ?? 'AC Sleeper'} • ${widget.booking?.seatNumbers.join(', ') ?? '2B, 2C'}',
                                                   style: FlutterFlowTheme.of(
                                                           context)
                                                       .labelMedium
@@ -250,7 +270,7 @@ class _PaymentCheckoutWidgetState extends State<PaymentCheckoutWidget> {
                                                     FlutterFlowTheme.of(context)
                                                         .primary10,
                                                 borderRadius:
-                                                    BorderRadius.circular(12.0),
+                                                    BorderRadius.circular(FlutterFlowTheme.of(context).designToken.radius.sm),
                                                 shape: BoxShape.rectangle,
                                               ),
                                               child: Padding(
@@ -316,7 +336,7 @@ class _PaymentCheckoutWidgetState extends State<PaymentCheckoutWidget> {
                                                   CrossAxisAlignment.start,
                                               children: [
                                                 Text(
-                                                  'Departure',
+                                                  AppLocalizations.of(context)!.departure,
                                                   style: FlutterFlowTheme.of(
                                                           context)
                                                       .labelSmall
@@ -372,8 +392,8 @@ class _PaymentCheckoutWidgetState extends State<PaymentCheckoutWidget> {
                                                         fontStyle:
                                                             FlutterFlowTheme.of(
                                                                     context)
-                                                                .bodyLarge
-                                                                .fontStyle,
+                                                                  .bodyLarge
+                                                                  .fontStyle,
                                                         lineHeight: 1.5,
                                                       ),
                                                 ),
@@ -394,7 +414,7 @@ class _PaymentCheckoutWidgetState extends State<PaymentCheckoutWidget> {
                                                   CrossAxisAlignment.end,
                                               children: [
                                                 Text(
-                                                  'Arrival',
+                                                  AppLocalizations.of(context)!.arrival,
                                                   style: FlutterFlowTheme.of(
                                                           context)
                                                       .labelSmall
@@ -557,6 +577,112 @@ class _PaymentCheckoutWidgetState extends State<PaymentCheckoutWidget> {
                                 crossAxisAlignment: CrossAxisAlignment.stretch,
                                 children: [
                                   Text(
+                                    'Offers & Coupons',
+                                    style: FlutterFlowTheme.of(context)
+                                        .titleMedium
+                                        .override(
+                                          font: GoogleFonts.plusJakartaSans(
+                                            fontWeight: FontWeight.bold,
+                                            fontStyle:
+                                                FlutterFlowTheme.of(context)
+                                                    .titleMedium
+                                                    .fontStyle,
+                                          ),
+                                          letterSpacing: 0.0,
+                                          fontWeight: FontWeight.bold,
+                                          fontStyle:
+                                              FlutterFlowTheme.of(context)
+                                                  .titleMedium
+                                                  .fontStyle,
+                                          lineHeight: 1.45,
+                                        ),
+                                  ),
+                                  Container(
+                                    decoration: BoxDecoration(
+                                      color: FlutterFlowTheme.of(context)
+                                          .secondaryBackground,
+                                      borderRadius: BorderRadius.circular(FlutterFlowTheme.of(context).designToken.radius.md),
+                                      border: Border.all(
+                                        color: FlutterFlowTheme.of(context)
+                                            .alternate,
+                                        width: 1.0,
+                                      ),
+                                    ),
+                                    child: Padding(
+                                      padding: const EdgeInsets.symmetric(
+                                          horizontal: 16.0, vertical: 8.0),
+                                      child: Row(
+                                        children: [
+                                          Expanded(
+                                            child: TextFormField(
+                                              controller:
+                                                  _model.couponController ??=
+                                                      TextEditingController(),
+                                              decoration: const InputDecoration(
+                                                hintText: 'Enter Promo Code',
+                                                border: InputBorder.none,
+                                              ),
+                                              style: FlutterFlowTheme.of(context)
+                                                  .bodyMedium,
+                                            ),
+                                          ),
+                                          TextButton(
+                                            onPressed: () async {
+                                              final code = _model
+                                                  .couponController?.text;
+                                              if (code != null &&
+                                                  code.isNotEmpty) {
+                                                final coupon = await _model
+                                                    .loyaltyRepository
+                                                    .getCoupon(code);
+                                                if (coupon != null) {
+                                                  setState(() {
+                                                    _model.appliedCoupon =
+                                                        coupon;
+                                                  });
+                                                  ScaffoldMessenger.of(context)
+                                                      .showSnackBar(
+                                                    const SnackBar(
+                                                        content: Text(
+                                                            'Coupon applied successfully!')),
+                                                  );
+                                                } else {
+                                                  ScaffoldMessenger.of(context)
+                                                      .showSnackBar(
+                                                    const SnackBar(
+                                                        content: Text(
+                                                            'Invalid coupon code')),
+                                                  );
+                                                }
+                                              }
+                                            },
+                                            child: const Text('APPLY'),
+                                          ),
+                                        ],
+                                      ),
+                                    ),
+                                  ),
+                                  if (_model.appliedCoupon != null)
+                                    Padding(
+                                      padding: const EdgeInsets.only(top: 8.0),
+                                      child: Text(
+                                        '✓ Coupon "${_model.appliedCoupon!.code}" applied! You save ₹${_model.appliedCoupon!.discountAmount.toInt()}',
+                                        style: FlutterFlowTheme.of(context)
+                                            .bodySmall
+                                            .copyWith(
+                                                color: FlutterFlowTheme.of(
+                                                        context)
+                                                    .success),
+                                      ),
+                                    ),
+                                ].divide(const SizedBox(height: 16.0)),
+                              ),
+                              Column(
+                                mainAxisSize: MainAxisSize.min,
+                                mainAxisAlignment: MainAxisAlignment.start,
+                                crossAxisAlignment: CrossAxisAlignment.stretch,
+                                children: [
+                                  Text(
                                     'Select Payment Method',
                                     style: FlutterFlowTheme.of(context)
                                         .titleMedium
@@ -576,6 +702,71 @@ class _PaymentCheckoutWidgetState extends State<PaymentCheckoutWidget> {
                                                   .fontStyle,
                                           lineHeight: 1.45,
                                         ),
+                                  ),
+                                  Container(
+                                    decoration: BoxDecoration(
+                                      color: FlutterFlowTheme.of(context)
+                                          .secondaryBackground,
+                                      borderRadius: BorderRadius.circular(FlutterFlowTheme.of(context).designToken.radius.md),
+                                      border: Border.all(
+                                        color: FlutterFlowTheme.of(context)
+                                            .alternate,
+                                        width: 1.0,
+                                      ),
+                                    ),
+                                    child: Padding(
+                                      padding: const EdgeInsets.all(16.0),
+                                      child: Row(
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.spaceBetween,
+                                        children: [
+                                          Row(
+                                            children: [
+                                              Icon(
+                                                Icons.account_balance_wallet,
+                                                color:
+                                                    FlutterFlowTheme.of(context)
+                                                        .primary,
+                                              ),
+                                              const SizedBox(width: 12),
+                                              Column(
+                                                crossAxisAlignment:
+                                                    CrossAxisAlignment.start,
+                                                children: [
+                                                  Text(
+                                                    'Deshmukh Wallet',
+                                                    style: FlutterFlowTheme.of(
+                                                            context)
+                                                        .bodyMedium
+                                                        .copyWith(
+                                                            fontWeight:
+                                                                FontWeight
+                                                                    .bold),
+                                                  ),
+                                                  Text(
+                                                    '${AppLocalizations.of(context)!.walletBalance}: ₹${_model.walletBalance.toInt()}',
+                                                    style: FlutterFlowTheme.of(
+                                                            context)
+                                                        .bodySmall,
+                                                  ),
+                                                ],
+                                              ),
+                                            ],
+                                          ),
+                                          Switch.adaptive(
+                                            value: _model.useWallet,
+                                            onChanged: (val) {
+                                              setState(() {
+                                                _model.useWallet = val;
+                                              });
+                                            },
+                                            activeColor:
+                                                FlutterFlowTheme.of(context)
+                                                    .primary,
+                                          ),
+                                        ],
+                                      ),
+                                    ),
                                   ),
                                   wrapWithModel(
                                     model: _model.paymentMethodTileModel1,
@@ -628,7 +819,7 @@ class _PaymentCheckoutWidgetState extends State<PaymentCheckoutWidget> {
                                 decoration: BoxDecoration(
                                   color: FlutterFlowTheme.of(context)
                                       .secondaryBackground,
-                                  borderRadius: BorderRadius.circular(24.0),
+                                  borderRadius: BorderRadius.circular(FlutterFlowTheme.of(context).designToken.radius.lg),
                                   shape: BoxShape.rectangle,
                                   border: Border.all(
                                     color:
@@ -637,7 +828,7 @@ class _PaymentCheckoutWidgetState extends State<PaymentCheckoutWidget> {
                                   ),
                                 ),
                                 child: Padding(
-                                  padding: EdgeInsets.all(24.0),
+                                  padding: EdgeInsets.all(FlutterFlowTheme.of(context).designToken.spacing.lg),
                                   child: Container(
                                     child: Column(
                                       mainAxisSize: MainAxisSize.min,
@@ -669,62 +860,86 @@ class _PaymentCheckoutWidgetState extends State<PaymentCheckoutWidget> {
                                                 lineHeight: 1.5,
                                               ),
                                         ),
-                                        wrapWithModel(
-                                          model: _model.priceSummaryRowModel1,
-                                          updateCallback: () =>
-                                              safeSetState(() {}),
-                                          child: PriceSummaryRowWidget(
-                                            color: FlutterFlowTheme.of(context)
-                                                .primary,
-                                            isTotal: 'true',
-                                            label: 'Base Fare',
-                                            value: '₹1,200',
-                                          ),
-                                        ),
-                                        wrapWithModel(
-                                          model: _model.priceSummaryRowModel2,
-                                          updateCallback: () =>
-                                              safeSetState(() {}),
-                                          child: PriceSummaryRowWidget(
-                                            color: FlutterFlowTheme.of(context)
-                                                .primary,
-                                            isTotal: 'true',
-                                            label: 'Convenience Fee',
-                                            value: '₹50',
-                                          ),
-                                        ),
-                                        wrapWithModel(
-                                          model: _model.priceSummaryRowModel3,
-                                          updateCallback: () =>
-                                              safeSetState(() {}),
-                                          child: PriceSummaryRowWidget(
-                                            color: FlutterFlowTheme.of(context)
-                                                .primary,
-                                            isTotal: 'true',
-                                            label: 'Taxes (GST)',
-                                            value: '₹66',
-                                          ),
-                                        ),
-                                        Divider(
-                                          height: 16.0,
-                                          thickness: 1.0,
-                                          indent: 0.0,
-                                          endIndent: 0.0,
-                                          color: FlutterFlowTheme.of(context)
-                                              .alternate,
-                                        ),
-                                        wrapWithModel(
-                                          model: _model.priceSummaryRowModel4,
-                                          updateCallback: () =>
-                                              safeSetState(() {}),
-                                          child: PriceSummaryRowWidget(
-                                            color: FlutterFlowTheme.of(context)
-                                                .primary,
-                                            isTotal: 'true',
-                                            label: 'Total Amount',
-                                            value: '₹1,316',
-                                          ),
-                                        ),
+                                  wrapWithModel(
+                                    model: _model.priceSummaryRowModel1,
+                                    updateCallback: () =>
+                                        safeSetState(() {}),
+                                    child: PriceSummaryRowWidget(
+                                      color: FlutterFlowTheme.of(context)
+                                          .primary,
+                                      isTotal: 'true',
+                                      label: AppLocalizations.of(context)!.baseFare,
+                                      value: '₹${((widget.booking?.totalAmount ?? 1316.0) - 116).toInt()}',
+                                    ),
+                                  ),
+                                  wrapWithModel(
+                                    model: _model.priceSummaryRowModel2,
+                                    updateCallback: () =>
+                                        safeSetState(() {}),
+                                    child: PriceSummaryRowWidget(
+                                      color: FlutterFlowTheme.of(context)
+                                          .primary,
+                                      isTotal: 'true',
+                                      label: AppLocalizations.of(context)!.convenienceFee,
+                                      value: '₹50',
+                                    ),
+                                  ),
+                                  wrapWithModel(
+                                    model: _model.priceSummaryRowModel3,
+                                    updateCallback: () =>
+                                        safeSetState(() {}),
+                                    child: PriceSummaryRowWidget(
+                                      color: FlutterFlowTheme.of(context)
+                                          .primary,
+                                      isTotal: 'true',
+                                      label: AppLocalizations.of(context)!.taxes,
+                                      value: '₹66',
+                                    ),
+                                  ),
+                                  if (_model.appliedCoupon != null)
+                                    wrapWithModel(
+                                      model: _model.priceSummaryRowModel3,
+                                      updateCallback: () => safeSetState(() {}),
+                                      child: PriceSummaryRowWidget(
+                                        color: FlutterFlowTheme.of(context)
+                                            .success,
+                                        isTotal: 'false',
+                                        label: AppLocalizations.of(context)!.couponDiscount,
+                                        value: '-₹${_model.appliedCoupon!.discountAmount.toInt()}',
+                                      ),
+                                    ),
+                                  if (_model.useWallet)
+                                    wrapWithModel(
+                                      model: _model.priceSummaryRowModel3,
+                                      updateCallback: () => safeSetState(() {}),
+                                      child: PriceSummaryRowWidget(
+                                        color: FlutterFlowTheme.of(context)
+                                            .primary,
+                                        isTotal: 'false',
+                                        label: AppLocalizations.of(context)!.walletPayment,
+                                        value: '-₹${min(_model.walletBalance, (widget.booking?.totalAmount ?? 1316.0) - (_model.appliedCoupon?.discountAmount ?? 0)).toInt()}',
+                                      ),
+                                    ),
+                                  Divider(
+                                    height: 16.0,
+                                    thickness: 1.0,
+                                    indent: 0.0,
+                                    endIndent: 0.0,
+                                    color: FlutterFlowTheme.of(context)
+                                        .alternate,
+                                  ),
+                                  wrapWithModel(
+                                    model: _model.priceSummaryRowModel4,
+                                    updateCallback: () =>
+                                        safeSetState(() {}),
+                                    child: PriceSummaryRowWidget(
+                                      color: FlutterFlowTheme.of(context)
+                                          .primary,
+                                      isTotal: 'true',
+                                      label: AppLocalizations.of(context)!.totalAmount,
+                                      value: '₹${max(0, (widget.booking?.totalAmount ?? 1316.0) - (_model.appliedCoupon?.discountAmount ?? 0) - (_model.useWallet ? min(_model.walletBalance, (widget.booking?.totalAmount ?? 1316.0) - (_model.appliedCoupon?.discountAmount ?? 0)) : 0)).toInt()}',
+                                    ),
+                                  ),
                                       ].divide(SizedBox(height: 16.0)),
                                     ),
                                   ),
@@ -802,7 +1017,7 @@ class _PaymentCheckoutWidgetState extends State<PaymentCheckoutWidget> {
                     ),
                   ),
                   Padding(
-                    padding: EdgeInsets.all(24.0),
+                    padding: EdgeInsets.all(FlutterFlowTheme.of(context).designToken.spacing.lg),
                     child: Container(
                       child: Row(
                         mainAxisSize: MainAxisSize.max,
@@ -871,7 +1086,41 @@ class _PaymentCheckoutWidgetState extends State<PaymentCheckoutWidget> {
                               hoverColor: Colors.transparent,
                               highlightColor: Colors.transparent,
                               onTap: () async {
-                                context.goNamed(HomeDashboardWidget.routeName);
+                                if (widget.booking != null) {
+                                  // 1. Deduct from wallet if used
+                                  if (_model.useWallet) {
+                                    final walletDeduction = min(
+                                      _model.walletBalance,
+                                      (widget.booking?.totalAmount ?? 1316.0) -
+                                          (_model.appliedCoupon?.discountAmount ?? 0),
+                                    );
+                                    if (walletDeduction > 0) {
+                                      await _model.firestoreService.updateWalletBalance(
+                                        currentUserUid,
+                                        walletDeduction,
+                                        'debit',
+                                        'Payment for Bus ${widget.booking?.busName}',
+                                      );
+                                    }
+                                  }
+
+                                  // 2. Create the booking record
+                                  await _model.firestoreService
+                                      .createBooking(widget.booking!);
+
+                                  // 3. Add Loyalty Points
+                                  await _model.firestoreService.addLoyaltyPoints(currentUserUid, 50);
+                                }
+
+                                context.goNamed(
+                                  BookingConfirmationTicketWidget.routeName,
+                                  queryParameters: {
+                                    'booking': serializeParam(
+                                      widget.booking,
+                                      ParamType.JSON,
+                                    ),
+                                  }.withoutNulls,
+                                );
                               },
                               child: wrapWithModel(
                                 model: _model.buttonModel,

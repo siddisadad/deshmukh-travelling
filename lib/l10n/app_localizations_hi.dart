@@ -1,0 +1,273 @@
+// ignore: unused_import
+import 'package:intl/intl.dart' as intl;
+import 'app_localizations.dart';
+
+// ignore_for_file: type=lint
+
+/// The translations for Hindi (`hi`).
+class AppLocalizationsHi extends AppLocalizations {
+  AppLocalizationsHi([String locale = 'hi']) : super(locale);
+
+  @override
+  String get appTitle => 'देशमुख ट्रैवलिंग';
+
+  @override
+  String get selectSeats => 'सीट चुनें';
+
+  @override
+  String get bookNow => 'अभी बुक करें';
+
+  @override
+  String get searchBuses => 'बस खोजें';
+
+  @override
+  String get from => 'कहाँ से';
+
+  @override
+  String get to => 'कहाँ तक';
+
+  @override
+  String get date => 'तारीख';
+
+  @override
+  String get passengers => 'यात्री';
+
+  @override
+  String get profile => 'प्रोफ़ाइल';
+
+  @override
+  String get myTrips => 'मेरी यात्राएं';
+
+  @override
+  String get logout => 'लॉगआउट';
+
+  @override
+  String get confirmBooking => 'बुकिंग की पुष्टि करें';
+
+  @override
+  String get payment => 'भुगतान';
+
+  @override
+  String get selectOrigin => 'मूल स्थान चुनें';
+
+  @override
+  String get selectDestination => 'गंतव्य चुनें';
+
+  @override
+  String get searchCity => 'शहर खोजें...';
+
+  @override
+  String get welcomeBack => 'वापसी पर स्वागत है!';
+
+  @override
+  String get enterPhone =>
+      'अपनी यात्रा जारी रखने के लिए अपना फ़ोन नंबर दर्ज करें।';
+
+  @override
+  String get sendOtp => 'ओटीपी भेजें';
+
+  @override
+  String get verifyOtp => 'ओटीपी सत्यापित करें';
+
+  @override
+  String get popularRoutes => 'लोकप्रिय मार्ग';
+
+  @override
+  String get seeAll => 'सभी देखें';
+
+  @override
+  String get specialOffers => 'विशेष ऑफर';
+
+  @override
+  String get whyChooseUs => 'हमें क्यों चुनें';
+
+  @override
+  String get availableBuses => 'उपलब्ध बसें';
+
+  @override
+  String busesFound(int count) {
+    return '$count बसें मिलीं';
+  }
+
+  @override
+  String get sortBy => 'क्रमबद्ध करें';
+
+  @override
+  String get price => 'कीमत';
+
+  @override
+  String get rating => 'रेटिंग';
+
+  @override
+  String seatsLeft(String count) {
+    return '$count सीटें शेष';
+  }
+
+  @override
+  String get perSeat => 'प्रति सीट';
+
+  @override
+  String get continueBtn => 'जारी रखें';
+
+  @override
+  String get boardingPoint => 'बोर्डिंग पॉइंट';
+
+  @override
+  String get arrival => 'आगमन';
+
+  @override
+  String get departure => 'प्रस्थान';
+
+  @override
+  String get passengerDetails => 'यात्री विवरण';
+
+  @override
+  String get fullName => 'पूरा नाम';
+
+  @override
+  String get age => 'आयु';
+
+  @override
+  String get gender => 'लिंग';
+
+  @override
+  String get male => 'पुरुष';
+
+  @override
+  String get female => 'महिला';
+
+  @override
+  String get other => 'अन्य';
+
+  @override
+  String get totalAmount => 'कुल राशि';
+
+  @override
+  String get proceedToPayment => 'भुगतान के लिए आगे बढ़ें';
+
+  @override
+  String get applyCoupon => 'कूपन लागू करें';
+
+  @override
+  String get walletBalance => 'वॉलेट बैलेंस';
+
+  @override
+  String get payUsingWallet => 'वॉलेट से भुगतान करें';
+
+  @override
+  String get bookingConfirmed => 'बुकिंग की पुष्टि हो गई!';
+
+  @override
+  String get downloadTicket => 'टिकट डाउनलोड करें';
+
+  @override
+  String get shareTicket => 'टिकट साझा करें';
+
+  @override
+  String get trackBus => 'बस ट्रैक करें';
+
+  @override
+  String get backToHome => 'मुख्यपृष्ठ पर जाएं';
+
+  @override
+  String get history => 'इतिहास';
+
+  @override
+  String get settings => 'सेटिंग्स';
+
+  @override
+  String get editProfile => 'प्रोफ़ाइल संपादित करें';
+
+  @override
+  String get changeLanguage => 'भाषा बदलें';
+
+  @override
+  String get privacyPolicy => 'गोपनीयता नीति';
+
+  @override
+  String get aboutUs => 'हमारे बारे में';
+
+  @override
+  String get createAccount => 'खाता बनाएं';
+
+  @override
+  String get signUp => 'साइन अप करें';
+
+  @override
+  String get dontHaveAccount => 'खाता नहीं है?';
+
+  @override
+  String get alreadyHaveAccount => 'पहले से ही एक खाता है?';
+
+  @override
+  String get login => 'लॉगिन';
+
+  @override
+  String get emailAddress => 'ईमेल पता';
+
+  @override
+  String get password => 'पासवर्ड';
+
+  @override
+  String get phoneNumber => 'फ़ोन नंबर';
+
+  @override
+  String get dateOfBirth => 'जन्म तिथि';
+
+  @override
+  String get joinDeshmukh => 'देशमुख ट्रैवलिंग से जुड़ें';
+
+  @override
+  String get enterName => 'अपना नाम दर्ज करें';
+
+  @override
+  String get selectDate => 'तारीख चुनें';
+
+  @override
+  String get recentSearches => 'हाल की खोजें';
+
+  @override
+  String get baseFare => 'मूल किराया';
+
+  @override
+  String get convenienceFee => 'सुविधा शुल्क';
+
+  @override
+  String get taxes => 'कर (GST)';
+
+  @override
+  String get couponDiscount => 'कूपन छूट';
+
+  @override
+  String get walletPayment => 'वॉलेट भुगतान';
+
+  @override
+  String get changePhone => 'Change Phone Number';
+
+  @override
+  String get termsOfService => 'Terms of Service';
+
+  @override
+  String get agreeTerms => 'By continuing, you agree to our';
+
+  @override
+  String get safeTravel => 'Safe Travel';
+
+  @override
+  String get verifiedOperators =>
+      'Verified operators and real-time tracking for your peace of mind.';
+
+  @override
+  String get securePayments => 'Secure Payments';
+
+  @override
+  String get encryptedTransactions =>
+      'Encrypted transactions with multiple safe payment options.';
+
+  @override
+  String get support247 => '24/7 Support';
+
+  @override
+  String get alwaysReadyHelp =>
+      'Our team is always ready to help you with your bookings.';
+}

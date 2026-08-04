@@ -1,3 +1,7 @@
+import 'components/passenger_form_list.dart';
+import '/auth/firebase_auth/auth_util.dart';
+import '/backend/schema/booking_record.dart';
+import '/backend/schema/bus_record.dart';
 import '/components/button/button_widget.dart';
 import '/components/passenger_form/passenger_form_widget.dart';
 import '/components/section_header_a8889900/section_header_a8889900_widget.dart';
@@ -5,6 +9,7 @@ import '/components/text_field/text_field_widget.dart';
 import '/flutter_flow/flutter_flow_icon_button.dart';
 import '/flutter_flow/flutter_flow_theme.dart';
 import '/flutter_flow/flutter_flow_util.dart';
+import '../../l10n/app_localizations.dart';
 import '/index.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -12,7 +17,14 @@ import 'passenger_details_model.dart';
 export 'passenger_details_model.dart';
 
 class PassengerDetailsWidget extends StatefulWidget {
-  const PassengerDetailsWidget({super.key});
+  const PassengerDetailsWidget({
+    super.key,
+    this.selectedSeats,
+    this.bus,
+  });
+
+  final List<String>? selectedSeats;
+  final BusRecord? bus;
 
   static String routeName = 'PassengerDetails';
   static String routePath = '/passengerDetails';
@@ -25,20 +37,104 @@ class _PassengerDetailsWidgetState extends State<PassengerDetailsWidget> {
   late PassengerDetailsModel _model;
 
   final scaffoldKey = GlobalKey<ScaffoldState>();
+  final _formKey = GlobalKey<FormState>();
 
   @override
   void initState() {
     super.initState();
     _model = createModel(context, () => PassengerDetailsModel());
 
+    // Initialize forms based on selected seats
+    final numSeats = widget.selectedSeats?.length ?? 1;
+    _model.passengerFormModels = List.generate(
+      numSeats,
+      (index) => createModel(context, () => PassengerFormModel()),
+    );
+
+    _prefillContactInfo();
+
+    _model.textFieldModel1.inputTextControllerValidator = (context, val) {
+      if (val == null || val.isEmpty) return 'Please enter a mobile number';
+      if (val.length != 10) return 'Enter a valid 10-digit number';
+      return null;
+    };
+    _model.textFieldModel2.inputTextControllerValidator = (context, val) {
+      if (val == null || val.isEmpty) return 'Please enter an email';
+      if (!RegExp(kTextValidatorEmailRegex).hasMatch(val)) return 'Invalid email';
+      return null;
+    };
+
+    // Set validators for each passenger form
+    for (var m in _model.passengerFormModels) {
+      m.textFieldModel1.inputTextControllerValidator = (context, val) {
+        if (val == null || val.isEmpty) return 'Full name required';
+        return null;
+      };
+      m.textFieldModel2.inputTextControllerValidator = (context, val) {
+        if (val == null || val.isEmpty) return 'Age required';
+        if (int.tryParse(val) == null) return 'Invalid age';
+        return null;
+      };
+    }
+
     WidgetsBinding.instance.addPostFrameCallback((_) => safeSetState(() {}));
+  }
+
+  Future<void> _prefillContactInfo() async {
+    final user = await _model.firestoreService.getUser(currentUserUid);
+    if (user != null) {
+      safeSetState(() {
+        _model.textFieldModel1.inputTextController?.text = user.phoneNumber ?? '';
+        _model.textFieldModel2.inputTextController?.text = user.email ?? '';
+      });
+    }
   }
 
   @override
   void dispose() {
     _model.dispose();
+    for (var m in _model.passengerFormModels) {
+      m.dispose();
+    }
 
     super.dispose();
+  }
+
+  void _onContinue() {
+    if (!_formKey.currentState!.validate()) {
+      return;
+    }
+
+    final passengers = _model.passengerFormModels.map((m) {
+      return Passenger(
+        name: m.name,
+        age: m.age,
+        gender: m.gender,
+      );
+    }).toList();
+
+    final booking = BookingRecord(
+      userId: currentUserUid,
+      busId: widget.bus?.id ?? 'bus123',
+      busName: widget.bus?.name ?? 'Deshmukh Luxury',
+      busType: widget.bus?.type ?? 'AC • Sleeper',
+      departureCity: widget.bus?.departureCity ?? 'Mumbai',
+      arrivalCity: widget.bus?.arrivalCity ?? 'Pune',
+      depTime: widget.bus?.depTime ?? '08:30 PM',
+      arrTime: widget.bus?.arrTime ?? '06:00 AM',
+      seatNumbers: widget.selectedSeats ?? ['S-1'],
+      passengers: passengers,
+      totalAmount: (widget.bus?.price ?? 850) * (widget.selectedSeats?.length ?? 1) * 1.05 + 50,
+      status: 'confirmed',
+      timestamp: DateTime.now(),
+    );
+
+    context.goNamed(
+      PaymentCheckoutWidget.routeName,
+      queryParameters: {
+        'booking': serializeParam(booking.toMap(), ParamType.JSON),
+      }.withoutNulls,
+    );
   }
 
   @override
@@ -66,8 +162,9 @@ class _PassengerDetailsWidgetState extends State<PassengerDetailsWidget> {
                 crossAxisAlignment: CrossAxisAlignment.stretch,
                 children: [
                   Padding(
-                    padding:
-                        EdgeInsetsDirectional.fromSTEB(24.0, 16.0, 24.0, 16.0),
+                    padding: EdgeInsets.symmetric(
+                        horizontal: FlutterFlowTheme.of(context).designToken.spacing.lg,
+                        vertical: FlutterFlowTheme.of(context).designToken.spacing.md),
                     child: Container(
                       child: Row(
                         mainAxisSize: MainAxisSize.max,
@@ -88,9 +185,8 @@ class _PassengerDetailsWidgetState extends State<PassengerDetailsWidget> {
                             },
                           ),
                           Expanded(
-                            flex: 1,
                             child: Text(
-                              'Passenger Details',
+                              AppLocalizations.of(context)!.passengerDetails,
                               style: FlutterFlowTheme.of(context)
                                   .titleLarge
                                   .override(
@@ -138,7 +234,8 @@ class _PassengerDetailsWidgetState extends State<PassengerDetailsWidget> {
             ),
             Expanded(
               flex: 1,
-              child: Container(
+              child: Form(
+                key: _formKey,
                 child: SingleChildScrollView(
                   primary: false,
                   child: Column(
@@ -147,7 +244,7 @@ class _PassengerDetailsWidgetState extends State<PassengerDetailsWidget> {
                     crossAxisAlignment: CrossAxisAlignment.stretch,
                     children: [
                       Padding(
-                        padding: EdgeInsets.all(24.0),
+                        padding: EdgeInsets.all(FlutterFlowTheme.of(context).designToken.spacing.lg),
                         child: Container(
                           child: Column(
                             mainAxisSize: MainAxisSize.min,
@@ -158,7 +255,7 @@ class _PassengerDetailsWidgetState extends State<PassengerDetailsWidget> {
                                 decoration: BoxDecoration(
                                   color: FlutterFlowTheme.of(context)
                                       .secondaryBackground,
-                                  borderRadius: BorderRadius.circular(16.0),
+                                  borderRadius: BorderRadius.circular(FlutterFlowTheme.of(context).designToken.radius.md),
                                   shape: BoxShape.rectangle,
                                   border: Border.all(
                                     color:
@@ -167,7 +264,7 @@ class _PassengerDetailsWidgetState extends State<PassengerDetailsWidget> {
                                   ),
                                 ),
                                 child: Padding(
-                                  padding: EdgeInsets.all(16.0),
+                                  padding: EdgeInsets.all(FlutterFlowTheme.of(context).designToken.spacing.md),
                                   child: Container(
                                     child: Row(
                                       mainAxisSize: MainAxisSize.max,
@@ -183,7 +280,7 @@ class _PassengerDetailsWidgetState extends State<PassengerDetailsWidget> {
                                             color: FlutterFlowTheme.of(context)
                                                 .primary10,
                                             borderRadius:
-                                                BorderRadius.circular(12.0),
+                                                BorderRadius.circular(FlutterFlowTheme.of(context).designToken.radius.sm),
                                             shape: BoxShape.rectangle,
                                           ),
                                           alignment:
@@ -205,7 +302,7 @@ class _PassengerDetailsWidgetState extends State<PassengerDetailsWidget> {
                                                 CrossAxisAlignment.start,
                                             children: [
                                               Text(
-                                                'Mumbai → Pune',
+                                                '${widget.bus?.departureCity.split(',').first ?? 'Mumbai'} → ${widget.bus?.arrivalCity.split(',').first ?? 'Pune'}',
                                                 maxLines: 1,
                                                 style:
                                                     FlutterFlowTheme.of(context)
@@ -234,7 +331,7 @@ class _PassengerDetailsWidgetState extends State<PassengerDetailsWidget> {
                                                 overflow: TextOverflow.ellipsis,
                                               ),
                                               Text(
-                                                'Oct 28, 2023 • 08:30 AM',
+                                                'Oct 28, 2023 • ${widget.bus?.depTime ?? '08:30 AM'}',
                                                 style: FlutterFlowTheme.of(
                                                         context)
                                                     .bodySmall
@@ -280,7 +377,7 @@ class _PassengerDetailsWidgetState extends State<PassengerDetailsWidget> {
                                               CrossAxisAlignment.end,
                                           children: [
                                             Text(
-                                              '₹850',
+                                              '₹${((widget.bus?.price ?? 850) * (widget.selectedSeats?.length ?? 1)).toInt()}',
                                               style: FlutterFlowTheme.of(
                                                       context)
                                                   .titleMedium
@@ -309,7 +406,7 @@ class _PassengerDetailsWidgetState extends State<PassengerDetailsWidget> {
                                                   ),
                                             ),
                                             Text(
-                                              'Total',
+                                              AppLocalizations.of(context)!.totalAmount,
                                               style:
                                                   FlutterFlowTheme.of(context)
                                                       .labelSmall
@@ -351,36 +448,9 @@ class _PassengerDetailsWidgetState extends State<PassengerDetailsWidget> {
                                   ),
                                 ),
                               ),
-                              Column(
-                                mainAxisSize: MainAxisSize.min,
-                                mainAxisAlignment: MainAxisAlignment.start,
-                                crossAxisAlignment: CrossAxisAlignment.stretch,
-                                children: [
-                                  wrapWithModel(
-                                    model: _model.sectionHeaderA8889900Model1,
-                                    updateCallback: () => safeSetState(() {}),
-                                    child: SectionHeaderA8889900Widget(
-                                      hasSubtitle: true,
-                                      subtitle:
-                                          'Enter details for all selected seats',
-                                      title: 'Passenger Info',
-                                    ),
-                                  ),
-                                  wrapWithModel(
-                                    model: _model.passengerFormModel1,
-                                    updateCallback: () => safeSetState(() {}),
-                                    child: PassengerFormWidget(
-                                      number: '1',
-                                    ),
-                                  ),
-                                  wrapWithModel(
-                                    model: _model.passengerFormModel2,
-                                    updateCallback: () => safeSetState(() {}),
-                                    child: PassengerFormWidget(
-                                      number: '2',
-                                    ),
-                                  ),
-                                ],
+                              PassengerFormList(
+                                model: _model,
+                                onUpdate: () => safeSetState(() {}),
                               ),
                               wrapWithModel(
                                 model: _model.sectionHeaderA8889900Model2,
@@ -395,7 +465,7 @@ class _PassengerDetailsWidgetState extends State<PassengerDetailsWidget> {
                                 decoration: BoxDecoration(
                                   color: FlutterFlowTheme.of(context)
                                       .secondaryBackground,
-                                  borderRadius: BorderRadius.circular(16.0),
+                                  borderRadius: BorderRadius.circular(FlutterFlowTheme.of(context).designToken.radius.md),
                                   shape: BoxShape.rectangle,
                                   border: Border.all(
                                     color:
@@ -404,7 +474,7 @@ class _PassengerDetailsWidgetState extends State<PassengerDetailsWidget> {
                                   ),
                                 ),
                                 child: Padding(
-                                  padding: EdgeInsets.all(24.0),
+                                  padding: EdgeInsets.all(FlutterFlowTheme.of(context).designToken.spacing.lg),
                                   child: Container(
                                     child: Column(
                                       mainAxisSize: MainAxisSize.min,
@@ -437,6 +507,9 @@ class _PassengerDetailsWidgetState extends State<PassengerDetailsWidget> {
                                             onSubmit: '',
                                             variant: 'outlined',
                                             error: false,
+                                            controller: _model.textFieldModel1.inputTextController,
+                                            focusNode: _model.textFieldModel1.inputFocusNode,
+                                            keyboardType: TextInputType.phone,
                                           ),
                                         ),
                                         wrapWithModel(
@@ -463,6 +536,9 @@ class _PassengerDetailsWidgetState extends State<PassengerDetailsWidget> {
                                             onSubmit: '',
                                             variant: 'outlined',
                                             error: false,
+                                            controller: _model.textFieldModel2.inputTextController,
+                                            focusNode: _model.textFieldModel2.inputFocusNode,
+                                            keyboardType: TextInputType.emailAddress,
                                           ),
                                         ),
                                       ].divide(SizedBox(height: 16.0)),
@@ -473,7 +549,7 @@ class _PassengerDetailsWidgetState extends State<PassengerDetailsWidget> {
                               Container(
                                 decoration: BoxDecoration(
                                   color: Color(0xFFE3F2FD),
-                                  borderRadius: BorderRadius.circular(16.0),
+                                  borderRadius: BorderRadius.circular(FlutterFlowTheme.of(context).designToken.radius.md),
                                   shape: BoxShape.rectangle,
                                   border: Border.all(
                                     color: Color(0xFFBBDEFB),
@@ -481,7 +557,7 @@ class _PassengerDetailsWidgetState extends State<PassengerDetailsWidget> {
                                   ),
                                 ),
                                 child: Padding(
-                                  padding: EdgeInsets.all(16.0),
+                                  padding: EdgeInsets.all(FlutterFlowTheme.of(context).designToken.spacing.md),
                                   child: Container(
                                     child: Row(
                                       mainAxisSize: MainAxisSize.max,
@@ -627,7 +703,7 @@ class _PassengerDetailsWidgetState extends State<PassengerDetailsWidget> {
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
                                   Text(
-                                    '₹1,700',
+                                    '₹${((widget.bus?.price ?? 850) * (widget.selectedSeats?.length ?? 1) * 1.05 + 50).toInt()}', // Price + Fees + Taxes
                                     style: FlutterFlowTheme.of(context)
                                         .titleLarge
                                         .override(
@@ -656,7 +732,7 @@ class _PassengerDetailsWidgetState extends State<PassengerDetailsWidget> {
                                         CrossAxisAlignment.center,
                                     children: [
                                       Text(
-                                        '2 Passengers',
+                                        '${widget.selectedSeats?.length ?? 1} Passengers',
                                         style: FlutterFlowTheme.of(context)
                                             .labelSmall
                                             .override(
@@ -757,8 +833,7 @@ class _PassengerDetailsWidgetState extends State<PassengerDetailsWidget> {
                                   hoverColor: Colors.transparent,
                                   highlightColor: Colors.transparent,
                                   onTap: () async {
-                                    context
-                                        .goNamed(HomeDashboardWidget.routeName);
+                                    _onContinue();
                                   },
                                   child: wrapWithModel(
                                     model: _model.buttonModel,
@@ -772,7 +847,7 @@ class _PassengerDetailsWidgetState extends State<PassengerDetailsWidget> {
                                         size: 24.0,
                                       ),
                                       iconEndPresent: true,
-                                      content: 'Continue to Pay',
+                                      content: AppLocalizations.of(context)!.proceedToPayment,
                                       variant: 'primary',
                                       size: 'large',
                                       fullWidth: false,

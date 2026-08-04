@@ -12,6 +12,7 @@ class SwitchComponentWidget extends StatefulWidget {
     bool? labelPresent,
     String? variant,
     bool? active,
+    this.onChanged,
   })  : this.label = label ?? '',
         this.labelPresent = labelPresent ?? false,
         this.variant = variant ?? 'iOS',
@@ -21,6 +22,7 @@ class SwitchComponentWidget extends StatefulWidget {
   final bool labelPresent;
   final String variant;
   final bool active;
+  final Future Function(bool)? onChanged;
 
   @override
   State<SwitchComponentWidget> createState() => _SwitchComponentWidgetState();
@@ -92,6 +94,9 @@ class _SwitchComponentWidgetState extends State<SwitchComponentWidget> {
               value: _model.switchValue!,
               onChanged: (newValue) async {
                 safeSetState(() => _model.switchValue = newValue);
+                if (widget.onChanged != null) {
+                  await widget.onChanged!(newValue);
+                }
               },
               activeTrackColor: FlutterFlowTheme.of(context).primary,
               inactiveTrackColor: FlutterFlowTheme.of(context).alternate,

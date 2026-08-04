@@ -1,3 +1,5 @@
+import '/backend/firebase/firestore_service.dart';
+import '/backend/schema/booking_record.dart';
 import '/components/tab_item/tab_item_widget.dart';
 import '/components/trip_card/trip_card_widget.dart';
 import '/flutter_flow/flutter_flow_util.dart';
@@ -6,6 +8,11 @@ import 'package:flutter/material.dart';
 
 class MyTripsModel extends FlutterFlowModel<MyTripsWidget> {
   ///  State fields for stateful widgets in this page.
+
+  final firestoreService = FirestoreService();
+  Future<List<BookingRecord>>? bookingsFuture;
+
+  String selectedTab = 'Upcoming';
 
   // Model for TabItem.
   late TabItemModel tabItemModel1;

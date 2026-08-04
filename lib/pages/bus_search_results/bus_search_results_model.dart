@@ -1,3 +1,5 @@
+import '/backend/firebase/firestore_service.dart';
+import '/backend/schema/bus_record.dart';
 import '/components/bus_card/bus_card_widget.dart';
 import '/components/filter_chip/filter_chip_widget.dart';
 import '/flutter_flow/flutter_flow_util.dart';
@@ -7,6 +9,61 @@ import 'package:flutter/material.dart';
 
 class BusSearchResultsModel extends FlutterFlowModel<BusSearchResultsWidget> {
   ///  State fields for stateful widgets in this page.
+
+  final firestoreService = FirestoreService();
+  Future<List<BusRecord>>? busesFuture;
+  List<BusRecord> allBuses = [];
+  List<BusRecord> filteredBuses = [];
+
+  String selectedFilter = 'All';
+  String sortBy = 'Price';
+  String? timeFilter; // 'Morning', 'Afternoon', 'Evening', 'Night'
+
+  void applyFilters() {
+    filteredBuses = allBuses.where((bus) {
+      bool typeMatch =
+          selectedFilter == 'All' || bus.type.contains(selectedFilter);
+
+      bool timeMatch = true;
+      if (timeFilter != null) {
+        final hour = _parseHour(bus.depTime);
+        if (timeFilter == 'Morning') {
+          timeMatch = hour >= 6 && hour < 12;
+        } else if (timeFilter == 'Afternoon') {
+          timeMatch = hour >= 12 && hour < 17;
+        } else if (timeFilter == 'Evening') {
+          timeMatch = hour >= 17 && hour < 21;
+        } else if (timeFilter == 'Night') {
+          timeMatch = hour >= 21 || hour < 6;
+        }
+      }
+
+      return typeMatch && timeMatch;
+    }).toList();
+
+    if (sortBy == 'Price') {
+      filteredBuses.sort((a, b) => a.price.compareTo(b.price));
+    } else if (sortBy == 'Rating') {
+      filteredBuses.sort((a, b) => b.rating.compareTo(a.rating));
+    } else if (sortBy == 'Earliest') {
+      filteredBuses.sort((a, b) => a.depTime.compareTo(b.depTime));
+    } else if (sortBy == 'Latest') {
+      filteredBuses.sort((a, b) => b.depTime.compareTo(a.depTime));
+    }
+  }
+
+  int _parseHour(String timeStr) {
+    // Example: "08:30 AM" or "08:30 PM"
+    final parts = timeStr.split(' ');
+    final timeParts = parts[0].split(':');
+    int hour = int.parse(timeParts[0]);
+    final isPM = parts[1] == 'PM';
+
+    if (isPM && hour != 12) hour += 12;
+    if (!isPM && hour == 12) hour = 0;
+
+    return hour;
+  }
 
   // Model for FilterChip.
   late FilterChipModel filterChipModel1;

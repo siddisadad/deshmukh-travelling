@@ -52,16 +52,26 @@ class _PopularRouteItemWidgetState extends State<PopularRouteItemWidget> {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: EdgeInsetsDirectional.fromSTEB(0.0, 0.0, 16.0, 0.0),
+      padding: EdgeInsets.only(right: FlutterFlowTheme.of(context).designToken.spacing.md),
       child: Container(
+        constraints: const BoxConstraints(maxWidth: 160.0),
+        decoration: BoxDecoration(
+          color: FlutterFlowTheme.of(context).secondaryBackground,
+          borderRadius: BorderRadius.circular(FlutterFlowTheme.of(context).designToken.radius.md),
+          boxShadow: [FlutterFlowTheme.of(context).designToken.shadow.xs],
+        ),
         child: ClipRRect(
-          borderRadius: BorderRadius.circular(16.0),
+          borderRadius: BorderRadius.circular(FlutterFlowTheme.of(context).designToken.radius.md),
           child: Container(
             width: 160.0,
             decoration: BoxDecoration(
               color: FlutterFlowTheme.of(context).secondaryBackground,
-              borderRadius: BorderRadius.circular(16.0),
+              borderRadius: BorderRadius.circular(FlutterFlowTheme.of(context).designToken.radius.md),
               shape: BoxShape.rectangle,
+              border: Border.all(
+                color: FlutterFlowTheme.of(context).alternate,
+                width: 1.0,
+              ),
             ),
             child: Column(
               mainAxisSize: MainAxisSize.min,

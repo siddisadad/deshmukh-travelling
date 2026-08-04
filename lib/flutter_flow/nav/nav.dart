@@ -77,14 +77,14 @@ GoRouter createRouter(AppStateNotifier appStateNotifier) => GoRouter(
       navigatorKey: appNavigatorKey,
       errorBuilder: (context, state) => appStateNotifier.loggedIn
           ? HomeDashboardWidget()
-          : SplashOnboardingWidget(),
+          : LoginOTPWidget(),
       routes: [
         FFRoute(
           name: '_initialize',
           path: '/',
           builder: (context, _) => appStateNotifier.loggedIn
               ? HomeDashboardWidget()
-              : SplashOnboardingWidget(),
+              : LoginOTPWidget(),
         ),
         FFRoute(
           name: SplashOnboardingWidget.routeName,
@@ -97,6 +97,11 @@ GoRouter createRouter(AppStateNotifier appStateNotifier) => GoRouter(
           builder: (context, params) => LoginOTPWidget(),
         ),
         FFRoute(
+          name: SignupWidget.routeName,
+          path: SignupWidget.routePath,
+          builder: (context, params) => SignupWidget(),
+        ),
+        FFRoute(
           name: HomeDashboardWidget.routeName,
           path: HomeDashboardWidget.routePath,
           builder: (context, params) => HomeDashboardWidget(),
@@ -104,27 +109,126 @@ GoRouter createRouter(AppStateNotifier appStateNotifier) => GoRouter(
         FFRoute(
           name: BusSearchResultsWidget.routeName,
           path: BusSearchResultsWidget.routePath,
-          builder: (context, params) => BusSearchResultsWidget(),
+          builder: (context, params) => BusSearchResultsWidget(
+            fromLocation: params.getParam('fromLocation', ParamType.String),
+            toLocation: params.getParam('toLocation', ParamType.String),
+            date: params.getParam('date', ParamType.DateTime),
+          ),
+        ),
+        FFRoute(
+          name: HotelSearchResultsWidget.routeName,
+          path: HotelSearchResultsWidget.routePath,
+          builder: (context, params) => HotelSearchResultsWidget(
+            destination: params.getParam('destination', ParamType.String),
+            checkIn: params.getParam('checkIn', ParamType.DateTime),
+            checkOut: params.getParam('checkOut', ParamType.DateTime),
+            guests: params.getParam('guests', ParamType.Int),
+          ),
+        ),
+        FFRoute(
+          name: HotelDetailsWidget.routeName,
+          path: HotelDetailsWidget.routePath,
+          builder: (context, params) {
+            final hotel = params.getParam<dynamic>('hotel', ParamType.JSON);
+            return HotelDetailsWidget(
+              hotel: hotel is HotelRecord
+                  ? hotel
+                  : HotelRecord.fromMap(hotel, hotel['id'] ?? ''),
+            );
+          },
+        ),
+        FFRoute(
+          name: HotelBookingConfirmationWidget.routeName,
+          path: HotelBookingConfirmationWidget.routePath,
+          builder: (context, params) {
+            final hotel = params.getParam<dynamic>('hotel', ParamType.JSON);
+            final room = params.getParam<dynamic>('room', ParamType.JSON);
+            return HotelBookingConfirmationWidget(
+              hotel: hotel is HotelRecord
+                  ? hotel
+                  : HotelRecord.fromMap(hotel, hotel['id'] ?? ''),
+              room: room is RoomRecord
+                  ? room
+                  : RoomRecord.fromMap(room, room['id'] ?? ''),
+            );
+          },
+        ),
+        FFRoute(
+          name: PackageListingWidget.routeName,
+          path: PackageListingWidget.routePath,
+          builder: (context, params) => const PackageListingWidget(),
+        ),
+        FFRoute(
+          name: PackageDetailsWidget.routeName,
+          path: PackageDetailsWidget.routePath,
+          builder: (context, params) {
+            final package = params.getParam<dynamic>('package', ParamType.JSON);
+            return PackageDetailsWidget(
+              package: package is PackageRecord
+                  ? package
+                  : PackageRecord.fromMap(package, package['id'] ?? ''),
+            );
+          },
+        ),
+        FFRoute(
+          name: TaxiBookingWidget.routeName,
+          path: TaxiBookingWidget.routePath,
+          builder: (context, params) => const TaxiBookingWidget(),
+        ),
+        FFRoute(
+          name: CarRentalWidget.routeName,
+          path: CarRentalWidget.routePath,
+          builder: (context, params) => const CarRentalWidget(),
+        ),
+        FFRoute(
+          name: ReferralWidget.routeName,
+          path: ReferralWidget.routePath,
+          builder: (context, params) => const ReferralWidget(),
         ),
         FFRoute(
           name: SeatSelectionWidget.routeName,
           path: SeatSelectionWidget.routePath,
-          builder: (context, params) => SeatSelectionWidget(),
+          builder: (context, params) {
+            final busMap = params.getParam<Map<String, dynamic>>('bus', ParamType.JSON);
+            return SeatSelectionWidget(
+              bus: busMap != null ? BusRecord.fromMap(busMap, busMap['id'] ?? '') : null,
+            );
+          },
         ),
         FFRoute(
           name: PassengerDetailsWidget.routeName,
           path: PassengerDetailsWidget.routePath,
-          builder: (context, params) => PassengerDetailsWidget(),
+          builder: (context, params) {
+            final busMap = params.getParam<Map<String, dynamic>>('bus', ParamType.JSON);
+            return PassengerDetailsWidget(
+              selectedSeats: params.getParam<String>(
+                'selectedSeats',
+                ParamType.String,
+                isList: true,
+              ),
+              bus: busMap != null ? BusRecord.fromMap(busMap, busMap['id'] ?? '') : null,
+            );
+          },
         ),
         FFRoute(
           name: PaymentCheckoutWidget.routeName,
           path: PaymentCheckoutWidget.routePath,
-          builder: (context, params) => PaymentCheckoutWidget(),
+          builder: (context, params) {
+            final bookingMap = params.getParam<Map<String, dynamic>>('booking', ParamType.JSON);
+            return PaymentCheckoutWidget(
+              booking: bookingMap != null ? BookingRecord.fromMap(bookingMap) : null,
+            );
+          },
         ),
         FFRoute(
           name: BookingConfirmationTicketWidget.routeName,
           path: BookingConfirmationTicketWidget.routePath,
-          builder: (context, params) => BookingConfirmationTicketWidget(),
+          builder: (context, params) {
+            final bookingMap = params.getParam<Map<String, dynamic>>('booking', ParamType.JSON);
+            return BookingConfirmationTicketWidget(
+              booking: bookingMap != null ? BookingRecord.fromMap(bookingMap) : null,
+            );
+          },
         ),
         FFRoute(
           name: MyTripsWidget.routeName,
@@ -134,7 +238,34 @@ GoRouter createRouter(AppStateNotifier appStateNotifier) => GoRouter(
         FFRoute(
           name: ProfileSettingsWidget.routeName,
           path: ProfileSettingsWidget.routePath,
-          builder: (context, params) => ProfileSettingsWidget(),
+          builder: (context, params) => const ProfileSettingsWidget(),
+        ),
+        FFRoute(
+          name: PersonalInfoWidget.routeName,
+          path: PersonalInfoWidget.routePath,
+          builder: (context, params) => const PersonalInfoWidget(),
+        ),
+        FFRoute(
+          name: WalletWidget.routeName,
+          path: WalletWidget.routePath,
+          builder: (context, params) => const WalletWidget(),
+        ),
+        FFRoute(
+          name: NotificationsWidget.routeName,
+          path: NotificationsWidget.routePath,
+          builder: (context, params) => const NotificationsWidget(),
+        ),
+        FFRoute(
+          name: LiveTrackingWidget.routeName,
+          path: LiveTrackingWidget.routePath,
+          builder: (context, params) => LiveTrackingWidget(
+            busId: params.getParam<String>('busId', ParamType.String),
+          ),
+        ),
+        FFRoute(
+          name: AllRoutesWidget.routeName,
+          path: AllRoutesWidget.routePath,
+          builder: (context, params) => const AllRoutesWidget(),
         )
       ].map((r) => r.toRoute(appStateNotifier)).toList(),
     );
@@ -303,7 +434,7 @@ class FFRoute {
 
           if (requireAuth && !appStateNotifier.loggedIn) {
             appStateNotifier.setRedirectLocationIfUnset(state.uri.toString());
-            return '/splashOnboarding';
+            return '/loginOTP';
           }
           return null;
         },
