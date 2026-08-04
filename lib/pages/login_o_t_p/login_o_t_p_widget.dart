@@ -242,7 +242,7 @@ class _LoginOTPWidgetState extends State<LoginOTPWidget> {
                             Text(
                               _model.isOtpSent
                                   ? 'Enter the 6-digit code sent to +91 ${_model.phoneNumber}'
-                                  : AppLocalizations.of(context)!.enterPhone,
+                                  : (_model.isEmailLogin ? 'Login with your email and password' : AppLocalizations.of(context)!.enterPhone),
                               style: FlutterFlowTheme.of(context)
                                   .bodyMedium
                                   .override(
@@ -268,11 +268,63 @@ class _LoginOTPWidgetState extends State<LoginOTPWidget> {
                             ),
                           ].divide(SizedBox(height: 8.0)),
                         ),
+                        if (!_model.isOtpSent)
+                        Container(
+                          width: double.infinity,
+                          height: 48,
+                          decoration: BoxDecoration(
+                            color: FlutterFlowTheme.of(context).primaryBackground,
+                            borderRadius: BorderRadius.circular(12),
+                          ),
+                          child: Row(
+                            children: [
+                              Expanded(
+                                child: InkWell(
+                                  onTap: () => safeSetState(() => _model.isEmailLogin = false),
+                                  child: Container(
+                                    decoration: BoxDecoration(
+                                      color: !_model.isEmailLogin ? FlutterFlowTheme.of(context).primary : Colors.transparent,
+                                      borderRadius: BorderRadius.circular(12),
+                                    ),
+                                    alignment: Alignment.center,
+                                    child: Text(
+                                      'Phone',
+                                      style: FlutterFlowTheme.of(context).bodyMedium.override(
+                                        font: GoogleFonts.inter(fontWeight: FontWeight.w600),
+                                        color: !_model.isEmailLogin ? Colors.white : FlutterFlowTheme.of(context).secondaryText,
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                              ),
+                              Expanded(
+                                child: InkWell(
+                                  onTap: () => safeSetState(() => _model.isEmailLogin = true),
+                                  child: Container(
+                                    decoration: BoxDecoration(
+                                      color: _model.isEmailLogin ? FlutterFlowTheme.of(context).primary : Colors.transparent,
+                                      borderRadius: BorderRadius.circular(12),
+                                    ),
+                                    alignment: Alignment.center,
+                                    child: Text(
+                                      'Email',
+                                      style: FlutterFlowTheme.of(context).bodyMedium.override(
+                                        font: GoogleFonts.inter(fontWeight: FontWeight.w600),
+                                        color: _model.isEmailLogin ? Colors.white : FlutterFlowTheme.of(context).secondaryText,
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
                         Column(
                           mainAxisSize: MainAxisSize.min,
                           mainAxisAlignment: MainAxisAlignment.start,
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
+                            if (!_model.isEmailLogin)
                             Text(
                               _model.isOtpSent
                                   ? AppLocalizations.of(context)!.verifyOtp
@@ -296,7 +348,7 @@ class _LoginOTPWidgetState extends State<LoginOTPWidget> {
                                     lineHeight: 1.4,
                                   ),
                             ),
-                            if (!_model.isOtpSent)
+                            if (!_model.isOtpSent && !_model.isEmailLogin)
                               Row(
                                 mainAxisSize: MainAxisSize.max,
                                 mainAxisAlignment: MainAxisAlignment.start,
@@ -389,6 +441,38 @@ class _LoginOTPWidgetState extends State<LoginOTPWidget> {
                                   ),
                                 ].divide(SizedBox(width: 16.0)),
                               ),
+                            if (_model.isEmailLogin)
+                              Column(
+                                children: [
+                                  wrapWithModel(
+                                    model: _model.emailModel,
+                                    updateCallback: () => safeSetState(() {}),
+                                    child: TextFieldWidget(
+                                      label: AppLocalizations.of(context)!.emailAddress,
+                                      hint: 'Enter your email',
+                                      leadingIconPresent: true,
+                                      leadingIcon: Icon(Icons.email_outlined, color: FlutterFlowTheme.of(context).primary),
+                                      controller: _model.emailModel.inputTextController,
+                                      focusNode: _model.emailModel.inputFocusNode,
+                                      keyboardType: TextInputType.emailAddress,
+                                    ),
+                                  ),
+                                  const SizedBox(height: 16),
+                                  wrapWithModel(
+                                    model: _model.passwordModel,
+                                    updateCallback: () => safeSetState(() {}),
+                                    child: TextFieldWidget(
+                                      label: AppLocalizations.of(context)!.password,
+                                      hint: 'Enter your password',
+                                      leadingIconPresent: true,
+                                      leadingIcon: Icon(Icons.lock_outline, color: FlutterFlowTheme.of(context).primary),
+                                      obscureText: true,
+                                      controller: _model.passwordModel.inputTextController,
+                                      focusNode: _model.passwordModel.inputFocusNode,
+                                    ),
+                                  ),
+                                ],
+                              ),
                             if (_model.isOtpSent)
                               wrapWithModel(
                                 model: _model.otpFieldModel,
@@ -424,17 +508,35 @@ class _LoginOTPWidgetState extends State<LoginOTPWidget> {
                             iconPresent: false,
                             iconEnd: Icon(
                               Icons.arrow_forward_rounded,
-                              color: FlutterFlowTheme.of(context).primaryText,
+                              color: Colors.white,
                               size: 24.0,
                             ),
                             iconEndPresent: true,
-                            content: _model.isOtpSent ? AppLocalizations.of(context)!.verifyOtp : AppLocalizations.of(context)!.sendOtp,
+                            content: _model.isOtpSent
+                                ? AppLocalizations.of(context)!.verifyOtp
+                                : (_model.isEmailLogin ? AppLocalizations.of(context)!.login : AppLocalizations.of(context)!.sendOtp),
                             variant: 'primary',
                             size: 'large',
                             fullWidth: true,
                             loading: false,
                             disabled: false,
                             onTap: () async {
+                              if (_model.isEmailLogin) {
+                                final email = _model.emailModel.inputTextController.text;
+                                final password = _model.passwordModel.inputTextController.text;
+                                if (email.isEmpty || password.isEmpty) {
+                                  ScaffoldMessenger.of(context).showSnackBar(
+                                    SnackBar(content: Text('Please enter email and password')),
+                                  );
+                                  return;
+                                }
+                                final user = await authManager.signInWithEmail(context, email, password);
+                                if (user != null) {
+                                  context.goNamed(HomeDashboardWidget.routeName);
+                                }
+                                return;
+                              }
+
                               if (!_model.isOtpSent) {
                                 final phoneVal =
                                     _model.textFieldModel.inputTextController?.text;

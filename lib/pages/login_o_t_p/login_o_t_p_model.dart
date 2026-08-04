@@ -11,12 +11,17 @@ class LoginOTPModel extends FlutterFlowModel<LoginOTPWidget> {
   ///  State fields for stateful widgets in this page.
 
   bool isOtpSent = false;
+  bool isEmailLogin = false;
   String phoneNumber = '';
 
   // Model for TextField (Phone).
   late TextFieldModel textFieldModel;
   // Model for TextField (OTP).
   late TextFieldModel otpFieldModel;
+  // Model for TextField (Email).
+  late TextFieldModel emailModel;
+  // Model for TextField (Password).
+  late TextFieldModel passwordModel;
   // Model for Button.
   late ButtonModel buttonModel;
   // Model for FeatureItem.
@@ -36,6 +41,14 @@ class LoginOTPModel extends FlutterFlowModel<LoginOTPWidget> {
     otpFieldModel.inputTextController = TextEditingController();
     otpFieldModel.inputFocusNode = FocusNode();
 
+    emailModel = createModel(context, () => TextFieldModel());
+    emailModel.inputTextController = TextEditingController();
+    emailModel.inputFocusNode = FocusNode();
+
+    passwordModel = createModel(context, () => TextFieldModel());
+    passwordModel.inputTextController = TextEditingController();
+    passwordModel.inputFocusNode = FocusNode();
+
     buttonModel = createModel(context, () => ButtonModel());
     featureItemModel1 = createModel(context, () => FeatureItemModel());
     featureItemModel2 = createModel(context, () => FeatureItemModel());
@@ -46,6 +59,8 @@ class LoginOTPModel extends FlutterFlowModel<LoginOTPWidget> {
   void dispose() {
     textFieldModel.dispose();
     otpFieldModel.dispose();
+    emailModel.dispose();
+    passwordModel.dispose();
     buttonModel.dispose();
     featureItemModel1.dispose();
     featureItemModel2.dispose();
