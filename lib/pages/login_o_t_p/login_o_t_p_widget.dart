@@ -33,6 +33,8 @@ class _LoginOTPWidgetState extends State<LoginOTPWidget> {
     super.initState();
     _model = createModel(context, () => LoginOTPModel());
 
+    authManager.handlePhoneAuthStateChanges(context);
+
     WidgetsBinding.instance.addPostFrameCallback((_) => safeSetState(() {}));
   }
 
