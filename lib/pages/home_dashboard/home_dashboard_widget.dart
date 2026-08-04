@@ -540,7 +540,7 @@ class _HomeDashboardWidgetState extends State<HomeDashboardWidget> {
                                   'checkOut': serializeParam(
                                       _model.checkOutDate, ParamType.DateTime),
                                   'guests': serializeParam(
-                                      _model.guestCount, ParamType.Int),
+                                      _model.guestCount, ParamType.int),
                                 }.withoutNulls,
                               );
                             } else if (_model.selectedService == 'Holiday') {

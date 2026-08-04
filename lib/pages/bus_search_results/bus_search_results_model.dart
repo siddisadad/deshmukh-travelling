@@ -2,7 +2,7 @@ import '/backend/firebase/firestore_service.dart';
 import '/components/filter_chip/filter_chip_model.dart';
 import '/components/bus_card/bus_card_model.dart';
 import '/flutter_flow/flutter_flow_util.dart';
-import '/backend/schema/bus_record.dart';
+import 'package:deshmukh_travelling/backend/schema/bus_record.dart';
 import 'bus_search_results_widget.dart' show BusSearchResultsWidget;
 import 'package:flutter/material.dart';
 

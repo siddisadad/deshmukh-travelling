@@ -1,37 +1,24 @@
 import 'dart:convert';
-
 import 'package:flutter/material.dart';
-import 'package:from_css_color/from_css_color.dart';
+import '../flutter_flow_util.dart';
 
-import '../../flutter_flow/lat_lng.dart';
-import '../../flutter_flow/place.dart';
-import '../../flutter_flow/uploaded_file.dart';
-
-/// SERIALIZATION HELPERS
-
-String dateTimeToString(DateTime dateTime) =>
-    '${dateTime.isUtc ? 'u' : 'l'}${dateTime.millisecondsSinceEpoch}';
-
-String dateTimeRangeToString(DateTimeRange dateTimeRange) {
-  final start = dateTimeRange.start;
-  final end = dateTimeRange.end;
-  final startStr = '${start.isUtc ? 'u' : 'l'}${start.millisecondsSinceEpoch}';
-  final endStr = '${end.isUtc ? 'u' : 'l'}${end.millisecondsSinceEpoch}';
-  return '$startStr|$endStr';
+extension ColorSerializationExt on Color {
+  String serializeColor() => '#\${value.toRadixString(16).padLeft(8, "0")}';
 }
 
-String placeToString(FFPlace place) => jsonEncode({
-      'latLng': place.latLng.serialize(),
-      'name': place.name,
-      'address': place.address,
-      'city': place.city,
-      'state': place.state,
-      'country': place.country,
-      'zipCode': place.zipCode,
-    });
-
-String uploadedFileToString(FFUploadedFile uploadedFile) =>
-    uploadedFile.serialize();
+enum ParamType {
+  int,
+  double,
+  String,
+  bool,
+  DateTime,
+  DateTimeRange,
+  LatLng,
+  Color,
+  FFPlace,
+  FFUploadedFile,
+  JSON,
+}
 
 String? serializeParam(
   dynamic param,
@@ -43,142 +30,41 @@ String? serializeParam(
       return null;
     }
     if (isList) {
-      final serializedValues = (param as Iterable)
+      final List<String> serializedValues = (param as Iterable)
           .map((p) => serializeParam(p, paramType, isList: false))
           .where((p) => p != null)
           .map((p) => p!)
           .toList();
       return json.encode(serializedValues);
     }
-    String? data;
     switch (paramType) {
-      case ParamType.Int:
-        data = param.toString();
+      case ParamType.int:
+        return param.toString();
       case ParamType.double:
-        data = param.toString();
+        return param.toString();
       case ParamType.String:
-        data = param;
+        return param;
       case ParamType.bool:
-        data = param ? 'true' : 'false';
+        return param ? 'true' : 'false';
       case ParamType.DateTime:
-        data = dateTimeToString(param as DateTime);
+        return (param as DateTime).millisecondsSinceEpoch.toString();
       case ParamType.DateTimeRange:
-        data = dateTimeRangeToString(param as DateTimeRange);
+        return dateTimeRangeToString(param as DateTimeRange);
       case ParamType.LatLng:
-        data = (param as LatLng).serialize();
+        return (param as LatLng).serialize();
       case ParamType.Color:
-        data = (param as Color).toCssString();
+        return (param as Color).serializeColor();
       case ParamType.FFPlace:
-        data = placeToString(param as FFPlace);
+        return (param as FFPlace).serialize();
       case ParamType.FFUploadedFile:
-        data = uploadedFileToString(param as FFUploadedFile);
+        return (param as FFUploadedFile).serialize();
       case ParamType.JSON:
-        data = json.encode(param);
+        return json.encode(param);
     }
-    return data;
   } catch (e) {
     print('Error serializing parameter: $e');
     return null;
   }
-}
-
-/// END SERIALIZATION HELPERS
-
-/// DESERIALIZATION HELPERS
-
-DateTime? dateTimeFromString(String? dateTimeStr) {
-  if (dateTimeStr == null || dateTimeStr.isEmpty) {
-    return null;
-  }
-  final hasPrefix = dateTimeStr.startsWith('u') || dateTimeStr.startsWith('l');
-  final milliseconds = int.tryParse(
-    hasPrefix ? dateTimeStr.substring(1) : dateTimeStr,
-  );
-  return milliseconds != null
-      ? DateTime.fromMillisecondsSinceEpoch(
-          milliseconds,
-          isUtc: hasPrefix ? dateTimeStr.startsWith('u') : false,
-        )
-      : null;
-}
-
-DateTimeRange? dateTimeRangeFromString(String dateTimeRangeStr) {
-  final pieces = dateTimeRangeStr.split('|');
-  if (pieces.length != 2) {
-    return null;
-  }
-  DateTime? parseDateTime(String value) {
-    final hasPrefix = value.startsWith('u') || value.startsWith('l');
-    final milliseconds = int.tryParse(hasPrefix ? value.substring(1) : value);
-    return milliseconds != null
-        ? DateTime.fromMillisecondsSinceEpoch(
-            milliseconds,
-            isUtc: hasPrefix ? value.startsWith('u') : false,
-          )
-        : null;
-  }
-
-  final start = parseDateTime(pieces.first);
-  final end = parseDateTime(pieces.last);
-  if (start == null || end == null) {
-    return null;
-  }
-  return DateTimeRange(
-    start: start,
-    end: end,
-  );
-}
-
-LatLng? latLngFromString(String? latLngStr) {
-  final pieces = latLngStr?.split(',');
-  if (pieces == null || pieces.length != 2) {
-    return null;
-  }
-  return LatLng(
-    double.parse(pieces.first.trim()),
-    double.parse(pieces.last.trim()),
-  );
-}
-
-FFPlace placeFromString(String placeStr) {
-  final serializedData = jsonDecode(placeStr) as Map<String, dynamic>;
-  final data = {
-    'latLng': serializedData.containsKey('latLng')
-        ? latLngFromString(serializedData['latLng'] as String)
-        : const LatLng(0.0, 0.0),
-    'name': serializedData['name'] ?? '',
-    'address': serializedData['address'] ?? '',
-    'city': serializedData['city'] ?? '',
-    'state': serializedData['state'] ?? '',
-    'country': serializedData['country'] ?? '',
-    'zipCode': serializedData['zipCode'] ?? '',
-  };
-  return FFPlace(
-    latLng: data['latLng'] as LatLng,
-    name: data['name'] as String,
-    address: data['address'] as String,
-    city: data['city'] as String,
-    state: data['state'] as String,
-    country: data['country'] as String,
-    zipCode: data['zipCode'] as String,
-  );
-}
-
-FFUploadedFile uploadedFileFromString(String uploadedFileStr) =>
-    FFUploadedFile.deserialize(uploadedFileStr);
-
-enum ParamType {
-  Int,
-  double,
-  String,
-  bool,
-  DateTime,
-  DateTimeRange,
-  LatLng,
-  Color,
-  FFPlace,
-  FFUploadedFile,
-  JSON,
 }
 
 dynamic deserializeParam<T>(
@@ -204,7 +90,7 @@ dynamic deserializeParam<T>(
           .toList();
     }
     switch (paramType) {
-      case ParamType.Int:
+      case ParamType.int:
         return int.tryParse(param);
       case ParamType.double:
         return double.tryParse(param);
@@ -219,11 +105,11 @@ dynamic deserializeParam<T>(
       case ParamType.LatLng:
         return latLngFromString(param);
       case ParamType.Color:
-        return fromCssColor(param);
+        return colorFromCssString(param);
       case ParamType.FFPlace:
-        return placeFromString(param);
+        return FFPlace.deserialize(param);
       case ParamType.FFUploadedFile:
-        return uploadedFileFromString(param);
+        return FFUploadedFile.deserialize(param);
       case ParamType.JSON:
         return json.decode(param);
     }
@@ -232,3 +118,40 @@ dynamic deserializeParam<T>(
     return null;
   }
 }
+
+DateTime? dateTimeFromString(String? dateTimeStr) {
+  if (dateTimeStr == null || dateTimeStr.isEmpty) {
+    return null;
+  }
+  return DateTime.fromMillisecondsSinceEpoch(int.parse(dateTimeStr));
+}
+
+String dateTimeRangeToString(DateTimeRange dateTimeRange) {
+  final start = dateTimeRange.start.millisecondsSinceEpoch;
+  final end = dateTimeRange.end.millisecondsSinceEpoch;
+  return '$start|$end';
+}
+
+DateTimeRange? dateTimeRangeFromString(String dateTimeRangeStr) {
+  final parts = dateTimeRangeStr.split('|');
+  if (parts.length != 2) {
+    return null;
+  }
+  return DateTimeRange(
+    start: DateTime.fromMillisecondsSinceEpoch(int.parse(parts[0])),
+    end: DateTime.fromMillisecondsSinceEpoch(int.parse(parts[1])),
+  );
+}
+
+LatLng? latLngFromString(String latLngStr) {
+  final parts = latLngStr.split(',');
+  if (parts.length != 2) {
+    return null;
+  }
+  return LatLng(double.parse(parts[0]), double.parse(parts[1]));
+}
+
+FFPlace placeFromString(String placeStr) => FFPlace.deserialize(placeStr);
+
+FFUploadedFile uploadedFileFromString(String uploadedFileStr) =>
+    FFUploadedFile.deserialize(uploadedFileStr);

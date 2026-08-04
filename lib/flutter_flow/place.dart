@@ -1,3 +1,4 @@
+import 'dart:convert';
 import 'lat_lng.dart';
 
 class FFPlace {
@@ -18,6 +19,34 @@ class FFPlace {
   final String state;
   final String country;
   final String zipCode;
+
+  String serialize() => jsonEncode({
+        'latLng': latLng.serialize(),
+        'name': name,
+        'address': address,
+        'city': city,
+        'state': state,
+        'country': country,
+        'zipCode': zipCode,
+      });
+
+  static FFPlace deserialize(String val) {
+    final map = jsonDecode(val);
+    return FFPlace(
+      latLng: latLngFromString(map['latLng'] as String),
+      name: map['name'] as String,
+      address: map['address'] as String,
+      city: map['city'] as String,
+      state: map['state'] as String,
+      country: map['country'] as String,
+      zipCode: map['zipCode'] as String,
+    );
+  }
+
+  static LatLng latLngFromString(String val) {
+    final parts = val.split(',');
+    return LatLng(double.parse(parts[0]), double.parse(parts[1]));
+  }
 
   @override
   String toString() => '''FFPlace(

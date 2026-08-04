@@ -122,7 +122,7 @@ GoRouter createRouter(AppStateNotifier appStateNotifier) => GoRouter(
             destination: params.getParam('destination', ParamType.String),
             checkIn: params.getParam('checkIn', ParamType.DateTime),
             checkOut: params.getParam('checkOut', ParamType.DateTime),
-            guests: params.getParam('guests', ParamType.Int),
+            guests: params.getParam('guests', ParamType.int),
           ),
         ),
         FFRoute(

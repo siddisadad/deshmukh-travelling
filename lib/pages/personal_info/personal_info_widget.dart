@@ -1,3 +1,4 @@
+import 'package:flutter/material.dart';
 import '/auth/firebase_auth/auth_util.dart';
 import '/components/button/button_widget.dart';
 import '/components/text_field/text_field_widget.dart';
@@ -6,7 +7,6 @@ import '/flutter_flow/flutter_flow_util.dart';
 import '../../l10n/app_localizations.dart';
 import '/backend/schema/users_record.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:intl/intl.dart';
 import 'personal_info_model.dart';
 export 'personal_info_model.dart';
 

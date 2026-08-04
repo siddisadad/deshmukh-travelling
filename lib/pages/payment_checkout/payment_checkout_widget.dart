@@ -1,4 +1,5 @@
 import '/auth/firebase_auth/auth_util.dart';
+import 'package:deshmukh_travelling/backend/schema/booking_record.dart';
 import '/components/button/button_widget.dart';
 import '/components/payment_method_tile/payment_method_tile_widget.dart';
 import '/components/price_summary_row/price_summary_row_widget.dart';
@@ -7,7 +8,9 @@ import '/flutter_flow/flutter_flow_theme.dart';
 import '/flutter_flow/flutter_flow_util.dart';
 import '../../l10n/app_localizations.dart';
 import 'package:flutter/material.dart';
-import '/index.dart';
+import '../seat_selection/seat_selection_widget.dart';
+import '../booking_confirmation_ticket/booking_confirmation_ticket_widget.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'payment_checkout_model.dart';
 export 'payment_checkout_model.dart';
