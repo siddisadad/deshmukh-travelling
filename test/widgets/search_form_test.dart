@@ -5,7 +5,6 @@ import 'package:deshmukh_travelling/pages/home_dashboard/home_dashboard_model.da
 import 'package:deshmukh_travelling/components/button/button_widget.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:deshmukh_travelling/l10n/app_localizations.dart';
-import 'package:provider/provider.dart';
 
 void main() {
   testWidgets('SearchForm renders correctly', (WidgetTester tester) async {

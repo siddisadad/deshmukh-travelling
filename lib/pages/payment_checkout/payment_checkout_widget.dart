@@ -11,7 +11,6 @@ import 'package:flutter/material.dart';
 import '../seat_selection/seat_selection_widget.dart';
 import '../booking_confirmation_ticket/booking_confirmation_ticket_widget.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:google_fonts/google_fonts.dart';
 import 'payment_checkout_model.dart';
 export 'payment_checkout_model.dart';
 
