@@ -242,32 +242,93 @@ class AppLocalizationsHi extends AppLocalizations {
   String get walletPayment => 'वॉलेट भुगतान';
 
   @override
-  String get changePhone => 'Change Phone Number';
+  String get changePhone => 'फ़ोन नंबर बदलें';
 
   @override
-  String get termsOfService => 'Terms of Service';
+  String get termsOfService => 'सेवा की शर्तें';
 
   @override
-  String get agreeTerms => 'By continuing, you agree to our';
+  String get agreeTerms => 'जारी रखकर, आप हमारे सहमत हैं';
 
   @override
-  String get safeTravel => 'Safe Travel';
+  String get safeTravel => 'सुरक्षित यात्रा';
 
   @override
   String get verifiedOperators =>
-      'Verified operators and real-time tracking for your peace of mind.';
+      'आपकी मन की शांति के लिए सत्यापित ऑपरेटर और वास्तविक समय की ट्रैकिंग।';
 
   @override
-  String get securePayments => 'Secure Payments';
+  String get securePayments => 'सुरक्षित भुगतान';
 
   @override
   String get encryptedTransactions =>
-      'Encrypted transactions with multiple safe payment options.';
+      'कई सुरक्षित भुगतान विकल्पों के साथ एन्क्रिप्टेड लेनदेन।';
 
   @override
-  String get support247 => '24/7 Support';
+  String get support247 => '24/7 सहायता';
 
   @override
   String get alwaysReadyHelp =>
-      'Our team is always ready to help you with your bookings.';
+      'हमारी टीम आपकी बुकिंग में आपकी मदद के लिए हमेशा तैयार है।';
+
+  @override
+  String get liveTracking => 'लाइव ट्रैकिंग';
+
+  @override
+  String get onTime => 'समय पर';
+
+  @override
+  String get busCaptain => 'बस कैप्टन';
+
+  @override
+  String get eta => 'ETA';
+
+  @override
+  String get distance => 'दूरी';
+
+  @override
+  String get nextStop => 'अगला स्टॉप';
+
+  @override
+  String get emergencySos => 'आपातकालीन एसओएस';
+
+  @override
+  String get sosConfirmMessage =>
+      'यह हमारी आपातकालीन प्रतिक्रिया टीम को सूचित करेगा और आपकी लाइव लोकेशन साझा करेगा। क्या आप आगे बढ़ना चाहते हैं?';
+
+  @override
+  String get sendSos => 'एसओएस भेजें';
+
+  @override
+  String get cancel => 'रद्द करें';
+
+  @override
+  String get holidayPackages => 'हॉलिडे पैकेज';
+
+  @override
+  String get bookHoliday => 'हॉलिडे बुक करें';
+
+  @override
+  String get selectDepartureDate => 'प्रस्थान की तारीख चुनें';
+
+  @override
+  String get numberOfTravelers => 'यात्रियों की संख्या';
+
+  @override
+  String get packagePrice => 'पैकेज की कीमत';
+
+  @override
+  String get overview => 'विवरण';
+
+  @override
+  String get inclusions => 'शामिल है';
+
+  @override
+  String get itinerary => 'यात्रा कार्यक्रम';
+
+  @override
+  String get reviews => 'समीक्षाएं';
+
+  @override
+  String get totalCost => 'कुल लागत';
 }

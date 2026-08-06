@@ -241,32 +241,93 @@ class AppLocalizationsMr extends AppLocalizations {
   String get walletPayment => 'वॉलेट पेमेंट';
 
   @override
-  String get changePhone => 'Change Phone Number';
+  String get changePhone => 'फोन नंबर बदला';
 
   @override
-  String get termsOfService => 'Terms of Service';
+  String get termsOfService => 'सेवा अटी';
 
   @override
-  String get agreeTerms => 'By continuing, you agree to our';
+  String get agreeTerms => 'पुढे सुरू ठेवून, तुम्ही आमच्याशी सहमत आहात';
 
   @override
-  String get safeTravel => 'Safe Travel';
+  String get safeTravel => 'सुरक्षित प्रवास';
 
   @override
   String get verifiedOperators =>
-      'Verified operators and real-time tracking for your peace of mind.';
+      'तुमच्या मनःशांतीसाठी सत्यापित ऑपरेटर आणि रिअल-टाइम ट्रॅकिंग.';
 
   @override
-  String get securePayments => 'Secure Payments';
+  String get securePayments => 'सुरक्षित पेमेंट';
 
   @override
   String get encryptedTransactions =>
-      'Encrypted transactions with multiple safe payment options.';
+      'अनेक सुरक्षित पेमेंट पर्यायांसह कूटबद्ध (encrypted) व्यवहार.';
 
   @override
-  String get support247 => '24/7 Support';
+  String get support247 => '24/7 सपोर्ट';
 
   @override
   String get alwaysReadyHelp =>
-      'Our team is always ready to help you with your bookings.';
+      'आमची टीम तुमच्या बुकिंगमध्ये तुम्हाला मदत करण्यासाठी नेहमी तयार आहे.';
+
+  @override
+  String get liveTracking => 'लाइव्ह ट्रॅकिंग';
+
+  @override
+  String get onTime => 'वेळेवर';
+
+  @override
+  String get busCaptain => 'बस कॅप्टन';
+
+  @override
+  String get eta => 'ETA';
+
+  @override
+  String get distance => 'अंतर';
+
+  @override
+  String get nextStop => 'पुढचा थांबा';
+
+  @override
+  String get emergencySos => 'आणीबाणी एसओएस';
+
+  @override
+  String get sosConfirmMessage =>
+      'हे आमच्या आणीबाणी प्रतिसाद टीमला सतर्क करेल आणि तुमचे लाइव्ह लोकेशन शेअर करेल. तुम्हाला पुढे जायचे आहे का?';
+
+  @override
+  String get sendSos => 'एसओएस पाठवा';
+
+  @override
+  String get cancel => 'रद्द करा';
+
+  @override
+  String get holidayPackages => 'हॉलिडे पॅकेजेस';
+
+  @override
+  String get bookHoliday => 'हॉलिडे बुक करा';
+
+  @override
+  String get selectDepartureDate => 'प्रस्थानाची तारीख निवडा';
+
+  @override
+  String get numberOfTravelers => 'प्रवाशांची संख्या';
+
+  @override
+  String get packagePrice => 'पॅकेजची किंमत';
+
+  @override
+  String get overview => 'आढावा';
+
+  @override
+  String get inclusions => 'समाविष्ट';
+
+  @override
+  String get itinerary => 'प्रवास कार्यक्रम';
+
+  @override
+  String get reviews => 'समीक्षा';
+
+  @override
+  String get totalCost => 'एकूण खर्च';
 }

@@ -21,6 +21,7 @@ class BusCardWidget extends StatefulWidget {
     String? rating,
     String? seats,
     String? type,
+    this.onTap,
   })  : this.arrTime = arrTime ?? '12:45',
         this.depTime = depTime ?? '08:30',
         this.duration = duration ?? '4h 15m',
@@ -39,6 +40,7 @@ class BusCardWidget extends StatefulWidget {
   final String rating;
   final String seats;
   final String type;
+  final VoidCallback? onTap;
 
   @override
   State<BusCardWidget> createState() => _BusCardWidgetState();
@@ -257,12 +259,20 @@ class _BusCardWidgetState extends State<BusCardWidget> {
                                 shape: BoxShape.rectangle,
                               ),
                               child: CachedNetworkImage(
-                                fadeInDuration: Duration(milliseconds: 0),
-                                fadeOutDuration: Duration(milliseconds: 0),
+                                fadeInDuration: const Duration(milliseconds: 0),
+                                fadeOutDuration: const Duration(milliseconds: 0),
                                 imageUrl:
                                     'https://dimg.dreamflow.cloud/v1/image/premium%20travel%20bus%20%24operator',
                                 fit: BoxFit.cover,
-                                alignment: Alignment(0.0, 0.0),
+                                alignment: const Alignment(0.0, 0.0),
+                                errorWidget: (context, url, error) => Container(
+                                  color: FlutterFlowTheme.of(context).alternate,
+                                  child: Icon(
+                                    Icons.directions_bus_rounded,
+                                    color: FlutterFlowTheme.of(context).secondaryText,
+                                    size: 20,
+                                  ),
+                                ),
                               ),
                             ),
                           ),
@@ -643,14 +653,12 @@ class _BusCardWidgetState extends State<BusCardWidget> {
                             hoverColor: Colors.transparent,
                             highlightColor: Colors.transparent,
                             onTap: () async {
+                              if (widget.onTap != null) {
+                                widget.onTap!();
+                                return;
+                              }
                               context.goNamed(
-                                SeatSelectionWidget.routeName,
-                                queryParameters: {
-                                  'bus': serializeParam(
-                                    widget.bus,
-                                    ParamType.JSON,
-                                  ),
-                                }.withoutNulls,
+                                SeatSelectionScreen.routeName,
                               );
                             },
                             child: wrapWithModel(

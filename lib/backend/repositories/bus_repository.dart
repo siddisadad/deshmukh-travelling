@@ -1,4 +1,4 @@
-import '../firebase/firestore_service.dart';
+import '../../core/data/datasources/bus_datasource.dart';
 import '../schema/bus_record.dart';
 
 abstract class BusRepository {
@@ -10,10 +10,10 @@ abstract class BusRepository {
 }
 
 class FirestoreBusRepository implements BusRepository {
-  final FirestoreService _service;
+  final BusDataSource _dataSource;
 
-  FirestoreBusRepository({FirestoreService? service})
-      : _service = service ?? FirestoreService();
+  FirestoreBusRepository({BusDataSource? dataSource})
+      : _dataSource = dataSource ?? FirestoreBusDataSource();
 
   @override
   Future<List<BusRecord>> searchBuses({
@@ -21,8 +21,6 @@ class FirestoreBusRepository implements BusRepository {
     required String to,
     DateTime? date,
   }) {
-    // Currently redirects to our existing service,
-    // but allows for future injection of caching or local data.
-    return _service.fetchBuses(from, to);
+    return _dataSource.getBuses(from, to);
   }
 }

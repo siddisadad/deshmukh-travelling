@@ -609,6 +609,126 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Our team is always ready to help you with your bookings.'**
   String get alwaysReadyHelp;
+
+  /// No description provided for @liveTracking.
+  ///
+  /// In en, this message translates to:
+  /// **'Live Tracking'**
+  String get liveTracking;
+
+  /// No description provided for @onTime.
+  ///
+  /// In en, this message translates to:
+  /// **'On Time'**
+  String get onTime;
+
+  /// No description provided for @busCaptain.
+  ///
+  /// In en, this message translates to:
+  /// **'Bus Captain'**
+  String get busCaptain;
+
+  /// No description provided for @eta.
+  ///
+  /// In en, this message translates to:
+  /// **'ETA'**
+  String get eta;
+
+  /// No description provided for @distance.
+  ///
+  /// In en, this message translates to:
+  /// **'Distance'**
+  String get distance;
+
+  /// No description provided for @nextStop.
+  ///
+  /// In en, this message translates to:
+  /// **'Next Stop'**
+  String get nextStop;
+
+  /// No description provided for @emergencySos.
+  ///
+  /// In en, this message translates to:
+  /// **'Emergency SOS'**
+  String get emergencySos;
+
+  /// No description provided for @sosConfirmMessage.
+  ///
+  /// In en, this message translates to:
+  /// **'This will alert our emergency response team and share your live location. Do you want to proceed?'**
+  String get sosConfirmMessage;
+
+  /// No description provided for @sendSos.
+  ///
+  /// In en, this message translates to:
+  /// **'SEND SOS'**
+  String get sendSos;
+
+  /// No description provided for @cancel.
+  ///
+  /// In en, this message translates to:
+  /// **'Cancel'**
+  String get cancel;
+
+  /// No description provided for @holidayPackages.
+  ///
+  /// In en, this message translates to:
+  /// **'Holiday Packages'**
+  String get holidayPackages;
+
+  /// No description provided for @bookHoliday.
+  ///
+  /// In en, this message translates to:
+  /// **'Book Holiday'**
+  String get bookHoliday;
+
+  /// No description provided for @selectDepartureDate.
+  ///
+  /// In en, this message translates to:
+  /// **'Select Departure Date'**
+  String get selectDepartureDate;
+
+  /// No description provided for @numberOfTravelers.
+  ///
+  /// In en, this message translates to:
+  /// **'Number of Travelers'**
+  String get numberOfTravelers;
+
+  /// No description provided for @packagePrice.
+  ///
+  /// In en, this message translates to:
+  /// **'Package Price'**
+  String get packagePrice;
+
+  /// No description provided for @overview.
+  ///
+  /// In en, this message translates to:
+  /// **'Overview'**
+  String get overview;
+
+  /// No description provided for @inclusions.
+  ///
+  /// In en, this message translates to:
+  /// **'Inclusions'**
+  String get inclusions;
+
+  /// No description provided for @itinerary.
+  ///
+  /// In en, this message translates to:
+  /// **'Itinerary'**
+  String get itinerary;
+
+  /// No description provided for @reviews.
+  ///
+  /// In en, this message translates to:
+  /// **'Reviews'**
+  String get reviews;
+
+  /// No description provided for @totalCost.
+  ///
+  /// In en, this message translates to:
+  /// **'Total Cost'**
+  String get totalCost;
 }
 
 class _AppLocalizationsDelegate

@@ -269,4 +269,65 @@ class AppLocalizationsEn extends AppLocalizations {
   @override
   String get alwaysReadyHelp =>
       'Our team is always ready to help you with your bookings.';
+
+  @override
+  String get liveTracking => 'Live Tracking';
+
+  @override
+  String get onTime => 'On Time';
+
+  @override
+  String get busCaptain => 'Bus Captain';
+
+  @override
+  String get eta => 'ETA';
+
+  @override
+  String get distance => 'Distance';
+
+  @override
+  String get nextStop => 'Next Stop';
+
+  @override
+  String get emergencySos => 'Emergency SOS';
+
+  @override
+  String get sosConfirmMessage =>
+      'This will alert our emergency response team and share your live location. Do you want to proceed?';
+
+  @override
+  String get sendSos => 'SEND SOS';
+
+  @override
+  String get cancel => 'Cancel';
+
+  @override
+  String get holidayPackages => 'Holiday Packages';
+
+  @override
+  String get bookHoliday => 'Book Holiday';
+
+  @override
+  String get selectDepartureDate => 'Select Departure Date';
+
+  @override
+  String get numberOfTravelers => 'Number of Travelers';
+
+  @override
+  String get packagePrice => 'Package Price';
+
+  @override
+  String get overview => 'Overview';
+
+  @override
+  String get inclusions => 'Inclusions';
+
+  @override
+  String get itinerary => 'Itinerary';
+
+  @override
+  String get reviews => 'Reviews';
+
+  @override
+  String get totalCost => 'Total Cost';
 }

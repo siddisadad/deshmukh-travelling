@@ -1,9 +1,10 @@
 import 'package:flutter_test/flutter_test.dart';
 import 'package:deshmukh_travelling/backend/repositories/booking_repository.dart';
 import 'package:deshmukh_travelling/backend/schema/booking_record.dart';
-import 'package:deshmukh_travelling/backend/firebase/firestore_service.dart';
+import 'package:deshmukh_travelling/core/data/datasources/booking_datasource.dart';
+import 'package:deshmukh_travelling/backend/schema/hotel_booking_record.dart';
 
-class MockFirestoreService extends FirestoreService {
+class MockBookingDataSource implements BookingDataSource {
   @override
   Future<List<BookingRecord>> fetchUserBookings(String userId) async {
     return [
@@ -25,12 +26,21 @@ class MockFirestoreService extends FirestoreService {
       )
     ];
   }
+
+  @override
+  Future<String?> createBooking(BookingRecord booking) async => '1';
+
+  @override
+  Future<String?> createHotelBooking(HotelBookingRecord booking) async => '1';
+
+  @override
+  Future<void> cancelBooking(String bookingId) async {}
 }
 
 void main() {
   group('FirestoreBookingRepository Tests', () {
     test('getBookingsForUser returns a list of BookingRecord', () async {
-      final repository = FirestoreBookingRepository(service: MockFirestoreService());
+      final repository = FirestoreBookingRepository(dataSource: MockBookingDataSource());
       final bookings = await repository.getBookingsForUser('test_user');
 
       expect(bookings, isA<List<BookingRecord>>());

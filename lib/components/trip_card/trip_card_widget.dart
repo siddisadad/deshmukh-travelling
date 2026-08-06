@@ -1,4 +1,3 @@
-import '/pages/live_tracking/live_tracking_widget.dart';
 import '/index.dart';
 import '/components/button/button_widget.dart';
 import '/flutter_flow/flutter_flow_theme.dart';
@@ -802,7 +801,7 @@ class _TripCardWidgetState extends State<TripCardWidget> {
                               child: InkWell(
                                 onTap: () async {
                                   context.pushNamed(
-                                    LiveTrackingWidget.routeName,
+                                    LiveTrackingScreen.routeName,
                                     queryParameters: {
                                       'busId': serializeParam(
                                           widget.busId, ParamType.String),

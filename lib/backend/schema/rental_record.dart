@@ -25,8 +25,12 @@ class RentalRecord {
 
   factory RentalRecord.fromFirestore(DocumentSnapshot doc) {
     Map data = doc.data() as Map;
+    return RentalRecord.fromMap(data as Map<String, dynamic>, doc.id);
+  }
+
+  factory RentalRecord.fromMap(Map<String, dynamic> data, String id) {
     return RentalRecord(
-      id: doc.id,
+      id: id,
       vehicleName: data['vehicleName'] ?? '',
       type: data['type'] ?? '',
       pricePerDay: (data['pricePerDay'] ?? 0.0).toDouble(),

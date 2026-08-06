@@ -67,14 +67,24 @@ class _OnboardingStepWidgetState extends State<OnboardingStepWidget> {
               shape: BoxShape.rectangle,
             ),
             child: CachedNetworkImage(
-              fadeInDuration: Duration(milliseconds: 0),
-              fadeOutDuration: Duration(milliseconds: 0),
+              fadeInDuration: const Duration(milliseconds: 0),
+              fadeOutDuration: const Duration(milliseconds: 0),
               imageUrl: valueOrDefault<String>(
                 widget.imgDesc,
                 'https://dimg.dreamflow.cloud/v1/image/modern%20luxury%20coach%20bus%20interior%20with%20comfortable%20seats',
               ),
               fit: BoxFit.cover,
-              alignment: Alignment(0.0, 0.0),
+              alignment: const Alignment(0.0, 0.0),
+              errorWidget: (context, url, error) => Container(
+                color: FlutterFlowTheme.of(context).alternate,
+                child: Center(
+                  child: Icon(
+                    Icons.image_not_supported_outlined,
+                    color: FlutterFlowTheme.of(context).secondaryText,
+                    size: 40,
+                  ),
+                ),
+              ),
             ),
           ),
         ),

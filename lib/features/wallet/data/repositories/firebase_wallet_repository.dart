@@ -1,43 +1,42 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
 import '../../domain/entities/wallet.dart';
 import '../../domain/repositories/wallet_repository.dart';
-import '../models/wallet_model.dart';
+import '../../../../core/data/datasources/wallet_datasource.dart';
 
 class FirebaseWalletRepository implements WalletRepository {
-  final FirebaseFirestore _firestore;
+  final WalletDataSource _dataSource;
 
-  FirebaseWalletRepository(this._firestore);
+  FirebaseWalletRepository(this._dataSource);
 
   @override
   Future<Wallet?> getWallet(String userId) async {
-    final doc = await _firestore.collection('wallets').doc(userId).get();
-    if (doc.exists) {
-      return WalletModel.fromFirestore(doc);
-    }
-    return null;
+    final record = await _dataSource.getWallet(userId);
+    if (record == null) return null;
+
+    return Wallet(
+      userId: record.userId,
+      balance: record.balance,
+      transactions: record.transactions.map((t) => WalletTransaction(
+        id: t.id,
+        amount: t.amount,
+        type: t.type == 'credit' ? WalletTransactionType.credit : WalletTransactionType.debit,
+        description: t.description,
+        timestamp: t.timestamp,
+      )).toList(),
+    );
   }
 
   @override
   Future<void> addMoney(String userId, double amount) async {
-    final walletRef = _firestore.collection('wallets').doc(userId);
-    await _firestore.runTransaction((transaction) async {
-      final doc = await transaction.get(walletRef);
-      if (doc.exists) {
-        final currentBalance = (doc.data()?['balance'] ?? 0.0).toDouble();
-        transaction.update(walletRef, {'balance': currentBalance + amount});
-      } else {
-        transaction.set(walletRef, {'balance': amount, 'transactions': []});
-      }
-    });
+    await _dataSource.updateWalletBalance(userId, amount, 'credit', 'Added money to wallet');
   }
 
   @override
   Future<void> recordTransaction(String userId, WalletTransaction walletTx) async {
-    final walletRef = _firestore.collection('wallets').doc(userId);
-    final model = WalletTransactionModel.fromEntity(walletTx);
-
-    await walletRef.update({
-      'transactions': FieldValue.arrayUnion([model.toMap()]),
-    });
+    await _dataSource.updateWalletBalance(
+      userId,
+      walletTx.amount,
+      walletTx.type == WalletTransactionType.credit ? 'credit' : 'debit',
+      walletTx.description
+    );
   }
 }

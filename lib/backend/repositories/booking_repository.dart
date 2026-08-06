@@ -1,4 +1,4 @@
-import '../firebase/firestore_service.dart';
+import '../../core/data/datasources/booking_datasource.dart';
 import '../schema/booking_record.dart';
 
 abstract class BookingRepository {
@@ -7,18 +7,18 @@ abstract class BookingRepository {
 }
 
 class FirestoreBookingRepository implements BookingRepository {
-  final FirestoreService _service;
+  final BookingDataSource _dataSource;
 
-  FirestoreBookingRepository({FirestoreService? service})
-      : _service = service ?? FirestoreService();
+  FirestoreBookingRepository({BookingDataSource? dataSource})
+      : _dataSource = dataSource ?? FirestoreBookingDataSource();
 
   @override
   Future<String?> createBooking(BookingRecord booking) {
-    return _service.createBooking(booking);
+    return _dataSource.createBooking(booking);
   }
 
   @override
   Future<List<BookingRecord>> getBookingsForUser(String userId) {
-    return _service.fetchUserBookings(userId);
+    return _dataSource.fetchUserBookings(userId);
   }
 }

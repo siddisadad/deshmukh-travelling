@@ -105,10 +105,14 @@ dependencies:
   riverpod: ^2.6.1
   flutter_riverpod: ^2.6.1
   riverpod_annotation: ^2.6.1
+  google_generative_ai: ^0.4.5
+  logger: ^2.4.0
 
   # The following adds the Cupertino Icons font to your application.
   # Use with the CupertinoIcons class for iOS style icons.
   cupertino_icons: ^1.0.0
+  firebase_crashlytics: ^5.2.7
+  firebase_analytics: ^12.4.6
 
 flutter_launcher_icons:
   android: "launcher_icon"

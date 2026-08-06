@@ -7,9 +7,10 @@ import 'package:deshmukh_travelling/backend/schema/wallet_record.dart';
 import 'package:deshmukh_travelling/backend/schema/hotel_record.dart';
 import 'package:deshmukh_travelling/backend/schema/room_record.dart';
 import 'package:deshmukh_travelling/backend/schema/taxi_record.dart';
-import 'package:deshmukh_travelling/backend/schema/package_record.dart';
+import 'package:deshmukh_travelling/features/packages/domain/entities/package_record.dart';
 import 'package:deshmukh_travelling/backend/schema/reward_record.dart';
 import 'package:deshmukh_travelling/backend/schema/hotel_booking_record.dart';
+import 'package:deshmukh_travelling/backend/schema/notification_item.dart';
 
 class FirestoreService {
   FirebaseFirestore get _db => FirebaseFirestore.instance;
@@ -551,5 +552,48 @@ class FirestoreService {
       }
       return {'lat': 0.0, 'lng': 0.0};
     });
+  }
+
+  Stream<Map<String, dynamic>> getFlightStatusStream(String flightId) {
+    if (!useRealFirestore) {
+      return Stream.periodic(const Duration(seconds: 5), (i) {
+        return {
+          'flightNumber': 'AI-101',
+          'status': 'In Air',
+          'lat': 19.0760 + (i * 0.005),
+          'lng': 72.8777 + (i * 0.005),
+          'eta': '45 Mins',
+          'gate': 'T2 - G12',
+          'terminal': '2',
+        };
+      });
+    }
+
+    return _db.collection('flights').doc(flightId).snapshots().map((doc) {
+      if (doc.exists) {
+        return doc.data()!;
+      }
+      return {};
+    });
+  }
+
+  Future<void> addNotification(String userId, NotificationItem notification) async {
+    if (!useRealFirestore) {
+      print('MOCK: Adding notification for user $userId: ${notification.title}');
+      return;
+    }
+
+    try {
+      await _db.collection('notifications').add({
+        'userId': userId,
+        'title': notification.title,
+        'message': notification.message,
+        'timestamp': Timestamp.fromDate(notification.timestamp),
+        'type': notification.type,
+        'isRead': notification.isRead,
+      });
+    } catch (e) {
+      print('Error adding notification: $e');
+    }
   }
 }

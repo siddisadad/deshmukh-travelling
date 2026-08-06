@@ -1,18 +1,18 @@
-import 'package:riverpod_annotation/riverpod_annotation.dart';
-import 'package:deshmukh_travelling/core/providers/firebase_providers.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import '../../../../core/data/datasources/wallet_datasource.dart';
 import '../../data/repositories/firebase_wallet_repository.dart';
 import '../../domain/entities/wallet.dart';
 import '../../domain/repositories/wallet_repository.dart';
 
-part 'wallet_providers.g.dart';
+final walletDataSourceProvider = Provider<WalletDataSource>((ref) {
+  return FirestoreWalletDataSource();
+});
 
-@riverpod
-WalletRepository walletRepository(WalletRepositoryRef ref) {
-  final firestore = ref.watch(firestoreProvider);
-  return FirebaseWalletRepository(firestore);
-}
+final walletRepositoryProvider = Provider<WalletRepository>((ref) {
+  final dataSource = ref.watch(walletDataSourceProvider);
+  return FirebaseWalletRepository(dataSource);
+});
 
-@riverpod
-Future<Wallet?> wallet(WalletRef ref, String userId) {
+final walletProvider = FutureProvider.family<Wallet?, String>((ref, userId) {
   return ref.watch(walletRepositoryProvider).getWallet(userId);
-}
+});

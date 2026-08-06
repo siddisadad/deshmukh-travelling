@@ -11,12 +11,14 @@ class ProfileMenuItemWidget extends StatefulWidget {
     this.icon,
     String? subtitle,
     String? title,
+    this.onTap,
   })  : this.subtitle = subtitle ?? 'Manage your data and identity',
         this.title = title ?? 'Personal Information';
 
   final Widget? icon;
   final String subtitle;
   final String title;
+  final VoidCallback? onTap;
 
   @override
   State<ProfileMenuItemWidget> createState() => _ProfileMenuItemWidgetState();
@@ -49,8 +51,9 @@ class _ProfileMenuItemWidgetState extends State<ProfileMenuItemWidget> {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: EdgeInsetsDirectional.fromSTEB(0.0, 0.0, 0.0, 4.0),
-      child: Container(
+      padding: const EdgeInsetsDirectional.fromSTEB(0.0, 0.0, 0.0, 4.0),
+      child: InkWell(
+        onTap: widget.onTap,
         child: Container(
           decoration: BoxDecoration(
             color: FlutterFlowTheme.of(context).secondaryBackground,
@@ -62,94 +65,61 @@ class _ProfileMenuItemWidgetState extends State<ProfileMenuItemWidget> {
             ),
           ),
           child: Padding(
-            padding: EdgeInsetsDirectional.fromSTEB(24.0, 16.0, 24.0, 16.0),
-            child: Container(
-              child: Row(
-                mainAxisSize: MainAxisSize.max,
-                mainAxisAlignment: MainAxisAlignment.start,
-                crossAxisAlignment: CrossAxisAlignment.center,
-                children: [
-                  Container(
-                    width: 40.0,
-                    height: 40.0,
-                    decoration: BoxDecoration(
-                      color: FlutterFlowTheme.of(context).primaryBackground,
-                      borderRadius: BorderRadius.circular(12.0),
-                      shape: BoxShape.rectangle,
-                    ),
-                    alignment: AlignmentDirectional(0.0, 0.0),
-                    child: widget.icon!,
+            padding: const EdgeInsetsDirectional.fromSTEB(24.0, 16.0, 24.0, 16.0),
+            child: Row(
+              mainAxisSize: MainAxisSize.max,
+              mainAxisAlignment: MainAxisAlignment.start,
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: [
+                Container(
+                  width: 40.0,
+                  height: 40.0,
+                  decoration: BoxDecoration(
+                    color: FlutterFlowTheme.of(context).primaryBackground,
+                    borderRadius: BorderRadius.circular(12.0),
+                    shape: BoxShape.rectangle,
                   ),
-                  Expanded(
-                    flex: 1,
-                    child: Column(
-                      mainAxisSize: MainAxisSize.min,
-                      mainAxisAlignment: MainAxisAlignment.start,
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text(
-                          valueOrDefault<String>(
-                            widget.title,
-                            'Personal Information',
-                          ),
-                          style: FlutterFlowTheme.of(context)
-                              .titleSmall
-                              .override(
-                                font: GoogleFonts.plusJakartaSans(
-                                  fontWeight: FontWeight.w600,
-                                  fontStyle: FlutterFlowTheme.of(context)
-                                      .titleSmall
-                                      .fontStyle,
-                                ),
-                                color: FlutterFlowTheme.of(context).primaryText,
-                                letterSpacing: 0.0,
+                  alignment: const AlignmentDirectional(0.0, 0.0),
+                  child: widget.icon!,
+                ),
+                const SizedBox(width: 16.0),
+                Expanded(
+                  child: Column(
+                    mainAxisSize: MainAxisSize.min,
+                    mainAxisAlignment: MainAxisAlignment.start,
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        widget.title,
+                        style: FlutterFlowTheme.of(context).titleSmall.override(
+                              font: GoogleFonts.plusJakartaSans(
                                 fontWeight: FontWeight.w600,
-                                fontStyle: FlutterFlowTheme.of(context)
-                                    .titleSmall
-                                    .fontStyle,
-                                lineHeight: 1.5,
                               ),
-                        ),
-                        Text(
-                          valueOrDefault<String>(
-                            widget.subtitle,
-                            'Manage your data and identity',
-                          ),
-                          maxLines: 1,
-                          style: FlutterFlowTheme.of(context)
-                              .labelSmall
-                              .override(
-                                font: GoogleFonts.inter(
-                                  fontWeight: FlutterFlowTheme.of(context)
-                                      .labelSmall
-                                      .fontWeight,
-                                  fontStyle: FlutterFlowTheme.of(context)
-                                      .labelSmall
-                                      .fontStyle,
-                                ),
-                                color:
-                                    FlutterFlowTheme.of(context).secondaryText,
-                                letterSpacing: 0.0,
-                                fontWeight: FlutterFlowTheme.of(context)
-                                    .labelSmall
-                                    .fontWeight,
-                                fontStyle: FlutterFlowTheme.of(context)
-                                    .labelSmall
-                                    .fontStyle,
-                                lineHeight: 1.4,
-                              ),
-                          overflow: TextOverflow.ellipsis,
-                        ),
-                      ].divide(SizedBox(height: 2.0)),
-                    ),
+                              color: FlutterFlowTheme.of(context).primaryText,
+                              lineHeight: 1.5,
+                            ),
+                      ),
+                      const SizedBox(height: 2.0),
+                      Text(
+                        widget.subtitle,
+                        maxLines: 1,
+                        style: FlutterFlowTheme.of(context).labelSmall.override(
+                              font: GoogleFonts.inter(),
+                              color: FlutterFlowTheme.of(context).secondaryText,
+                              lineHeight: 1.4,
+                            ),
+                        overflow: TextOverflow.ellipsis,
+                      ),
+                    ],
                   ),
-                  Icon(
-                    Icons.chevron_right_rounded,
-                    color: FlutterFlowTheme.of(context).accent3,
-                    size: 20.0,
-                  ),
-                ].divide(SizedBox(width: 16.0)),
-              ),
+                ),
+                const SizedBox(width: 16.0),
+                Icon(
+                  Icons.chevron_right_rounded,
+                  color: FlutterFlowTheme.of(context).accent3,
+                  size: 20.0,
+                ),
+              ],
             ),
           ),
         ),

@@ -304,13 +304,25 @@ class FirebaseAuthManager extends AuthManager
       final errorMsg = switch (e.code) {
         'email-already-in-use' =>
           'Error: The email is already in use by a different account',
+        'invalid-credential' =>
+          'Error: Invalid email or password',
+        'user-not-found' =>
+          'Error: No user found for this email. Please sign up first.',
+        'wrong-password' =>
+          'Error: Incorrect password. Please try again.',
         'INVALID_LOGIN_CREDENTIALS' =>
           'Error: The supplied auth credential is incorrect, malformed or has expired',
-        _ => 'Error: ${e.message!}',
+        _ => 'Error: ${e.message ?? "An unknown error occurred"}',
       };
       ScaffoldMessenger.of(context).hideCurrentSnackBar();
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(content: Text(errorMsg)),
+      );
+      return null;
+    } catch (e) {
+      ScaffoldMessenger.of(context).hideCurrentSnackBar();
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text('Error: $e')),
       );
       return null;
     }

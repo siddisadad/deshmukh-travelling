@@ -26,6 +26,7 @@ class TextFieldWidget extends StatefulWidget {
     this.keyboardType = TextInputType.text,
     this.controller,
     this.focusNode,
+    this.validator,
   })  : this.label = label ?? '',
         this.labelPresent = labelPresent ?? false,
         this.helper = helper ?? '',
@@ -57,6 +58,7 @@ class TextFieldWidget extends StatefulWidget {
   final TextInputType keyboardType;
   final TextEditingController? controller;
   final FocusNode? focusNode;
+  final String? Function(String?)? validator;
 
   @override
   State<TextFieldWidget> createState() => _TextFieldWidgetState();
@@ -481,7 +483,7 @@ class _TextFieldWidgetState extends State<TextFieldWidget> {
                                 .fontStyle,
                             lineHeight: 1.5,
                           ),
-                      validator: _model.inputTextControllerValidator
+                      validator: widget.validator ?? _model.inputTextControllerValidator
                           .asValidator(context),
                     ),
                   ),

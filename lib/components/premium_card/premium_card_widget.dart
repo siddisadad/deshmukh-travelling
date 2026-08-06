@@ -71,6 +71,23 @@ class _PremiumCardWidgetState extends State<PremiumCardWidget> {
                     width: widget.width,
                     height: 120,
                     fit: BoxFit.cover,
+                    placeholder: (context, url) => Container(
+                      width: widget.width,
+                      height: 120,
+                      color: FlutterFlowTheme.of(context).alternate,
+                      child: const Center(
+                        child: CircularProgressIndicator(),
+                      ),
+                    ),
+                    errorWidget: (context, url, error) => Container(
+                      width: widget.width,
+                      height: 120,
+                      color: FlutterFlowTheme.of(context).alternate,
+                      child: Icon(
+                        Icons.image_not_supported_outlined,
+                        color: FlutterFlowTheme.of(context).secondaryText,
+                      ),
+                    ),
                   ),
                 ),
                 if (widget.rating != null)

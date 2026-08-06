@@ -82,6 +82,16 @@ class _HotelCardWidgetState extends State<HotelCardWidget> {
                 width: double.infinity,
                 height: 180.0,
                 fit: BoxFit.cover,
+                errorWidget: (context, url, error) => Container(
+                  width: double.infinity,
+                  height: 180.0,
+                  color: FlutterFlowTheme.of(context).alternate,
+                  child: Icon(
+                    Icons.hotel_rounded,
+                    color: FlutterFlowTheme.of(context).secondaryText,
+                    size: 40,
+                  ),
+                ),
               ),
             ),
             Padding(

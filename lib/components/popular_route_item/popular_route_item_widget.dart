@@ -79,15 +79,31 @@ class _PopularRouteItemWidgetState extends State<PopularRouteItemWidget> {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 CachedNetworkImage(
-                  fadeInDuration: Duration(milliseconds: 0),
-                  fadeOutDuration: Duration(milliseconds: 0),
+                  fadeInDuration: const Duration(milliseconds: 0),
+                  fadeOutDuration: const Duration(milliseconds: 0),
                   imageUrl: valueOrDefault<String>(
                     widget.imgDesc,
                     'https://dimg.dreamflow.cloud/v1/image/Lokhandwala%20Complex%20Mumbai',
                   ),
+                  width: double.infinity,
                   height: 100.0,
                   fit: BoxFit.cover,
-                  alignment: Alignment(0.0, 0.0),
+                  alignment: const Alignment(0.0, 0.0),
+                  placeholder: (context, url) => Container(
+                    width: double.infinity,
+                    height: 100.0,
+                    color: FlutterFlowTheme.of(context).alternate,
+                    child: const Center(child: CircularProgressIndicator()),
+                  ),
+                  errorWidget: (context, url, error) => Container(
+                    width: double.infinity,
+                    height: 100.0,
+                    color: FlutterFlowTheme.of(context).alternate,
+                    child: Icon(
+                      Icons.image_not_supported_outlined,
+                      color: FlutterFlowTheme.of(context).secondaryText,
+                    ),
+                  ),
                 ),
                 Padding(
                   padding: EdgeInsets.all(8.0),

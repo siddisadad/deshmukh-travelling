@@ -9,6 +9,9 @@ import '/flutter_flow/flutter_flow_theme.dart';
 import '/flutter_flow/flutter_flow_util.dart';
 
 import '/index.dart';
+import '../../features/hajj_umrah/presentation/pages/package_listing_screen.dart' as hajj_pkg;
+import '../../features/hajj_umrah/presentation/pages/package_details_screen.dart' as hajj_pkg_details;
+import '../../features/hajj_umrah/presentation/pages/booking_screen.dart' as hajj_booking;
 
 export 'package:go_router/go_router.dart';
 export 'serialization_util.dart';
@@ -76,14 +79,14 @@ GoRouter createRouter(AppStateNotifier appStateNotifier) => GoRouter(
       refreshListenable: appStateNotifier,
       navigatorKey: appNavigatorKey,
       errorBuilder: (context, state) => appStateNotifier.loggedIn
-          ? HomeDashboardWidget()
+          ? HomeDashboardScreen()
           : LoginOTPWidget(),
       routes: [
         FFRoute(
           name: '_initialize',
           path: '/',
           builder: (context, _) => appStateNotifier.loggedIn
-              ? HomeDashboardWidget()
+              ? HomeDashboardScreen()
               : LoginOTPWidget(),
         ),
         FFRoute(
@@ -102,35 +105,35 @@ GoRouter createRouter(AppStateNotifier appStateNotifier) => GoRouter(
           builder: (context, params) => SignupWidget(),
         ),
         FFRoute(
-          name: HomeDashboardWidget.routeName,
-          path: HomeDashboardWidget.routePath,
-          builder: (context, params) => HomeDashboardWidget(),
+          name: HomeDashboardScreen.routeName,
+          path: HomeDashboardScreen.routePath,
+          builder: (context, params) => HomeDashboardScreen(),
         ),
         FFRoute(
-          name: BusSearchResultsWidget.routeName,
-          path: BusSearchResultsWidget.routePath,
-          builder: (context, params) => BusSearchResultsWidget(
-            fromLocation: params.getParam('fromLocation', ParamType.String),
-            toLocation: params.getParam('toLocation', ParamType.String),
-            date: params.getParam('date', ParamType.DateTime),
+          name: BusSearchResultsScreen.routeName,
+          path: BusSearchResultsScreen.routePath,
+          builder: (context, params) => BusSearchResultsScreen(
+            fromLocation: params.getParam('fromLocation', ParamType.String) ?? 'Mumbai',
+            toLocation: params.getParam('toLocation', ParamType.String) ?? 'Pune',
+            date: params.getParam('date', ParamType.DateTime) ?? DateTime.now(),
           ),
         ),
         FFRoute(
-          name: HotelSearchResultsWidget.routeName,
-          path: HotelSearchResultsWidget.routePath,
-          builder: (context, params) => HotelSearchResultsWidget(
-            destination: params.getParam('destination', ParamType.String),
+          name: HotelSearchResultsScreen.routeName,
+          path: HotelSearchResultsScreen.routePath,
+          builder: (context, params) => HotelSearchResultsScreen(
+            destination: params.getParam('destination', ParamType.String) ?? 'Mumbai',
             checkIn: params.getParam('checkIn', ParamType.DateTime),
             checkOut: params.getParam('checkOut', ParamType.DateTime),
-            guests: params.getParam('guests', ParamType.int),
+            guests: params.getParam('guests', ParamType.int) ?? 2,
           ),
         ),
         FFRoute(
-          name: HotelDetailsWidget.routeName,
-          path: HotelDetailsWidget.routePath,
+          name: HotelDetailsScreen.routeName,
+          path: HotelDetailsScreen.routePath,
           builder: (context, params) {
             final hotel = params.getParam<dynamic>('hotel', ParamType.JSON);
-            return HotelDetailsWidget(
+            return HotelDetailsScreen(
               hotel: hotel is HotelRecord
                   ? hotel
                   : HotelRecord.fromMap(hotel, hotel['id'] ?? ''),
@@ -138,12 +141,12 @@ GoRouter createRouter(AppStateNotifier appStateNotifier) => GoRouter(
           },
         ),
         FFRoute(
-          name: HotelBookingConfirmationWidget.routeName,
-          path: HotelBookingConfirmationWidget.routePath,
+          name: HotelBookingConfirmationScreen.routeName,
+          path: HotelBookingConfirmationScreen.routePath,
           builder: (context, params) {
             final hotel = params.getParam<dynamic>('hotel', ParamType.JSON);
             final room = params.getParam<dynamic>('room', ParamType.JSON);
-            return HotelBookingConfirmationWidget(
+            return HotelBookingConfirmationScreen(
               hotel: hotel is HotelRecord
                   ? hotel
                   : HotelRecord.fromMap(hotel, hotel['id'] ?? ''),
@@ -154,16 +157,16 @@ GoRouter createRouter(AppStateNotifier appStateNotifier) => GoRouter(
           },
         ),
         FFRoute(
-          name: PackageListingWidget.routeName,
-          path: PackageListingWidget.routePath,
-          builder: (context, params) => const PackageListingWidget(),
+          name: HolidayPackageListingScreen.routeName,
+          path: HolidayPackageListingScreen.routePath,
+          builder: (context, params) => const HolidayPackageListingScreen(),
         ),
         FFRoute(
-          name: PackageDetailsWidget.routeName,
-          path: PackageDetailsWidget.routePath,
+          name: HolidayPackageBookingScreen.routeName,
+          path: HolidayPackageBookingScreen.routePath,
           builder: (context, params) {
             final package = params.getParam<dynamic>('package', ParamType.JSON);
-            return PackageDetailsWidget(
+            return HolidayPackageBookingScreen(
               package: package is PackageRecord
                   ? package
                   : PackageRecord.fromMap(package, package['id'] ?? ''),
@@ -171,101 +174,172 @@ GoRouter createRouter(AppStateNotifier appStateNotifier) => GoRouter(
           },
         ),
         FFRoute(
-          name: TaxiBookingWidget.routeName,
-          path: TaxiBookingWidget.routePath,
-          builder: (context, params) => const TaxiBookingWidget(),
-        ),
-        FFRoute(
-          name: CarRentalWidget.routeName,
-          path: CarRentalWidget.routePath,
-          builder: (context, params) => const CarRentalWidget(),
-        ),
-        FFRoute(
-          name: ReferralWidget.routeName,
-          path: ReferralWidget.routePath,
-          builder: (context, params) => const ReferralWidget(),
-        ),
-        FFRoute(
-          name: SeatSelectionWidget.routeName,
-          path: SeatSelectionWidget.routePath,
+          name: HolidayPackageDetailsScreen.routeName,
+          path: HolidayPackageDetailsScreen.routePath,
           builder: (context, params) {
-            final busMap = params.getParam<Map<String, dynamic>>('bus', ParamType.JSON);
-            return SeatSelectionWidget(
-              bus: busMap != null ? BusRecord.fromMap(busMap, busMap['id'] ?? '') : null,
+            final package = params.getParam<dynamic>('package', ParamType.JSON);
+            return HolidayPackageDetailsScreen(
+              package: package is PackageRecord
+                  ? package
+                  : PackageRecord.fromMap(package, package['id'] ?? ''),
             );
           },
         ),
         FFRoute(
-          name: PassengerDetailsWidget.routeName,
-          path: PassengerDetailsWidget.routePath,
+          name: TaxiSearchResultsScreen.routeName,
+          path: TaxiSearchResultsScreen.routePath,
+          builder: (context, params) => TaxiSearchResultsScreen(
+            from: params.getParam<String>('from', ParamType.String),
+            to: params.getParam<String>('to', ParamType.String),
+          ),
+        ),
+        FFRoute(
+          name: TaxiBookingScreen.routeName,
+          path: TaxiBookingScreen.routePath,
+          builder: (context, params) => const TaxiBookingScreen(),
+        ),
+        FFRoute(
+          name: CarRentalScreen.routeName,
+          path: CarRentalScreen.routePath,
+          builder: (context, params) => const CarRentalScreen(),
+        ),
+        FFRoute(
+          name: CarRentalDetailsScreen.routeName,
+          path: CarRentalDetailsScreen.routePath,
           builder: (context, params) {
-            final busMap = params.getParam<Map<String, dynamic>>('bus', ParamType.JSON);
-            return PassengerDetailsWidget(
-              selectedSeats: params.getParam<String>(
-                'selectedSeats',
-                ParamType.String,
-                isList: true,
-              ),
-              bus: busMap != null ? BusRecord.fromMap(busMap, busMap['id'] ?? '') : null,
+            final car = params.getParam<dynamic>('car', ParamType.JSON);
+            return CarRentalDetailsScreen(
+              car: car is RentalRecord
+                  ? car
+                  : RentalRecord.fromMap(car, car['id'] ?? ''),
             );
           },
         ),
         FFRoute(
-          name: PaymentCheckoutWidget.routeName,
-          path: PaymentCheckoutWidget.routePath,
+          name: ReferralScreen.routeName,
+          path: ReferralScreen.routePath,
+          builder: (context, params) => const ReferralScreen(),
+        ),
+        FFRoute(
+          name: SeatSelectionScreen.routeName,
+          path: SeatSelectionScreen.routePath,
+          builder: (context, params) => const SeatSelectionScreen(),
+        ),
+        FFRoute(
+          name: PassengerDetailsScreen.routeName,
+          path: PassengerDetailsScreen.routePath,
+          builder: (context, params) => const PassengerDetailsScreen(),
+        ),
+        FFRoute(
+          name: PaymentCheckoutScreen.routeName,
+          path: PaymentCheckoutScreen.routePath,
           builder: (context, params) {
-            final bookingMap = params.getParam<Map<String, dynamic>>('booking', ParamType.JSON);
-            return PaymentCheckoutWidget(
-              booking: bookingMap != null ? BookingRecord.fromMap(bookingMap) : null,
+            return PaymentCheckoutScreen(
+              booking: params.state.extra as BookingRecord?,
             );
           },
         ),
         FFRoute(
-          name: BookingConfirmationTicketWidget.routeName,
-          path: BookingConfirmationTicketWidget.routePath,
+          name: BookingConfirmationTicketScreen.routeName,
+          path: BookingConfirmationTicketScreen.routePath,
           builder: (context, params) {
-            final bookingMap = params.getParam<Map<String, dynamic>>('booking', ParamType.JSON);
-            return BookingConfirmationTicketWidget(
-              booking: bookingMap != null ? BookingRecord.fromMap(bookingMap) : null,
+            return BookingConfirmationTicketScreen(
+              booking: params.state.extra as BookingRecord,
             );
           },
         ),
         FFRoute(
-          name: MyTripsWidget.routeName,
-          path: MyTripsWidget.routePath,
-          builder: (context, params) => MyTripsWidget(),
+          name: MyTripsScreen.routeName,
+          path: MyTripsScreen.routePath,
+          builder: (context, params) => MyTripsScreen(),
         ),
         FFRoute(
-          name: ProfileSettingsWidget.routeName,
-          path: ProfileSettingsWidget.routePath,
-          builder: (context, params) => const ProfileSettingsWidget(),
+          name: ProfileScreen.routeName,
+          path: ProfileScreen.routePath,
+          builder: (context, params) => const ProfileScreen(),
         ),
         FFRoute(
-          name: PersonalInfoWidget.routeName,
-          path: PersonalInfoWidget.routePath,
-          builder: (context, params) => const PersonalInfoWidget(),
+          name: PersonalInfoScreen.routeName,
+          path: PersonalInfoScreen.routePath,
+          builder: (context, params) => const PersonalInfoScreen(),
         ),
         FFRoute(
-          name: WalletWidget.routeName,
-          path: WalletWidget.routePath,
-          builder: (context, params) => const WalletWidget(),
+          name: WalletScreen.routeName,
+          path: WalletScreen.routePath,
+          builder: (context, params) => const WalletScreen(),
         ),
         FFRoute(
-          name: NotificationsWidget.routeName,
-          path: NotificationsWidget.routePath,
-          builder: (context, params) => const NotificationsWidget(),
+          name: NotificationsScreen.routeName,
+          path: NotificationsScreen.routePath,
+          builder: (context, params) => const NotificationsScreen(),
         ),
         FFRoute(
-          name: LiveTrackingWidget.routeName,
-          path: LiveTrackingWidget.routePath,
-          builder: (context, params) => LiveTrackingWidget(
+          name: LiveTrackingScreen.routeName,
+          path: LiveTrackingScreen.routePath,
+          builder: (context, params) => LiveTrackingScreen(
             busId: params.getParam<String>('busId', ParamType.String),
           ),
         ),
         FFRoute(
-          name: AllRoutesWidget.routeName,
-          path: AllRoutesWidget.routePath,
-          builder: (context, params) => const AllRoutesWidget(),
+          name: AllRoutesScreen.routeName,
+          path: AllRoutesScreen.routePath,
+          builder: (context, params) => const AllRoutesScreen(),
+        ),
+        FFRoute(
+          name: LiveChatScreen.routeName,
+          path: LiveChatScreen.routePath,
+          builder: (context, params) => const LiveChatScreen(),
+        ),
+        FFRoute(
+          name: FlightTrackingScreen.routeName,
+          path: FlightTrackingScreen.routePath,
+          builder: (context, params) => FlightTrackingScreen(
+            flightId: params.getParam<String>('flightId', ParamType.String),
+          ),
+        ),
+        FFRoute(
+          name: 'HajjDashboard',
+          path: '/hajjDashboard',
+          builder: (context, params) => const HajjDashboardScreen(),
+        ),
+        FFRoute(
+          name: 'HajjPackages',
+          path: '/hajjPackages',
+          builder: (context, params) {
+            final typeStr = params.getParam<String>('type', ParamType.String);
+            return hajj_pkg.PackageListingScreen(
+              type: PackageType.values.firstWhere(
+                (e) => e.name == typeStr,
+                orElse: () => PackageType.hajj,
+              ),
+            );
+          },
+        ),
+        FFRoute(
+          name: 'HajjPackageDetails',
+          path: '/hajjPackageDetails',
+          builder: (context, params) => hajj_pkg_details.PackageDetailsScreen(
+            packageId: params.getParam<String>('id', ParamType.String)!,
+          ),
+        ),
+        FFRoute(
+          name: 'HajjBooking',
+          path: '/hajjBooking',
+          builder: (context, params) => hajj_booking.HajjBookingScreen(
+            package: params.getParam<HajjPackage>('package', ParamType.JSON),
+          ),
+        ),
+        FFRoute(
+          name: 'MyJourney',
+          path: '/myJourney',
+          builder: (context, params) => const MyJourneyScreen(),
+        ),
+        FFRoute(
+          name: 'IslamicTools',
+          path: '/islamicTools',
+          builder: (context, params) => IslamicToolsScreen(
+            initialTab: params.getParam<int>('initialTab', ParamType.int) ?? 0,
+          ),
         )
       ].map((r) => r.toRoute(appStateNotifier)).toList(),
     );
@@ -503,7 +577,11 @@ class TransitionInfo {
   final Duration duration;
   final Alignment? alignment;
 
-  static TransitionInfo appDefault() => TransitionInfo(hasTransition: false);
+  static TransitionInfo appDefault() => const TransitionInfo(
+        hasTransition: true,
+        transitionType: PageTransitionType.fade,
+        duration: Duration(milliseconds: 300),
+      );
 }
 
 class RootPageContext {
