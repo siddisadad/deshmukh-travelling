@@ -292,7 +292,7 @@ class _HomeDashboardWidgetState extends State<HomeDashboardWidget> {
                                     highlightColor: Colors.transparent,
                                     onTap: () async {
                                       context.goNamed(
-                                          HomeDashboardWidget.routeName);
+                                          BusSearchResultsWidget.routeName);
                                     },
                                     child: wrapWithModel(
                                       model: _model.buttonModel1,

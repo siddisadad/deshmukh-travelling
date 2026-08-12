@@ -6,13 +6,21 @@ import '/flutter_flow/flutter_flow_icon_button.dart';
 import '/flutter_flow/flutter_flow_theme.dart';
 import '/flutter_flow/flutter_flow_util.dart';
 import '/index.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'passenger_details_model.dart';
 export 'passenger_details_model.dart';
 
 class PassengerDetailsWidget extends StatefulWidget {
-  const PassengerDetailsWidget({super.key});
+  const PassengerDetailsWidget({
+    super.key,
+    this.selectedSeats,
+    this.busRef,
+  });
+
+  final List<String>? selectedSeats;
+  final DocumentReference? busRef;
 
   static String routeName = 'PassengerDetails';
   static String routePath = '/passengerDetails';
@@ -757,8 +765,20 @@ class _PassengerDetailsWidgetState extends State<PassengerDetailsWidget> {
                                   hoverColor: Colors.transparent,
                                   highlightColor: Colors.transparent,
                                   onTap: () async {
-                                    context
-                                        .goNamed(HomeDashboardWidget.routeName);
+                                    context.goNamed(
+                                      PaymentCheckoutWidget.routeName,
+                                      queryParameters: {
+                                        'selectedSeats': serializeParam(
+                                          widget.selectedSeats,
+                                          ParamType.String,
+                                          true,
+                                        ),
+                                        'busRef': serializeParam(
+                                          widget.busRef,
+                                          ParamType.DocumentReference,
+                                        ),
+                                      }.withoutNulls,
+                                    );
                                   },
                                   child: wrapWithModel(
                                     model: _model.buttonModel,

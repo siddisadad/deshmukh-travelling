@@ -2,6 +2,7 @@ import '/components/button/button_widget.dart';
 import '/flutter_flow/flutter_flow_theme.dart';
 import '/flutter_flow/flutter_flow_util.dart';
 import '/index.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -19,6 +20,7 @@ class BusCardWidget extends StatefulWidget {
     String? rating,
     String? seats,
     String? type,
+    this.busRef,
   })  : this.arrTime = arrTime ?? '12:45',
         this.depTime = depTime ?? '08:30',
         this.duration = duration ?? '4h 15m',
@@ -36,6 +38,7 @@ class BusCardWidget extends StatefulWidget {
   final String rating;
   final String seats;
   final String type;
+  final DocumentReference? busRef;
 
   @override
   State<BusCardWidget> createState() => _BusCardWidgetState();
@@ -638,7 +641,15 @@ class _BusCardWidgetState extends State<BusCardWidget> {
                             hoverColor: Colors.transparent,
                             highlightColor: Colors.transparent,
                             onTap: () async {
-                              context.goNamed(SeatSelectionWidget.routeName);
+                              context.goNamed(
+                                SeatSelectionWidget.routeName,
+                                queryParameters: {
+                                  'busRef': serializeParam(
+                                    widget.busRef,
+                                    ParamType.DocumentReference,
+                                  ),
+                                }.withoutNulls,
+                              );
                             },
                             child: wrapWithModel(
                               model: _model.buttonModel,

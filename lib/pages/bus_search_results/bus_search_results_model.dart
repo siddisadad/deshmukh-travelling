@@ -8,6 +8,8 @@ import 'package:flutter/material.dart';
 class BusSearchResultsModel extends FlutterFlowModel<BusSearchResultsWidget> {
   ///  State fields for stateful widgets in this page.
 
+  String selectedFilter = 'All';
+
   // Model for FilterChip.
   late FilterChipModel filterChipModel1;
   // Model for FilterChip.

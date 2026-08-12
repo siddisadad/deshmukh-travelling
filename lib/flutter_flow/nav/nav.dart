@@ -109,17 +109,48 @@ GoRouter createRouter(AppStateNotifier appStateNotifier) => GoRouter(
         FFRoute(
           name: SeatSelectionWidget.routeName,
           path: SeatSelectionWidget.routePath,
-          builder: (context, params) => SeatSelectionWidget(),
+          builder: (context, params) => SeatSelectionWidget(
+            busRef: params.getParam(
+              'busRef',
+              ParamType.DocumentReference,
+              false,
+              ['buses'],
+            ),
+          ),
         ),
         FFRoute(
           name: PassengerDetailsWidget.routeName,
           path: PassengerDetailsWidget.routePath,
-          builder: (context, params) => PassengerDetailsWidget(),
+          builder: (context, params) => PassengerDetailsWidget(
+            selectedSeats: params.getParam<String>(
+              'selectedSeats',
+              ParamType.String,
+              true,
+            ),
+            busRef: params.getParam(
+              'busRef',
+              ParamType.DocumentReference,
+              false,
+              ['buses'],
+            ),
+          ),
         ),
         FFRoute(
           name: PaymentCheckoutWidget.routeName,
           path: PaymentCheckoutWidget.routePath,
-          builder: (context, params) => PaymentCheckoutWidget(),
+          builder: (context, params) => PaymentCheckoutWidget(
+            selectedSeats: params.getParam<String>(
+              'selectedSeats',
+              ParamType.String,
+              true,
+            ),
+            busRef: params.getParam(
+              'busRef',
+              ParamType.DocumentReference,
+              false,
+              ['buses'],
+            ),
+          ),
         ),
         FFRoute(
           name: BookingConfirmationTicketWidget.routeName,
