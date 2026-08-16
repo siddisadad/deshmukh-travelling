@@ -12,8 +12,8 @@ class BusesRecord {
   String get depTime => data['depTime'] as String? ?? '';
   String get arrTime => data['arrTime'] as String? ?? '';
   String get duration => data['duration'] as String? ?? '';
-  double get price => castToDouble(data['price']);
-  double get rating => castToDouble(data['rating']);
+  double get price => castToType<double>(data['price']) ?? 0.0;
+  double get rating => castToType<double>(data['rating']) ?? 0.0;
   int get seatsAvailable => data['seats_available'] as int? ?? 0;
 
   static CollectionReference get collection =>

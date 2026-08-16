@@ -1,12 +1,10 @@
 import '/components/button/button_widget.dart';
-import '/components/payment_method_tile/payment_method_tile_widget.dart';
 import '/components/price_summary_row/price_summary_row_widget.dart';
 import '/flutter_flow/flutter_flow_icon_button.dart';
 import '/flutter_flow/flutter_flow_theme.dart';
 import '/flutter_flow/flutter_flow_util.dart';
 import '/index.dart';
 import '/backend/schema/buses_record.dart';
-import '/backend/schema/seats_record.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';

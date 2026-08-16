@@ -1,6 +1,5 @@
 import '/components/button/button_widget.dart';
 import '/components/seat_legend_item/seat_legend_item_widget.dart';
-import '/components/seat_widget/seat_widget_widget.dart';
 import '/flutter_flow/flutter_flow_util.dart';
 import '/index.dart';
 import 'seat_selection_widget.dart' show SeatSelectionWidget;

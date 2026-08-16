@@ -282,9 +282,10 @@ class FFParameters {
 
   dynamic getParam<T>(
     String paramName,
-    ParamType type, {
+    ParamType type, [
     bool isList = false,
-  }) {
+    List<String>? collectionNamePath,
+  ]) {
     if (futureParamValues.containsKey(paramName)) {
       return futureParamValues[paramName];
     }
@@ -301,6 +302,7 @@ class FFParameters {
       param,
       type,
       isList,
+      collectionNamePath,
     );
   }
 }

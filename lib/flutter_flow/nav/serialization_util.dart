@@ -1,5 +1,6 @@
 import 'dart:convert';
 
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:from_css_color/from_css_color.dart';
 
@@ -35,16 +36,16 @@ String uploadedFileToString(FFUploadedFile uploadedFile) =>
 
 String? serializeParam(
   dynamic param,
-  ParamType paramType, {
+  ParamType paramType, [
   bool isList = false,
-}) {
+]) {
   try {
     if (param == null) {
       return null;
     }
     if (isList) {
       final serializedValues = (param as Iterable)
-          .map((p) => serializeParam(p, paramType, isList: false))
+          .map((p) => serializeParam(p, paramType, false))
           .where((p) => p != null)
           .map((p) => p!)
           .toList();
@@ -74,9 +75,8 @@ String? serializeParam(
         data = uploadedFileToString(param as FFUploadedFile);
       case ParamType.JSON:
         data = json.encode(param);
-
-      default:
-        data = null;
+      case ParamType.DocumentReference:
+        data = (param as DocumentReference).path;
     }
     return data;
   } catch (e) {
@@ -182,13 +182,15 @@ enum ParamType {
   FFPlace,
   FFUploadedFile,
   JSON,
+  DocumentReference,
 }
 
 dynamic deserializeParam<T>(
   String? param,
   ParamType paramType,
-  bool isList,
-) {
+  bool isList, [
+  List<String>? collectionNamePath,
+]) {
   try {
     if (param == null) {
       return null;
@@ -201,7 +203,8 @@ dynamic deserializeParam<T>(
       return paramValues
           .where((p) => p is String)
           .map((p) => p as String)
-          .map((p) => deserializeParam<T>(p, paramType, false))
+          .map((p) =>
+              deserializeParam<T>(p, paramType, false, collectionNamePath))
           .where((p) => p != null)
           .map((p) => p! as T)
           .toList();
@@ -229,9 +232,8 @@ dynamic deserializeParam<T>(
         return uploadedFileFromString(param);
       case ParamType.JSON:
         return json.decode(param);
-
-      default:
-        return null;
+      case ParamType.DocumentReference:
+        return FirebaseFirestore.instance.doc(param);
     }
   } catch (e) {
     print('Error deserializing parameter: $e');
