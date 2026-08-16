@@ -313,6 +313,11 @@ class _HomeDashboardWidgetState extends State<HomeDashboardWidget> {
                                         fullWidth: true,
                                         loading: false,
                                         disabled: false,
+                                        onPressed: () async {
+                                          context.goNamed(
+                                              BusSearchResultsWidget
+                                                  .routeName);
+                                        },
                                       ),
                                     ),
                                   ),
@@ -615,27 +620,21 @@ class _HomeDashboardWidgetState extends State<HomeDashboardWidget> {
                                           model: _model.buttonModel2,
                                           updateCallback: () =>
                                               safeSetState(() {}),
-                                          child: InkWell(
-                                            splashColor: Colors.transparent,
-                                            focusColor: Colors.transparent,
-                                            hoverColor: Colors.transparent,
-                                            highlightColor: Colors.transparent,
-                                            onTap: () async {
+                                          child: ButtonWidget(
+                                            iconPresent: false,
+                                            iconEndPresent: false,
+                                            content: 'Book Now',
+                                            variant: 'primary',
+                                            size: 'small',
+                                            fullWidth: false,
+                                            loading: false,
+                                            disabled: false,
+                                            onPressed: () async {
                                               context.goNamed(
                                                 BusSearchResultsWidget
                                                     .routeName,
                                               );
                                             },
-                                            child: ButtonWidget(
-                                              iconPresent: false,
-                                              iconEndPresent: false,
-                                              content: 'Book Now',
-                                              variant: 'primary',
-                                              size: 'small',
-                                              fullWidth: false,
-                                              loading: false,
-                                              disabled: false,
-                                            ),
                                           ),
                                         ),
                                       ].divide(SizedBox(height: 4.0)),

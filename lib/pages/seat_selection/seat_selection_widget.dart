@@ -326,32 +326,32 @@ class _SeatSelectionWidgetState extends State<SeatSelectionWidget> {
                             ),
                           ],
                         ),
-                        InkWell(
-                          onTap: _model.selectedSeatNumbers.isNotEmpty ? () async {
-                            context.goNamed(
-                              PassengerDetailsWidget.routeName,
-                              queryParameters: {
-                                'selectedSeats': serializeParam(
-                                  _model.selectedSeatNumbers,
-                                  ParamType.String,
-                                  true,
-                                ),
-                                'busRef': serializeParam(
-                                  widget.busRef,
-                                  ParamType.DocumentReference,
-                                ),
-                              }.withoutNulls,
-                            );
-                          } : null,
-                          child: wrapWithModel(
-                            model: _model.buttonModel,
-                            updateCallback: () => safeSetState(() {}),
-                            child: ButtonWidget(
-                              content: 'Continue',
-                              variant: 'primary',
-                              size: 'large',
-                              disabled: _model.selectedSeatNumbers.isEmpty,
-                            ),
+                        wrapWithModel(
+                          model: _model.buttonModel,
+                          updateCallback: () => safeSetState(() {}),
+                          child: ButtonWidget(
+                            content: 'Continue',
+                            variant: 'primary',
+                            size: 'large',
+                            disabled: _model.selectedSeatNumbers.isEmpty,
+                            onPressed: _model.selectedSeatNumbers.isEmpty
+                                ? null
+                                : () async {
+                                    context.goNamed(
+                                      PassengerDetailsWidget.routeName,
+                                      queryParameters: {
+                                        'selectedSeats': serializeParam(
+                                          _model.selectedSeatNumbers,
+                                          ParamType.String,
+                                          true,
+                                        ),
+                                        'busRef': serializeParam(
+                                          widget.busRef,
+                                          ParamType.DocumentReference,
+                                        ),
+                                      }.withoutNulls,
+                                    );
+                                  },
                           ),
                         ),
                       ],

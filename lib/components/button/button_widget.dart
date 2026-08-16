@@ -1,5 +1,6 @@
 import '/flutter_flow/flutter_flow_theme.dart';
 import '/flutter_flow/flutter_flow_util.dart';
+import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:percent_indicator/percent_indicator.dart';
@@ -19,6 +20,7 @@ class ButtonWidget extends StatefulWidget {
     bool? fullWidth,
     bool? loading,
     bool? disabled,
+    this.onPressed,
   })  : this.iconPresent = iconPresent ?? false,
         this.iconEndPresent = iconEndPresent ?? false,
         this.content = content ?? 'Get Started',
@@ -38,6 +40,8 @@ class ButtonWidget extends StatefulWidget {
   final bool fullWidth;
   final bool loading;
   final bool disabled;
+  final FutureOr<void> Function()? onPressed;
+
 
   @override
   State<ButtonWidget> createState() => _ButtonWidgetState();
@@ -69,7 +73,30 @@ class _ButtonWidgetState extends State<ButtonWidget> {
 
   @override
   Widget build(BuildContext context) {
-    return Opacity(
+    final radius = () {
+      if (widget.size == 'small') {
+        return 8.0;
+      }
+      if (widget.size == 'large') {
+        return 16.0;
+      }
+      return 12.0;
+    }();
+    final enabled =
+        !widget.disabled && !widget.loading && widget.onPressed != null;
+
+    return Material(
+      color: Colors.transparent,
+      child: InkWell(
+        onTap: enabled
+            ? () async {
+                await widget.onPressed?.call();
+              }
+            : null,
+        borderRadius: BorderRadius.circular(radius),
+        mouseCursor:
+            enabled ? SystemMouseCursors.click : SystemMouseCursors.basic,
+        child: Opacity(
       opacity: valueOrDefault<double>(
         valueOrDefault<bool>(
           widget.disabled,
@@ -443,6 +470,8 @@ class _ButtonWidgetState extends State<ButtonWidget> {
                 backgroundColor: FlutterFlowTheme.of(context).alternate,
               ),
           ],
+        ),
+      ),
         ),
       ),
     );
