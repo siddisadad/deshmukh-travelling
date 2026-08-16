@@ -469,16 +469,10 @@ class _HomeDashboardWidgetState extends State<HomeDashboardWidget> {
                     ),
                     ClipRRect(
                       borderRadius: BorderRadius.circular(24.0),
-                      child: Container(
-                        height: 160.0,
-                        decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(24.0),
-                          shape: BoxShape.rectangle,
-                        ),
-                        child: Stack(
-                          alignment: AlignmentDirectional(-1.0, -1.0),
-                          children: [
-                            CachedNetworkImage(
+                      child: Stack(
+                        children: [
+                          Positioned.fill(
+                            child: CachedNetworkImage(
                               fadeInDuration: Duration(milliseconds: 0),
                               fadeOutDuration: Duration(milliseconds: 0),
                               imageUrl:
@@ -486,31 +480,30 @@ class _HomeDashboardWidgetState extends State<HomeDashboardWidget> {
                               fit: BoxFit.cover,
                               alignment: Alignment(0.0, 0.0),
                             ),
-                            Container(
+                          ),
+                          Positioned.fill(
+                            child: DecoratedBox(
                               decoration: BoxDecoration(
                                 gradient: LinearGradient(
                                   colors: [
-                                    FlutterFlowTheme.of(context).fullContrast67,
+                                    FlutterFlowTheme.of(context)
+                                        .fullContrast67,
                                     Colors.transparent
                                   ],
                                   stops: [0.0, 1.0],
                                   begin: AlignmentDirectional(-1.0, 0.0),
                                   end: AlignmentDirectional(1.0, 0),
                                 ),
-                                shape: BoxShape.rectangle,
                               ),
-                              child: Padding(
-                                padding: EdgeInsets.all(24.0),
-                                child: Container(
-                                  child: Container(
-                                    alignment: AlignmentDirectional(-1.0, 0.0),
-                                    child: Column(
-                                      mainAxisSize: MainAxisSize.min,
-                                      mainAxisAlignment:
-                                          MainAxisAlignment.start,
-                                      crossAxisAlignment:
-                                          CrossAxisAlignment.start,
-                                      children: [
+                            ),
+                          ),
+                          Padding(
+                            padding: EdgeInsets.all(24.0),
+                            child: Column(
+                              mainAxisSize: MainAxisSize.min,
+                              mainAxisAlignment: MainAxisAlignment.start,
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
                                         Container(
                                           decoration: BoxDecoration(
                                             color: FlutterFlowTheme.of(context)
@@ -634,13 +627,9 @@ class _HomeDashboardWidgetState extends State<HomeDashboardWidget> {
                                           ),
                                         ),
                                       ].divide(SizedBox(height: 4.0)),
-                                    ),
-                                  ),
-                                ),
-                              ),
                             ),
-                          ],
-                        ),
+                          ),
+                        ],
                       ),
                     ),
                   ].divide(SizedBox(height: 16.0)),
