@@ -73,29 +73,18 @@ class _ButtonWidgetState extends State<ButtonWidget> {
 
   @override
   Widget build(BuildContext context) {
-    final radius = () {
-      if (widget.size == 'small') {
-        return 8.0;
-      }
-      if (widget.size == 'large') {
-        return 16.0;
-      }
-      return 12.0;
-    }();
     final enabled =
         !widget.disabled && !widget.loading && widget.onPressed != null;
 
-    return Material(
-      color: Colors.transparent,
-      child: InkWell(
+    return MouseRegion(
+      cursor: enabled ? SystemMouseCursors.click : SystemMouseCursors.basic,
+      child: GestureDetector(
+        behavior: HitTestBehavior.opaque,
         onTap: enabled
             ? () async {
                 await widget.onPressed?.call();
               }
             : null,
-        borderRadius: BorderRadius.circular(radius),
-        mouseCursor:
-            enabled ? SystemMouseCursors.click : SystemMouseCursors.basic,
         child: Opacity(
       opacity: valueOrDefault<double>(
         valueOrDefault<bool>(

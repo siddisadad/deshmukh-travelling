@@ -634,15 +634,15 @@ class _BusCardWidgetState extends State<BusCardWidget> {
                       ),
                       Padding(
                         padding: EdgeInsets.all(16.0),
-                        child: Container(
+                        child: SizedBox(
+                          width: double.infinity,
                           child: wrapWithModel(
                             model: _model.buttonModel,
                             updateCallback: () => safeSetState(() {}),
                             child: ButtonWidget(
                               icon: Icon(
                                 Icons.arrow_forward_rounded,
-                                color:
-                                    FlutterFlowTheme.of(context).primaryText,
+                                color: FlutterFlowTheme.of(context).onPrimary,
                                 size: 24.0,
                               ),
                               iconPresent: true,
@@ -654,14 +654,15 @@ class _BusCardWidgetState extends State<BusCardWidget> {
                               loading: false,
                               disabled: false,
                               onPressed: () async {
-                                context.goNamed(
+                                final busRefParam = serializeParam(
+                                  widget.busRef,
+                                  ParamType.DocumentReference,
+                                );
+                                context.pushNamed(
                                   SeatSelectionWidget.routeName,
                                   queryParameters: {
-                                    'busRef': serializeParam(
-                                      widget.busRef,
-                                      ParamType.DocumentReference,
-                                    ),
-                                  }.withoutNulls,
+                                    if (busRefParam != null) 'busRef': busRefParam,
+                                  },
                                 );
                               },
                             ),
