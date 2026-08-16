@@ -126,6 +126,38 @@ class BusesRecord {
     }
   }
 
+  /// Resolve a single bus for detail pages. Falls back to demo data when the
+  /// Firestore document is missing (common for local demo refs).
+  static Stream<BusesRecord> streamForRef(DocumentReference? busRef) async* {
+    BusesRecord? demoMatch;
+    if (busRef != null) {
+      for (final bus in demoBuses()) {
+        if (bus.reference?.id == busRef.id) {
+          demoMatch = bus;
+          break;
+        }
+      }
+    }
+    final fallback = demoMatch ?? demoBuses().first;
+    yield fallback;
+
+    if (busRef == null || Firebase.apps.isEmpty) {
+      return;
+    }
+
+    try {
+      await for (final snapshot in busRef.snapshots()) {
+        if (snapshot.exists) {
+          yield fromSnapshot(snapshot);
+        } else {
+          yield fallback;
+        }
+      }
+    } catch (_) {
+      yield fallback;
+    }
+  }
+
   static BusesRecord fromSnapshot(DocumentSnapshot snapshot) =>
       BusesRecord._(
           snapshot.reference, snapshot.data() as Map<String, dynamic>);

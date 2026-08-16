@@ -143,9 +143,18 @@ class _BusSearchResultsWidgetState extends State<BusSearchResultsWidget> {
                           mainAxisAlignment: MainAxisAlignment.start,
                           crossAxisAlignment: CrossAxisAlignment.center,
                           children: [
-                            for (var filter in ['All', 'AC', 'Non-AC', 'Sleeper', 'Seater', 'Luxury'])
-                              InkWell(
-                                onTap: () => safeSetState(() => _model.selectedFilter = filter),
+                            for (var filter in [
+                              'All',
+                              'AC',
+                              'Non-AC',
+                              'Sleeper',
+                              'Seater',
+                              'Luxury'
+                            ])
+                              GestureDetector(
+                                behavior: HitTestBehavior.opaque,
+                                onTap: () => safeSetState(
+                                    () => _model.selectedFilter = filter),
                                 child: FilterChipWidget(
                                   label: filter,
                                   selected: _model.selectedFilter == filter,

@@ -59,9 +59,7 @@ class _SeatSelectionWidgetState extends State<SeatSelectionWidget> {
         key: scaffoldKey,
         backgroundColor: FlutterFlowTheme.of(context).primaryBackground,
         body: StreamBuilder<BusesRecord>(
-          stream: widget.busRef != null
-              ? widget.busRef!.snapshots().map((s) => BusesRecord.fromSnapshot(s))
-              : Stream.empty(),
+          stream: BusesRecord.streamForRef(widget.busRef),
           builder: (context, busSnapshot) {
             if (!busSnapshot.hasData) {
               return Center(child: CircularProgressIndicator());
@@ -197,9 +195,8 @@ class _SeatSelectionWidgetState extends State<SeatSelectionWidget> {
                                       SizedBox(height: 32.0),
                                       // Seat Grid
                                       StreamBuilder<List<SeatsRecord>>(
-                                        stream: widget.busRef != null
-                                            ? SeatsRecord.getStream(widget.busRef!)
-                                            : Stream.value([]),
+                                        stream:
+                                            SeatsRecord.getStream(widget.busRef),
                                         builder: (context, snapshot) {
                                           if (!snapshot.hasData) {
                                             return Center(child: CircularProgressIndicator());

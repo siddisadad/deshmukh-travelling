@@ -1,6 +1,7 @@
 import 'package:flutter_test/flutter_test.dart';
 
 import 'package:deshmukh_travelling/backend/schema/buses_record.dart';
+import 'package:deshmukh_travelling/backend/schema/seats_record.dart';
 import 'package:deshmukh_travelling/pages/bus_search_results/bus_search_results_widget.dart';
 import 'package:deshmukh_travelling/pages/home_dashboard/home_dashboard_widget.dart';
 
@@ -23,5 +24,12 @@ void main() {
       sleeper.every((bus) => bus.type.toLowerCase().contains('sleeper')),
       isTrue,
     );
+  });
+
+  test('demo seats include available and booked seats', () {
+    final seats = SeatsRecord.demoSeats();
+    expect(seats.length, 16);
+    expect(seats.any((seat) => seat.status == 'available'), isTrue);
+    expect(seats.any((seat) => seat.status == 'booked'), isTrue);
   });
 }

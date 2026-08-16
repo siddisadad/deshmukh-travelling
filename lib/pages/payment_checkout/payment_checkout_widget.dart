@@ -59,9 +59,7 @@ class _PaymentCheckoutWidgetState extends State<PaymentCheckoutWidget> {
         key: scaffoldKey,
         backgroundColor: FlutterFlowTheme.of(context).primaryBackground,
         body: StreamBuilder<BusesRecord>(
-          stream: widget.busRef != null
-              ? widget.busRef!.snapshots().map((s) => BusesRecord.fromSnapshot(s))
-              : Stream.empty(),
+          stream: BusesRecord.streamForRef(widget.busRef),
           builder: (context, snapshot) {
             if (!snapshot.hasData) {
               return Center(child: CircularProgressIndicator());
