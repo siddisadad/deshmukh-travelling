@@ -143,9 +143,18 @@ class _BusSearchResultsWidgetState extends State<BusSearchResultsWidget> {
                           mainAxisAlignment: MainAxisAlignment.start,
                           crossAxisAlignment: CrossAxisAlignment.center,
                           children: [
-                            for (var filter in ['All', 'AC', 'Non-AC', 'Sleeper', 'Seater', 'Luxury'])
-                              InkWell(
-                                onTap: () => safeSetState(() => _model.selectedFilter = filter),
+                            for (var filter in [
+                              'All',
+                              'AC',
+                              'Non-AC',
+                              'Sleeper',
+                              'Seater',
+                              'Luxury'
+                            ])
+                              GestureDetector(
+                                behavior: HitTestBehavior.opaque,
+                                onTap: () => safeSetState(
+                                    () => _model.selectedFilter = filter),
                                 child: FilterChipWidget(
                                   label: filter,
                                   selected: _model.selectedFilter == filter,
@@ -165,85 +174,110 @@ class _BusSearchResultsWidgetState extends State<BusSearchResultsWidget> {
               child: StreamBuilder<List<BusesRecord>>(
                 stream: BusesRecord.getStream(filter: _model.selectedFilter),
                 builder: (context, snapshot) {
+                  if (snapshot.hasError) {
+                    final buses = BusesRecord.demoBuses(
+                      filter: _model.selectedFilter,
+                    );
+                    return _buildBusList(context, buses);
+                  }
                   if (!snapshot.hasData) {
-                    return Center(child: CircularProgressIndicator());
+                    return Center(
+                      child: CircularProgressIndicator(
+                        valueColor: AlwaysStoppedAnimation<Color>(
+                          FlutterFlowTheme.of(context).primary,
+                        ),
+                      ),
+                    );
                   }
                   final buses = snapshot.data!;
-                  return Column(
-                    children: [
-                      Padding(
-                        padding: EdgeInsetsDirectional.fromSTEB(24.0, 0.0, 24.0, 16.0),
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            Text(
-                              '${buses.length} Buses found',
-                              style: FlutterFlowTheme.of(context).labelLarge,
-                            ),
-                            Row(
-                              children: [
-                                Text('Sort by:', style: FlutterFlowTheme.of(context).labelSmall),
-                                Text('Price', style: FlutterFlowTheme.of(context).labelSmall.override(
-                                  font: GoogleFonts.inter(fontWeight: FontWeight.bold),
-                                  color: FlutterFlowTheme.of(context).primary,
-                                )),
-                                Icon(Icons.expand_more_rounded, color: FlutterFlowTheme.of(context).primary, size: 14.0),
-                              ].divide(SizedBox(width: 4.0)),
-                            ),
-                          ],
-                        ),
-                      ),
-                      Expanded(
-                        child: SingleChildScrollView(
-                          padding: EdgeInsets.symmetric(horizontal: 24.0),
-                          child: Column(
-                            children: [
-                              if (buses.isEmpty)
-                                Center(child: Text('No buses found for this filter'))
-                              else
-                                ...buses.map((bus) => BusCardWidget(
-                                  operator: bus.operator,
-                                  type: bus.type,
-                                  depTime: bus.depTime,
-                                  arrTime: bus.arrTime,
-                                  duration: bus.duration,
-                                  price: bus.price.toString(),
-                                  rating: bus.rating.toString(),
-                                  seats: bus.seatsAvailable.toString(),
-                                  busRef: bus.reference,
-                                )),
-                              // Footer Lottie
-                              Padding(
-                                padding: EdgeInsets.all(32.0),
-                                child: Column(
-                                  children: [
-                                    Lottie.network(
-                                      'https://dimg.dreamflow.cloud/v1/lottie/searching+for+more+buses',
-                                      width: 120.0,
-                                      height: 120.0,
-                                    ),
-                                    Text(
-                                      'You\'ve seen all the buses for this route',
-                                      style: FlutterFlowTheme.of(context).bodySmall.override(
-                                        font: GoogleFonts.inter(),
-                                        color: FlutterFlowTheme.of(context).secondaryText,
-                                      ),
-                                    ),
-                                  ].divide(SizedBox(height: 8.0)),
-                                ),
-                              ),
-                            ].divide(SizedBox(height: 16.0)),
-                          ),
-                        ),
-                      ),
-                    ],
-                  );
+                  return _buildBusList(context, buses);
                 },
               ),
             ),
           ],
         ),
       ),
+    );
+  }
+
+  Widget _buildBusList(BuildContext context, List<BusesRecord> buses) {
+    return Column(
+      children: [
+        Padding(
+          padding: EdgeInsetsDirectional.fromSTEB(24.0, 0.0, 24.0, 16.0),
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Text(
+                '${buses.length} Buses found',
+                style: FlutterFlowTheme.of(context).labelLarge,
+              ),
+              Row(
+                children: [
+                  Text('Sort by:',
+                      style: FlutterFlowTheme.of(context).labelSmall),
+                  Text(
+                    'Price',
+                    style: FlutterFlowTheme.of(context).labelSmall.override(
+                          font: GoogleFonts.inter(fontWeight: FontWeight.bold),
+                          color: FlutterFlowTheme.of(context).primary,
+                        ),
+                  ),
+                  Icon(
+                    Icons.expand_more_rounded,
+                    color: FlutterFlowTheme.of(context).primary,
+                    size: 14.0,
+                  ),
+                ].divide(SizedBox(width: 4.0)),
+              ),
+            ],
+          ),
+        ),
+        Expanded(
+          child: SingleChildScrollView(
+            padding: EdgeInsets.symmetric(horizontal: 24.0),
+            child: Column(
+              children: [
+                if (buses.isEmpty)
+                  Center(child: Text('No buses found for this filter'))
+                else
+                  ...buses.map(
+                    (bus) => BusCardWidget(
+                      operator: bus.operator,
+                      type: bus.type,
+                      depTime: bus.depTime,
+                      arrTime: bus.arrTime,
+                      duration: bus.duration,
+                      price: bus.price.toString(),
+                      rating: bus.rating.toString(),
+                      seats: bus.seatsAvailable.toString(),
+                      busRef: bus.reference,
+                    ),
+                  ),
+                Padding(
+                  padding: EdgeInsets.all(32.0),
+                  child: Column(
+                    children: [
+                      Lottie.network(
+                        'https://dimg.dreamflow.cloud/v1/lottie/searching+for+more+buses',
+                        width: 120.0,
+                        height: 120.0,
+                      ),
+                      Text(
+                        'You\'ve seen all the buses for this route',
+                        style: FlutterFlowTheme.of(context).bodySmall.override(
+                              font: GoogleFonts.inter(),
+                              color: FlutterFlowTheme.of(context).secondaryText,
+                            ),
+                      ),
+                    ].divide(SizedBox(height: 8.0)),
+                  ),
+                ),
+              ].divide(SizedBox(height: 16.0)),
+            ),
+          ),
+        ),
+      ],
     );
   }
 }

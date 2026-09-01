@@ -4,6 +4,7 @@ import '/components/search_input_row/search_input_row_widget.dart';
 import '/flutter_flow/flutter_flow_icon_button.dart';
 import '/flutter_flow/flutter_flow_theme.dart';
 import '/flutter_flow/flutter_flow_util.dart';
+import '/pages/bus_search_results/bus_search_results_widget.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -312,6 +313,11 @@ class _HomeDashboardWidgetState extends State<HomeDashboardWidget> {
                                         fullWidth: true,
                                         loading: false,
                                         disabled: false,
+                                        onPressed: () async {
+                                          context.goNamed(
+                                              BusSearchResultsWidget
+                                                  .routeName);
+                                        },
                                       ),
                                     ),
                                   ),
@@ -468,16 +474,10 @@ class _HomeDashboardWidgetState extends State<HomeDashboardWidget> {
                     ),
                     ClipRRect(
                       borderRadius: BorderRadius.circular(24.0),
-                      child: Container(
-                        height: 160.0,
-                        decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(24.0),
-                          shape: BoxShape.rectangle,
-                        ),
-                        child: Stack(
-                          alignment: AlignmentDirectional(-1.0, -1.0),
-                          children: [
-                            CachedNetworkImage(
+                      child: Stack(
+                        children: [
+                          Positioned.fill(
+                            child: CachedNetworkImage(
                               fadeInDuration: Duration(milliseconds: 0),
                               fadeOutDuration: Duration(milliseconds: 0),
                               imageUrl:
@@ -485,31 +485,30 @@ class _HomeDashboardWidgetState extends State<HomeDashboardWidget> {
                               fit: BoxFit.cover,
                               alignment: Alignment(0.0, 0.0),
                             ),
-                            Container(
+                          ),
+                          Positioned.fill(
+                            child: DecoratedBox(
                               decoration: BoxDecoration(
                                 gradient: LinearGradient(
                                   colors: [
-                                    FlutterFlowTheme.of(context).fullContrast67,
+                                    FlutterFlowTheme.of(context)
+                                        .fullContrast67,
                                     Colors.transparent
                                   ],
                                   stops: [0.0, 1.0],
                                   begin: AlignmentDirectional(-1.0, 0.0),
                                   end: AlignmentDirectional(1.0, 0),
                                 ),
-                                shape: BoxShape.rectangle,
                               ),
-                              child: Padding(
-                                padding: EdgeInsets.all(24.0),
-                                child: Container(
-                                  child: Container(
-                                    alignment: AlignmentDirectional(-1.0, 0.0),
-                                    child: Column(
-                                      mainAxisSize: MainAxisSize.min,
-                                      mainAxisAlignment:
-                                          MainAxisAlignment.start,
-                                      crossAxisAlignment:
-                                          CrossAxisAlignment.start,
-                                      children: [
+                            ),
+                          ),
+                          Padding(
+                            padding: EdgeInsets.all(24.0),
+                            child: Column(
+                              mainAxisSize: MainAxisSize.min,
+                              mainAxisAlignment: MainAxisAlignment.start,
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
                                         Container(
                                           decoration: BoxDecoration(
                                             color: FlutterFlowTheme.of(context)
@@ -630,16 +629,18 @@ class _HomeDashboardWidgetState extends State<HomeDashboardWidget> {
                                             fullWidth: false,
                                             loading: false,
                                             disabled: false,
+                                            onPressed: () async {
+                                              context.goNamed(
+                                                BusSearchResultsWidget
+                                                    .routeName,
+                                              );
+                                            },
                                           ),
                                         ),
                                       ].divide(SizedBox(height: 4.0)),
-                                    ),
-                                  ),
-                                ),
-                              ),
                             ),
-                          ],
-                        ),
+                          ),
+                        ],
                       ),
                     ),
                   ].divide(SizedBox(height: 16.0)),

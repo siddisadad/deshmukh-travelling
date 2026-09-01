@@ -634,42 +634,37 @@ class _BusCardWidgetState extends State<BusCardWidget> {
                       ),
                       Padding(
                         padding: EdgeInsets.all(16.0),
-                        child: Container(
-                          child: InkWell(
-                            splashColor: Colors.transparent,
-                            focusColor: Colors.transparent,
-                            hoverColor: Colors.transparent,
-                            highlightColor: Colors.transparent,
-                            onTap: () async {
-                              context.goNamed(
-                                SeatSelectionWidget.routeName,
-                                queryParameters: {
-                                  'busRef': serializeParam(
-                                    widget.busRef,
-                                    ParamType.DocumentReference,
-                                  ),
-                                }.withoutNulls,
-                              );
-                            },
-                            child: wrapWithModel(
-                              model: _model.buttonModel,
-                              updateCallback: () => safeSetState(() {}),
-                              child: ButtonWidget(
-                                icon: Icon(
-                                  Icons.arrow_forward_rounded,
-                                  color:
-                                      FlutterFlowTheme.of(context).primaryText,
-                                  size: 24.0,
-                                ),
-                                iconPresent: true,
-                                iconEndPresent: false,
-                                content: 'Select Seats',
-                                variant: 'primary',
-                                size: 'medium',
-                                fullWidth: true,
-                                loading: false,
-                                disabled: false,
+                        child: SizedBox(
+                          width: double.infinity,
+                          child: wrapWithModel(
+                            model: _model.buttonModel,
+                            updateCallback: () => safeSetState(() {}),
+                            child: ButtonWidget(
+                              icon: Icon(
+                                Icons.arrow_forward_rounded,
+                                color: FlutterFlowTheme.of(context).onPrimary,
+                                size: 24.0,
                               ),
+                              iconPresent: true,
+                              iconEndPresent: false,
+                              content: 'Select Seats',
+                              variant: 'primary',
+                              size: 'medium',
+                              fullWidth: true,
+                              loading: false,
+                              disabled: false,
+                              onPressed: () async {
+                                final busRefParam = serializeParam(
+                                  widget.busRef,
+                                  ParamType.DocumentReference,
+                                );
+                                context.pushNamed(
+                                  SeatSelectionWidget.routeName,
+                                  queryParameters: {
+                                    if (busRefParam != null) 'busRef': busRefParam,
+                                  },
+                                );
+                              },
                             ),
                           ),
                         ),

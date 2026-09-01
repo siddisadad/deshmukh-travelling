@@ -182,50 +182,40 @@ class _SplashOnboardingWidgetState extends State<SplashOnboardingWidget> {
                           mainAxisAlignment: MainAxisAlignment.start,
                           crossAxisAlignment: CrossAxisAlignment.stretch,
                           children: [
-                            InkWell(
-                              splashColor: Colors.transparent,
-                              focusColor: Colors.transparent,
-                              hoverColor: Colors.transparent,
-                              highlightColor: Colors.transparent,
-                              onTap: () async {
-                                context.goNamed(HomeDashboardWidget.routeName);
-                              },
-                              child: wrapWithModel(
-                                model: _model.buttonModel1,
-                                updateCallback: () => safeSetState(() {}),
-                                child: ButtonWidget(
-                                  iconPresent: false,
-                                  iconEndPresent: false,
-                                  content: 'Get Started',
-                                  variant: 'primary',
-                                  size: 'large',
-                                  fullWidth: false,
-                                  loading: false,
-                                  disabled: false,
-                                ),
+                            wrapWithModel(
+                              model: _model.buttonModel1,
+                              updateCallback: () => safeSetState(() {}),
+                              child: ButtonWidget(
+                                iconPresent: false,
+                                iconEndPresent: false,
+                                content: 'Get Started',
+                                variant: 'primary',
+                                size: 'large',
+                                fullWidth: false,
+                                loading: false,
+                                disabled: false,
+                                onPressed: () async {
+                                  context.goNamed(
+                                      HomeDashboardWidget.routeName);
+                                },
                               ),
                             ),
-                            InkWell(
-                              splashColor: Colors.transparent,
-                              focusColor: Colors.transparent,
-                              hoverColor: Colors.transparent,
-                              highlightColor: Colors.transparent,
-                              onTap: () async {
-                                context.goNamed(HomeDashboardWidget.routeName);
-                              },
-                              child: wrapWithModel(
-                                model: _model.buttonModel2,
-                                updateCallback: () => safeSetState(() {}),
-                                child: ButtonWidget(
-                                  iconPresent: false,
-                                  iconEndPresent: false,
-                                  content: 'Sign In to Account',
-                                  variant: 'ghost',
-                                  size: 'medium',
-                                  fullWidth: false,
-                                  loading: false,
-                                  disabled: false,
-                                ),
+                            wrapWithModel(
+                              model: _model.buttonModel2,
+                              updateCallback: () => safeSetState(() {}),
+                              child: ButtonWidget(
+                                iconPresent: false,
+                                iconEndPresent: false,
+                                content: 'Sign In to Account',
+                                variant: 'ghost',
+                                size: 'medium',
+                                fullWidth: false,
+                                loading: false,
+                                disabled: false,
+                                onPressed: () async {
+                                  context.goNamed(
+                                      HomeDashboardWidget.routeName);
+                                },
                               ),
                             ),
                           ].divide(SizedBox(height: 16.0)),
